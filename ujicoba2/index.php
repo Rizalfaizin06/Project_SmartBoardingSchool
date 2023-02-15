@@ -1,6 +1,36 @@
 <?php 
+session_start();
 require 'fungsiAdmin.php';
+
+
+
+
+if (!isset($_SESSION["login"])) {
+    header("location: login.php");
+    exit;
+}
+
+
 $menu = query("SELECT * FROM tbl_menu");
+$idUser = $_SESSION["idUser"];
+$namaUser = $_SESSION["namaUser"];
+$saldoUser = $_SESSION["saldoUser"];
+$roleUser = $_SESSION["roleUser"];
+
+
+if ($roleUser == 3) {
+    header("location: buyer.php");
+    exit;
+}
+
+
+var_dump($idUser);
+var_dump($namaUser);
+var_dump($saldoUser);
+
+
+
+
 
 if (isset($_POST['buttonPesan'])) {
     $idMenu = $_POST['idMenu'];
@@ -30,7 +60,7 @@ if (isset($_POST['buttonOrder'])) {
     // $idPembeli = $_POST['idPembeli'];
     $waktuOrder = date("Y-m-d H:i:s");
 
-    $query = "INSERT INTO tbl_order (idOrder, waktuOrder, statusOrder) VALUES (NULL, '$waktuOrder', 'belum')";
+    $query = "INSERT INTO tbl_order (idOrder, idPenjual, waktuOrder, statusOrder) VALUES (NULL, '$idUser', '$waktuOrder', 'belum')";
     mysqli_query($koneksi, $query);
 
     $querydOrder = query("SELECT idOrder FROM tbl_order ORDER BY idOrder DESC LIMIT 1");
@@ -48,7 +78,8 @@ if (isset($_POST['buttonOrder'])) {
     mysqli_query($koneksi, $queryUbahJumlah);
     }
     // SELECT hargaMenu, jumlahPesan, hargaMenu * jumlahPesan AS total FROM tbl_pesan INNER JOIN tbl_menu ON tbl_pesan.idMenu = tbl_menu.idMenu;
-    header("Location: order.php");
+    header("Location: beli.php");
+    exit;
 
 }
 
@@ -56,7 +87,7 @@ if (isset($_POST['buttonOrder'])) {
 
 
 
-$dataPesanan = query("SELECT * FROM tbl_pesan WHERE idOrder = 0");
+$dataPesanan = query("SELECT * FROM tbl_pesan P, tbl_menu M WHERE P.idMenu = M.idMenu AND idOrder = 0");
 
 
 $pesanan = array();
@@ -83,6 +114,8 @@ foreach($dataPesanan as $oneView) {
 
 </head>
 <body>
+    <a href="beli.php">beli</a>
+    <a href="logout.php">logout</a>
     <div class="container">
     <?php
     foreach ($menu as $oneView) :
@@ -111,6 +144,7 @@ foreach($dataPesanan as $oneView) {
             <tr>
                 <!-- <th>No.</th> -->
                 <th>Menu</th>
+                <th>Harga</th>
                 <th>Jumlah</th>
                 <th>Action</th>
             </tr>
@@ -120,8 +154,10 @@ foreach($dataPesanan as $oneView) {
                 foreach ($dataPesanan as $oneView):
                     ?>
                     <tr>
-                    <td><?=$oneView["idMenu"];?>
-                    <input id="<?= 'harga'.$oneView['idMenu']; ?>" class="span8" type="hidden" value="50000"/>
+                    <td><?=$oneView["namaMenu"];?>
+                    </td>
+                    <td><?=$oneView["hargaMenu"];?>
+                    <input id="<?= 'harga'.$oneView['idMenu']; ?>" class="span8" type="hidden" value="<?=$oneView["hargaMenu"];?>"/>
                     </td>
                     <td><input id="<?= 'jumlahPesan'.$oneView['idMenu']; ?>" type="number" name="<?= 'jumlahPesan'.$oneView['idMenu']; ?>" value="1" onchange="return operasi()">
                     </td> 
@@ -145,7 +181,13 @@ foreach($dataPesanan as $oneView) {
             <input class="span8" id="tot" name="total_harga" type="hidden" value="" placeholder="" />
         </div>
         <input type="hidden" name="idMenu" value="<?= $oneView["idMenu"]; ?>">
-        <button class="btn btn-outline-dark w-25" type="submit" id="buttonOrder" name="buttonOrder">Order</button>
+        <?php if(empty($dataPesanan)):?>
+            <button class="btn btn-secondary w-25" type="submit" disabled>Order</button>
+            <?php else:?>
+            <button class="btn btn-outline-dark w-25" type="submit" id="buttonOrder" name="buttonOrder">Order</button>
+
+            <?php endif;?>
+        <!-- <button class="btn btn-outline-dark w-25" type="submit" id="buttonOrder" name="buttonOrder">Order</button> -->
         </div>
     </form>
     </div>
