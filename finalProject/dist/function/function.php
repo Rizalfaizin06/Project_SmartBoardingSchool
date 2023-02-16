@@ -4,7 +4,8 @@
 // $koneksi = mysqli_connect("localhost", "id18952921_rizal", ">R(xFzvAW#ln~1YB", "id18952921_krenova");
 // $koneksi = mysqli_connect("localhost", "ninb9915_rizal", ">R(xFzvAW#ln~1YB", "ninb9915_Krenova");
 // $koneksi = mysqli_connect("localhost", "fira3489_rizal", "tY%=Cz+#jPUi", "fira3489_rizal_database");
-$koneksi = mysqli_connect("127.0.0.1", "rizal", "rizal", "db_smartboardingschool");
+// $koneksi = mysqli_connect("127.0.0.1", "rizal", "rizal", "db_smartboardingschool");
+$koneksi = mysqli_connect("127.0.0.1", "rizal", "rizal", "db_ssm");
 
 date_default_timezone_set('Asia/Jakarta');
 $tanggal = date("Y-m-d");
