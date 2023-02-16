@@ -11,14 +11,38 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
-$_SESSION["currentPage"] = "waiting";
 
 
-$category = query("SELECT DISTINCT namaCategory, tbl_category.idCategory FROM tbl_menu, tbl_category WHERE tbl_menu.idCategory = tbl_category.idCategory");
 $idUser = $_SESSION["idUser"];
-$namaUser = $_SESSION["namaUser"];
-$saldoUser = $_SESSION["saldoUser"];
-$roleUser = $_SESSION["roleUser"];
+
+$queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
+$role = $queryUser["role"];
+
+
+if ($role == 1) {
+
+
+} elseif ($role == 2) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $saldo = $queryUser["saldo"];
+    $namaToko = $queryUser["namaToko"];
+    $logoToko = $queryUser["logoToko"];
+    $PemasukanHariIni = 128000;
+} else {
+
+}
+
+$category = query("SELECT DISTINCT namaCategory, C.idCategory FROM tbl_menu M, tbl_category C WHERE idPenjual = '$idUser' AND M.idCategory = C.idCategory");
 // var_dump($category);
 
 // if ($roleUser == 3) {
@@ -37,7 +61,7 @@ $_SESSION['idPenjual'] = $idPenjual;
 
 
 if (is_numeric($idPenjual) == false) {
-    echo $idPenjual;
+    // echo $idPenjual;
     echo '<div>
     <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">QR Code Salah
     </h2>
@@ -58,6 +82,15 @@ if (!empty($querydOrder)) {
 
     $totalHarga = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder")[0]["total"];
     // var_dump($totalHarga);
+} else {
+    // echo $idPenjual;
+    echo '<div>
+    <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">QR Code Salah
+    </h2>
+</div>
+<button onClick="window.location.reload();"
+    class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300" id="buttonUlang" name="buttonUlang">Ulangi</button>';
+    return false;
 }
 
 $pembayaran = $querydOrder;

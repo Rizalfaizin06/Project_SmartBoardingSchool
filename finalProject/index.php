@@ -12,25 +12,61 @@ if (!isset($_SESSION["login"])) {
 }
 
 $_SESSION["currentPage"] = "dashboard";
-
-$menu = query("SELECT * FROM tbl_menu");
 $idUser = $_SESSION["idUser"];
-$namaUser = $_SESSION["namaUser"];
+
+$queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
+$role = $queryUser["role"];
 
 
-$roleUser = $_SESSION["roleUser"];
-$querydLihatSaldo = query("SELECT saldoUser FROM tbl_users WHERE idUser = '$idUser'");
-$saldoUser = $querydLihatSaldo[0]["saldoUser"];
+if ($role == 1) {
 
 
-$_SESSION["saldoUser"] = $saldoUser;
+} elseif ($role == 2) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
 
-// var_dump($_SESSION['saldoUser']);
+    $saldo = $queryUser["saldo"];
+    $namaToko = $queryUser["namaToko"];
+    $logoToko = $queryUser["logoToko"];
+    $PemasukanHariIni = 128000;
+} else {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
+
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $idOrangTua = $queryUser["idOrangTua"];
+    $saldo = $queryUser["saldo"];
+    $spendingLimit = $queryUser["spendingLimit"];
+    $additionalLimit = $queryUser["additionalLimit"];
+    $totalLimit = $spendingLimit + $additionalLimit;
+    $PengeluaranHariIni = 17000;
+}
 
 
 
 
-// if ($roleUser == 3) {
+// var_dump($_SESSION['sal$saldo']);
+
+
+
+
+// if ($role == 3) {
 //     header("location: buyer.php");
 //     exit;
 // }
@@ -38,7 +74,7 @@ $_SESSION["saldoUser"] = $saldoUser;
 
 // var_dump($idUser);
 // var_dump($namaUser);
-// var_dump($saldoUser);
+// var_dump($saldo);
 
 
 
@@ -63,15 +99,31 @@ $_SESSION["saldoUser"] = $saldoUser;
 
 
 
-
     <div class="grid grid-cols-1 items-center justify-items-center bg-primary h-64 w-full rounded-b-3xl shadow-xl p-5">
-        <img src="assets/images/gb.jpg" alt="avatar" class="object-cover rounded-full h-24 w-2h-24">
-        <h3 class="text-xl font-poppins font-bold text-white">
-            <?= $namaUser; ?>
-        </h3>
-        <h3 class="font-poppins font-bold text-white">
-            <?="Rp " . number_format($saldoUser, 0, ",", ".") ?>
-        </h3>
+
+        <?php if ($role == 1): ?>
+        <?php elseif ($role == 2): ?>
+            <img src="assets/images/avatar/<?= $logoToko; ?>" alt="avatar" class="object-cover rounded-full h-24 w-2h-24">
+            <h3 class="text-xl font-poppins font-bold text-white">
+                <?= $namaToko; ?>
+            </h3>
+            <h3 class="font-poppins font-bold text-white">
+                <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+            </h3>
+        <?php elseif ($role == 3): ?>
+            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
+                class="object-cover rounded-full h-24 w-2h-24">
+            <h3 class="text-xl font-poppins font-bold text-white">
+                <?= $realName; ?>
+            </h3>
+            <h3 class="font-poppins font-bold text-white">
+                <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+            </h3>
+        <?php else: ?>
+        <?php endif; ?>
+
+
+
         <div class=" w-full grid grid-cols-1 justify-items-center">
             <button
                 class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
@@ -89,27 +141,35 @@ $_SESSION["saldoUser"] = $saldoUser;
         <div class="grid grid-cols-1 gap-8 p-5 w-full max-w-xl">
 
             <?php
-            if ($roleUser == 2): ?>
+            if ($role == 2): ?>
                 <div
                     class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-1 gap-5 justify-items-center">
                     <h3 class="text-xl font-poppins font-bold">
                         Pendapatan Harian
                     </h3>
                     <h3 class="text-2xl font-poppins font-bold">
-                        <?="Rp " . number_format($saldoUser, 0, ",", ".") ?>
+                        <?="Rp " . number_format($saldo, 0, ",", ".") ?>
                     </h3>
 
                 </div>
-            <?php elseif ($roleUser == 3): ?>
+            <?php elseif ($role == 3): ?>
                 <div
                     class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-1 gap-5 justify-items-center">
                     <h3 class="text-xl font-poppins font-bold">
                         Pengeluaran Harian
                     </h3>
                     <h3 class="text-2xl font-poppins font-bold">
-                        <?="Rp " . number_format($saldoUser, 0, ",", ".") ?>
+                        <?="Rp " . number_format($PengeluaranHariIni, 0, ",", ".") ?>/
+                        <?="Rp " . number_format($totalLimit, 0, ",", ".") ?>
                     </h3>
+                    <h3 class="font-poppins font-bold">
+                        <?php
 
+                        $persentase = ($PengeluaranHariIni / $totalLimit) * 100;
+
+                        echo round($persentase, 2) . "%";
+                        ?>
+                    </h3>
                 </div>
             <?php endif; ?>
 
@@ -119,7 +179,7 @@ $_SESSION["saldoUser"] = $saldoUser;
             <div class=" w-full grid grid-cols-1 justify-items-center">
 
                 <?php
-                if ($roleUser == 2): ?>
+                if ($role == 2): ?>
                     <a href="entryMenu.php"
                         class="text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300 w-44">
                         <div class="grid grid-cols-2 gap-3 h-10 items-center justify-items-center">
@@ -130,7 +190,7 @@ $_SESSION["saldoUser"] = $saldoUser;
 
                         </div>
                     </a>
-                <?php elseif ($roleUser == 3): ?>
+                <?php elseif ($role == 3): ?>
                     <a href="pay.php"
                         class="px-4 py-2 mt-2 text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
                         <div class="grid grid-cols-2 h-10 items-center justify-items-center">

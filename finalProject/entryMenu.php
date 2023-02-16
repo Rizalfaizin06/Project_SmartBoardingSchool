@@ -14,11 +14,36 @@ if (!isset($_SESSION["login"])) {
 
 $_SESSION["currentPage"] = "entryMenu";
 
-$category = query("SELECT DISTINCT namaCategory, tbl_category.idCategory FROM tbl_menu, tbl_category WHERE tbl_menu.idCategory = tbl_category.idCategory");
 $idUser = $_SESSION["idUser"];
-$namaUser = $_SESSION["namaUser"];
-$saldoUser = $_SESSION["saldoUser"];
-$roleUser = $_SESSION["roleUser"];
+
+$queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
+$role = $queryUser["role"];
+
+
+if ($role == 1) {
+
+
+} elseif ($role == 2) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $saldo = $queryUser["saldo"];
+    $namaToko = $queryUser["namaToko"];
+    $logoToko = $queryUser["logoToko"];
+    $PemasukanHariIni = 128000;
+} else {
+
+}
+
+$category = query("SELECT DISTINCT namaCategory, C.idCategory FROM tbl_menu M, tbl_category C WHERE idPenjual = '$idUser' AND M.idCategory = C.idCategory");
 // var_dump($category);
 
 // if ($roleUser == 3) {
@@ -35,20 +60,25 @@ $roleUser = $_SESSION["roleUser"];
 
 
 if (isset($_POST['buttonOrder'])) {
+    // foreach ($_POST as $key => $value) {
+    //     echo "Field " . htmlspecialchars($key) . " is " . htmlspecialchars($value) . "<br>";
+    // }
+    // die;
     // $idPembeli = $_POST['idPembeli'];
     $waktuOrder = date("Y-m-d H:i:s");
 
-    $query = "INSERT INTO tbl_order (idOrder, idPenjual, waktuOrder, statusOrder) VALUES (NULL, '$idUser', '$waktuOrder', 'belum')";
+    $query = "INSERT INTO tbl_order (idOrder, idPenjual, idPembeli, waktuOrder, statusOrder) VALUES (NULL, '$idUser', 0, '$waktuOrder', 0)";
     mysqli_query($koneksi, $query);
 
-    $querydOrder = query("SELECT idOrder FROM tbl_order ORDER BY idOrder DESC LIMIT 1");
+    $querydOrder = query("SELECT idOrder FROM tbl_order WHERE statusOrder = 0 AND idPenjual = '$idUser' ORDER BY idOrder DESC LIMIT 1");
     $idOrder = $querydOrder[0]["idOrder"];
     var_dump($idOrder);
 
 
 
-    $dataPesanan = query("SELECT * FROM tbl_pesan WHERE idOrder = 0");
-
+    $dataPesanan = query("SELECT * FROM tbl_pesan P, tbl_menu M WHERE P.idMenu = M.idMenu AND idOrder = 0 AND M.idPenjual = '$idUser'");
+    // var_dump($dataPesanan);
+    // die;
     foreach ($dataPesanan as $oneView) {
         $idMenu = $oneView['idMenu'];
         $jumlahPesan = $_POST['jumlahPesan' . $idMenu];
@@ -65,7 +95,7 @@ if (isset($_POST['buttonOrder'])) {
 
 
 
-$dataPesanan = query("SELECT * FROM tbl_pesan P, tbl_menu M WHERE (P.idMenu = M.idMenu) AND idOrder = 0");
+$dataPesanan = query("SELECT * FROM tbl_pesan P, tbl_menu M WHERE (P.idMenu = M.idMenu) AND idOrder = 0 AND idPenjual = $idUser");
 
 
 $pesanan = array();
@@ -125,7 +155,7 @@ foreach ($dataPesanan as $oneView) {
 
                 <?php foreach ($category as $categorySingle):
                     $idCategory = $categorySingle['idCategory'];
-                    $menu = query("SELECT * FROM tbl_menu WHERE idCategory = $idCategory"); ?>
+                    $menu = query("SELECT * FROM tbl_menu WHERE idPenjual = '$idUser' AND idCategory = $idCategory"); ?>
 
                     <div class="grid grid-cols-2 gap-5">
 

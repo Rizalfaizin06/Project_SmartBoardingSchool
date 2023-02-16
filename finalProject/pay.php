@@ -10,13 +10,51 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
-$_SESSION["currentPage"] = "pay";
-
-$menu = query("SELECT * FROM tbl_menu");
 $idUser = $_SESSION["idUser"];
-$namaUser = $_SESSION["namaUser"];
-$saldoUser = $_SESSION["saldoUser"];
-$roleUser = $_SESSION["roleUser"];
+
+$queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
+$role = $queryUser["role"];
+
+
+if ($role == 1) {
+
+
+} elseif ($role == 2) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $saldo = $queryUser["saldo"];
+    $namaToko = $queryUser["namaToko"];
+    $logoToko = $queryUser["logoToko"];
+    $PemasukanHariIni = 128000;
+} else {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
+
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $idOrangTua = $queryUser["idOrangTua"];
+    $saldo = $queryUser["saldo"];
+    $spendingLimit = $queryUser["spendingLimit"];
+    $additionalLimit = $queryUser["additionalLimit"];
+    $totalLimit = $spendingLimit + $additionalLimit;
+    $PengeluaranHariIni = 17000;
+}
 
 
 // if ($roleUser == 3) {
@@ -42,13 +80,24 @@ if (isset($_POST['buttonBayar'])) {
     $totalHarga = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder")[0]["total"];
     var_dump($totalHarga);
 
-    $query = "UPDATE tbl_users U, tbl_order O SET O.statusOrder = 1, saldoUser = 
-        CASE 
-            WHEN idUser = $idPenjual THEN saldoUser + $totalHarga
-            WHEN idUser = $idUser THEN saldoUser - $totalHarga
-            ELSE saldoUser
-        END WHERE U.idUser IN ($idPenjual, $idUser) AND idOrder = $idOrder;";
+    // $query = "UPDATE tbl_users U, tbl_order O SET O.statusOrder = 1, saldoUser = 
+    //     CASE 
+    //         WHEN idUser = $idPenjual THEN saldoUser + $totalHarga
+    //         WHEN idUser = $idUser THEN saldoUser - $totalHarga
+    //         ELSE saldoUser
+    //     END WHERE U.idUser IN ($idPenjual, $idUser) AND idOrder = $idOrder;";
+    // mysqli_query($koneksi, $query);
+
+    $query = "UPDATE tbl_users U, tbl_penjual P SET saldo = saldo + $totalHarga WHERE U.idDetailUser = P.idDetailUser AND idUser = $idPenjual";
     mysqli_query($koneksi, $query);
+    $query = "UPDATE tbl_users U, tbl_siswa S SET saldo = saldo - $totalHarga WHERE U.idDetailUser = S.idDetailUser AND idUser = $idUser";
+    mysqli_query($koneksi, $query);
+    $query = "UPDATE tbl_order SET statusOrder = 1 WHERE idOrder = $idOrder;";
+    mysqli_query($koneksi, $query);
+
+
+
+
     $_SESSION["idPenjual"] = '';
     header("Location: index.php");
     exit;
@@ -77,12 +126,13 @@ if (isset($_POST['buttonBayar'])) {
 
 
     <div class="grid grid-cols-1 items-center justify-items-center bg-primary h-64 w-full rounded-b-3xl shadow-xl p-5">
-        <img src="assets/images/gb.jpg" alt="avatar" class="object-cover rounded-full h-24 w-2h-24">
+        <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
+            class="object-cover rounded-full h-24 w-2h-24">
         <h3 class="text-xl font-poppins font-bold text-white">
-            <?= $namaUser; ?>
+            <?= $realName; ?>
         </h3>
         <h3 class="font-poppins font-bold text-white">
-            <?="Rp " . number_format($saldoUser, 0, ",", ".") ?>
+            <?="Rp " . number_format($saldo, 0, ",", ".") ?>
         </h3>
         <div class=" w-full grid grid-cols-1 justify-items-center">
             <button

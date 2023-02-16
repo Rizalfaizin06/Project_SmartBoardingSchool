@@ -11,8 +11,39 @@ if (!isset($_SESSION["login"])) {
 }
 
 
-$category = query("SELECT DISTINCT namaCategory, tbl_category.idCategory FROM tbl_menu, tbl_category WHERE tbl_menu.idCategory = tbl_category.idCategory");
-$dataPesanan = query("SELECT * FROM tbl_pesan P, tbl_menu M WHERE (P.idMenu = M.idMenu) AND idOrder = 0");
+$idUser = $_SESSION["idUser"];
+
+$queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
+$role = $queryUser["role"];
+
+
+if ($role == 1) {
+
+
+} elseif ($role == 2) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $saldo = $queryUser["saldo"];
+    $namaToko = $queryUser["namaToko"];
+    $logoToko = $queryUser["logoToko"];
+    $PemasukanHariIni = 128000;
+} else {
+
+}
+
+$category = query("SELECT DISTINCT namaCategory, C.idCategory FROM tbl_menu M, tbl_category C WHERE idPenjual = '$idUser' AND M.idCategory = C.idCategory");
+
+
+$dataPesanan = query("SELECT * FROM tbl_pesan P, tbl_menu M WHERE (P.idMenu = M.idMenu) AND idOrder = 0 AND idPenjual = $idUser");
 
 
 $pesanan = array();
@@ -28,13 +59,12 @@ foreach ($dataPesanan as $oneView) {
 ?>
 
 
-
 <div>
     <div class="grid gap-2 justify-items-center">
 
         <?php foreach ($category as $categorySingle):
             $idCategory = $categorySingle['idCategory'];
-            $menu = query("SELECT * FROM tbl_menu WHERE idCategory = $idCategory"); ?>
+            $menu = query("SELECT * FROM tbl_menu WHERE idPenjual = '$idUser' AND idCategory = $idCategory"); ?>
 
             <div class="grid grid-cols-2 gap-5">
 

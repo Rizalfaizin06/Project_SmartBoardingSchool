@@ -12,33 +12,57 @@ if (isset($_POST["login"])) {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    $result = mysqli_query($koneksi, "SELECT * FROM tbl_users WHERE username = '$username'");
-    //cek username
-    // var_dump($result);
-    if (mysqli_num_rows($result) === 1) {
-        //cek password
-        $row = mysqli_fetch_assoc($result);
-        // var_dump(password_verify($password, $row["password"]));
-        if (password_verify($password, $row["password"])) {
-            // var_dump($row['statusUser']);
-            if ($row['statusUser'] == 1) {
+    if (!empty(query("SELECT username FROM tbl_users WHERE username = '$username'"))) {
+
+        $queryUser = query("SELECT * FROM tbl_users WHERE username = '$username'")[0];
+
+        if (password_verify($password, $queryUser['password'])) {
+            if ($queryUser['status'] == 1) {
                 //set session
+                $_SESSION["idUser"] = $queryUser['idUser'];
                 $_SESSION["login"] = true;
-                $_SESSION["idUser"] = $row['idUser'];
-                $_SESSION["namaUser"] = $row['namaUser'];
-                $_SESSION["saldoUser"] = $row['saldoUser'];
-                $_SESSION["roleUser"] = $row['roleUser'];
 
                 header("location: index.php");
                 exit;
             }
             $error = "Akun anda masih menunggu persetujuan";
         } else {
-            $error = "Password salah";
+
+            $error = "Username atau password salah";
         }
     } else {
-        $error = "Username salah";
+        $error = "Username atau password salah";
     }
+
+
+
+
+    // //cek username
+    // // var_dump($result);
+    // if (mysqli_num_rows($result) === 1) {
+    //     //cek password
+    //     $row = mysqli_fetch_assoc($result);
+    //     // var_dump(password_verify($password, $row["password"]));
+    //     if (password_verify($password, $row["password"])) {
+    //         // var_dump($row['statusUser']);
+    //         if ($row['statusUser'] == 1) {
+    //             //set session
+    //             $_SESSION["login"] = true;
+    //             $_SESSION["idUser"] = $row['idUser'];
+    //             $_SESSION["namaUser"] = $row['namaUser'];
+    //             $_SESSION["saldoUser"] = $row['saldoUser'];
+    //             $_SESSION["roleUser"] = $row['roleUser'];
+
+    //             header("location: index.php");
+    //             exit;
+    //         }
+    //         $error = "Akun anda masih menunggu persetujuan";
+    //     } else {
+    //         $error = "Password salah";
+    //     }
+    // } else {
+    //     $error = "Username salah";
+    // }
 }
 ?>
 
@@ -48,103 +72,90 @@ if (isset($_POST["login"])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/icon/bootstrap-icons.css">
-    <title>Student Spending Tracker</title>
+    <link href="dist/css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <title>Student Spending Management</title>
 </head>
 
 <body>
 
 
-    <!-- Section: Design Block -->
-    <section class="">
-        <!-- Jumbotron -->
-        <div class="px-4 py-5 px-md-5 text-center text-lg-start">
-            <div class="container">
-                <div class="row gx-lg-5 align-items-center">
-                    <div class="col-lg-6 mb-5 mb-lg-0">
-                        <h1 class="my-5 display-3 fw-bold ls-tight">
-                            Boarding School<br />
-                            <span class="text-primary fs-1">SMKN 1 WIROSARI</span>
-                        </h1>
-                        <!-- <p style="color: hsl(217, 10%, 50.8%)">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Eveniet, itaque accusantium odio, soluta, corrupti aliquam
-                        quibusdam tempora at cupiditate quis eum maiores libero
-                        veritatis? Dicta facilis sint aliquid ipsum atque?
-                    </p> -->
+
+
+
+
+
+
+
+
+
+
+    <div class="relative min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8  bg-no-repeat bg-cover"
+        style="background-image: url(https://images.unsplash.com/photo-1525302220185-c387a117886e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80);">
+        <div class="absolute bg-black opacity-60 inset-0 z-0"></div>
+        <div class="max-w-md w-full space-y-8 p-10 bg-white rounded-xl z-10">
+            <div class="text-center">
+                <h2 class="mt-6 text-3xl font-bold font-poppins text-gray-900">
+                    Selamat Datang
+                </h2>
+                <p class="mt-2 text-sm text-gray-600">Silahkan login dengan akun anda</p>
+
+                <?php if (isset($error)): ?>
+                    <p class="mt-2 text-sm text-red-500">
+                        <?= $error ?>
+                    </p>
+                <?php endif; ?>
+            </div>
+
+            <form class="mt-8 space-y-6" action="" method="POST">
+                <input type="hidden" name="remember" value="true">
+                <div class="relative">
+
+                    <label class="text-sm font-bold text-gray-700 tracking-wide">Username</label>
+                    <input id="username" name="username"
+                        class=" w-full text-base py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-indigo-500"
+                        type="text" placeholder="Masukkan username" value="">
+                </div>
+                <div class="mt-8 content-center">
+                    <label class="text-sm font-bold text-gray-700 tracking-wide">
+                        Password
+                    </label>
+                    <input id="password" name="password"
+                        class="w-full content-center text-base py-2  border border-gray-300 rounded-xl  focus:outline-none focus:border-indigo-500"
+                        type="password" placeholder="Masukkan password" value="">
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="rememberMe" name="rememberMe" type="checkbox"
+                            class="h-4 w-4 bg-indigo-500 focus:ring-indigo-400 border-gray-300 rounded">
+                        <label for="rememberMe" class="ml-2 block text-sm text-gray-900">
+                            Remember me
+                        </label>
                     </div>
-
-                    <div class="col-lg-6 mb-5 mb-lg-0">
-                        <div class="card">
-
-                            <div class="card-body py-5 px-md-5">
-                                <form action="" method="post">
-                                    <!-- 2 column grid layout with text inputs for the first and last names -->
-                                    <h1 class="mb-3 fw-bold">LOGIN</h1>
-                                    <?php if (isset($error)): ?>
-                                        <p style="color: red; font-style: italic;">
-                                            <?= $error ?>
-                                        </p>
-                                    <?php endif; ?>
-                                    <!-- Email input -->
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="username">Username</label>
-                                        <input type="text" id="username" name="username"
-                                            class="form-control text-center text-lg-start">
-                                    </div>
-
-                                    <!-- Password input -->
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="password">Password</label>
-                                        <input type="password" id="password" name="password"
-                                            class="form-control text-center text-lg-start">
-                                    </div>
-
-                                    <!-- Checkbox -->
-                                    <div class="form-check d-flex justify-content-center mb-4">
-                                        <input class="form-check-input me-2" type="checkbox" value=""
-                                            id="form2Example33" checked />
-                                        <label class="form-check-label" for="form2Example33">
-                                            Remember me
-                                        </label>
-                                    </div>
-
-                                    <!-- Submit button -->
-                                    <div class="text-center">
-
-                                        <button type="submit" name="login" class="btn btn-primary btn-block mb-4 ">
-                                            Sign In
-                                        </button>
-                                    </div>
-
-                                    <!-- Register buttons -->
-
-                                    <div class="text-center">
-                                        <p>Or sign up with :
-
-                                            <a href="registrasi.php"
-                                                class="text-decoration-none text text-black fw-bold">
-                                                Sign
-                                                Up</a>
-                                        </p>
-                                    </div>
-                                </form>
-                                <a href="../" class="text-decoration-none text text-black fw-bold text-center">
-                                    Back</a>
-                            </div>
-                        </div>
+                    <div class="text-sm">
+                        <a href="#" class="font-medium text-indigo-500 hover:text-indigo-500">
+                            Forgot your password?
+                        </a>
                     </div>
                 </div>
-            </div>
+                <div>
+                    <button type="submit" name="login"
+                        class="w-full flex justify-center bg-indigo-500 text-gray-100 p-4  rounded-full tracking-wide
+                                font-semibold  focus:outline-none focus:shadow-outline hover:bg-indigo-600 shadow-lg cursor-pointer transition ease-in duration-300">
+                        Sign in
+                    </button>
+                </div>
+                <p class="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
+                    <span>Belum terdaftar sebagai member?</span>
+                    <a href="#"
+                        class="text-indigo-500 hover:text-indigo-500 no-underline hover:underline cursor-pointer transition ease-in duration-300">Sign
+                        up</a>
+                </p>
+            </form>
         </div>
-        <!-- Jumbotron -->
-    </section>
-    <!-- Section: Design Block -->
-    <script src="assets/js/bootstrap.bundle.min.js">
-    </script>
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/script.js"></script>
+    </div>
 </body>
 
 </html>

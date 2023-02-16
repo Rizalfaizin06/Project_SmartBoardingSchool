@@ -11,13 +11,38 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
-$_SESSION["currentPage"] = "waiting";
 
-$category = query("SELECT DISTINCT namaCategory, tbl_category.idCategory FROM tbl_menu, tbl_category WHERE tbl_menu.idCategory = tbl_category.idCategory");
+
 $idUser = $_SESSION["idUser"];
-$namaUser = $_SESSION["namaUser"];
-$saldoUser = $_SESSION["saldoUser"];
-$roleUser = $_SESSION["roleUser"];
+
+$queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
+$role = $queryUser["role"];
+
+
+if ($role == 1) {
+
+
+} elseif ($role == 2) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $saldo = $queryUser["saldo"];
+    $namaToko = $queryUser["namaToko"];
+    $logoToko = $queryUser["logoToko"];
+    $PemasukanHariIni = 128000;
+} else {
+
+}
+
+$category = query("SELECT DISTINCT namaCategory, C.idCategory FROM tbl_menu M, tbl_category C WHERE idPenjual = '$idUser' AND M.idCategory = C.idCategory");
 // var_dump($category);
 
 // if ($roleUser == 3) {
@@ -37,8 +62,6 @@ if (isset($_POST['buttonCancel'])) {
     $idOrder = $querydOrder[0]["idOrder"];
     var_dump($idOrder);
 
-
-
     $queryDeleteOrder ="DELETE FROM tbl_order WHERE idOrder = $idOrder;";
     mysqli_query($koneksi, $queryDeleteOrder);
 
@@ -57,7 +80,8 @@ if (isset($_POST['buttonCancel'])) {
 
 
 
-$querydOrder = query("SELECT idOrder FROM tbl_order WHERE statusOrder = 0 ORDER BY idOrder DESC LIMIT 1");
+$querydOrder = query("SELECT idOrder FROM tbl_order WHERE idPenjual = '$idUser' AND statusOrder = 0 ORDER BY idOrder DESC LIMIT 1");
+
 if (!empty($querydOrder)) {
     $idOrder = $querydOrder[0]["idOrder"];
     // var_dump($idOrder);
@@ -75,18 +99,7 @@ $pembayaran = $querydOrder;
 
 
 
-$dataPesanan = query("SELECT * FROM tbl_pesan P, tbl_menu M WHERE (P.idMenu = M.idMenu) AND idOrder = 0");
 
-
-$pesanan = array();
-// $dataPesananSingle = "SELECT * FROM tbl_pesan WHERE idOrder = 0";
-// $queryDataPesananSingle = mysqli_query($koneksi, $dataPesananSingle);
-// while($readData = mysqli_fetch_array($queryDataPesananSingle)){
-//   array_push($pesanan, $readData['idMenu']);
-// }
-foreach ($dataPesanan as $oneView) {
-    array_push($pesanan, $oneView['idMenu']);
-}
 ?>
 <!doctype html>
 <html>

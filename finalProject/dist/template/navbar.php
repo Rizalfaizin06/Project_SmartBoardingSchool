@@ -6,17 +6,50 @@ if (!session_id()) {
 
 
 $idUser = $_SESSION["idUser"];
-$namaUser = $_SESSION["namaUser"];
 
 
-$roleUser = $_SESSION["roleUser"];
-$querydLihatSaldo = query("SELECT saldoUser FROM tbl_users WHERE idUser = '$idUser'");
-$saldoUser = $querydLihatSaldo[0]["saldoUser"];
 
 
-$_SESSION["saldoUser"] = $saldoUser;
+if ($role == 1) {
 
-// var_dump($_SESSION['saldoUser']);
+
+} elseif ($role == 2) {
+   $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+   $realName = $queryUser["realName"];
+   $tempatLahir = $queryUser["tempatLahir"];
+   $tanggalLahir = $queryUser["tanggalLahir"];
+   $alamat = $queryUser["alamat"];
+   $nomorTelfon = $queryUser["nomorTelfon"];
+   $email = $queryUser["email"];
+   $profileImage = $queryUser["profileImage"];
+   $role = $queryUser["role"];
+   $idDetailUser = $queryUser["idDetailUser"];
+
+   $saldo = $queryUser["saldo"];
+   $namaToko = $queryUser["namaToko"];
+   $logoToko = $queryUser["logoToko"];
+   $PemasukanHariIni = 128000;
+} else {
+   $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
+
+   $realName = $queryUser["realName"];
+   $tempatLahir = $queryUser["tempatLahir"];
+   $tanggalLahir = $queryUser["tanggalLahir"];
+   $alamat = $queryUser["alamat"];
+   $nomorTelfon = $queryUser["nomorTelfon"];
+   $email = $queryUser["email"];
+   $profileImage = $queryUser["profileImage"];
+   $role = $queryUser["role"];
+   $idDetailUser = $queryUser["idDetailUser"];
+
+   $idOrangTua = $queryUser["idOrangTua"];
+   $saldo = $queryUser["saldo"];
+   $spendingLimit = $queryUser["spendingLimit"];
+   $additionalLimit = $queryUser["additionalLimit"];
+   $totalLimit = $spendingLimit + $additionalLimit;
+   $PengeluaranHariIni = 17000;
+}
+
 
 
 
@@ -44,13 +77,14 @@ $_SESSION["saldoUser"] = $saldoUser;
    aria-label="Sidebar">
    <div class="bg-white">
       <div class="grid grid-cols-3 items-center h-28 w-full bg-primary rounded-br-2xl">
-         <img src="assets/images/gb.jpg" alt="avatar" class="object-cover rounded-full h-16 w-16 ml-3">
+         <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
+            class="object-cover rounded-full h-16 w-16 ml-3">
          <div class="col-span-2">
             <h3 class="font-poppins font-bold text-white">
-               <?= $namaUser; ?>
+               <?= $realName; ?>
             </h3>
             <h3 class="font-poppins font-bold text-white">
-               <?="Rp " . number_format($saldoUser, 0, ",", ".") ?>
+               <?="Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
          </div>
       </div>
@@ -119,7 +153,7 @@ $_SESSION["saldoUser"] = $saldoUser;
             </li>
 
          <?php endif; ?>
-         <?php if ($roleUser == 2): ?>
+         <?php if ($role == 2): ?>
             <?php if ($_SESSION["currentPage"] == "entryMenu"): ?>
                <li>
                   <a href="entryMenu.php" data-drawer-toggle="default-sidebar"
@@ -147,7 +181,7 @@ $_SESSION["saldoUser"] = $saldoUser;
                   </a>
                </li>
             <?php endif; ?>
-         <?php elseif ($roleUser == 3): ?>
+         <?php elseif ($role == 3): ?>
             <?php if ($_SESSION["currentPage"] == "pay"): ?>
                <li>
                   <a href="pay.php" data-drawer-toggle="default-sidebar"

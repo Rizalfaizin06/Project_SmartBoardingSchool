@@ -14,11 +14,38 @@ if (!isset($_SESSION["login"])) {
 
 
 
-$category = query("SELECT DISTINCT namaCategory, tbl_category.idCategory FROM tbl_menu, tbl_category WHERE tbl_menu.idCategory = tbl_category.idCategory");
+
+
 $idUser = $_SESSION["idUser"];
-$namaUser = $_SESSION["namaUser"];
-$saldoUser = $_SESSION["saldoUser"];
-$roleUser = $_SESSION["roleUser"];
+
+$queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
+$role = $queryUser["role"];
+
+
+if ($role == 1) {
+
+
+} elseif ($role == 2) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $saldo = $queryUser["saldo"];
+    $namaToko = $queryUser["namaToko"];
+    $logoToko = $queryUser["logoToko"];
+    $PemasukanHariIni = 128000;
+} else {
+
+}
+
+$category = query("SELECT DISTINCT namaCategory, C.idCategory FROM tbl_menu M, tbl_category C WHERE idPenjual = '$idUser' AND M.idCategory = C.idCategory");
 // var_dump($category);
 
 // if ($roleUser == 3) {
@@ -29,7 +56,7 @@ $pembayaran = query("SELECT idOrder FROM tbl_order WHERE idPenjual = '$idUser' A
 if (!empty($pembayaran)) {
     return false;
 } else {
-    echo '<div>
+    echo '<div class="mt-10">
     <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">Pembayaran Berhasil
     </h2>
 </div>
