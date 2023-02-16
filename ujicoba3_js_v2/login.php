@@ -82,9 +82,10 @@ if (isset($_POST["login"])) {
                                     <!-- 2 column grid layout with text inputs for the first and last names -->
                                     <h1 class="mb-3 fw-bold">LOGIN</h1>
                                     <?php if (isset($error)): ?>
-                                    <p style="color: red; font-style: italic;"><?=$error?>
-                                    </p>
-                                    <?php endif;?>
+                                        <p style="color: red; font-style: italic;">
+                                            <?= $error ?>
+                                        </p>
+                                    <?php endif; ?>
                                     <!-- Email input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="username">Username</label>
