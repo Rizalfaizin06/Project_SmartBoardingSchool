@@ -35,7 +35,7 @@ $_SESSION["saldoUser"] = $saldoUser;
       </svg>
    </button>
    <div class="flex items-center">
-      <h3 class="font-poppins font-bold">Student Spending Tracker
+      <h3 class="font-poppins font-bold">Student Spending Managemet
       </h3>
    </div>
 </div>
