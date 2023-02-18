@@ -245,7 +245,7 @@ if ($role == 1) {
 
          <?php if ($_SESSION["currentPage"] == "transaction"): ?>
             <li>
-               <a href="transaction.php" data-drawer-toggle="default-sidebar"
+               <a href="transactionHistory.php" data-drawer-toggle="default-sidebar"
                   class="flex items-center p-2 text-base font-normal rounded-lg bg-primary hover:bg-opacity-80">
                   <svg aria-hidden="true" class="w-6 h-6 text-gray-500 transition duration-75" fill="currentColor"
                      viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -257,7 +257,7 @@ if ($role == 1) {
             </li>
          <?php else: ?>
             <li>
-               <a href="transaction.php" data-drawer-toggle="default-sidebar"
+               <a href="transactionHistory.php" data-drawer-toggle="default-sidebar"
                   class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg">
                   <svg aria-hidden="true" class="w-6 h-6 text-gray-500 transition duration-75" fill="currentColor"
                      viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

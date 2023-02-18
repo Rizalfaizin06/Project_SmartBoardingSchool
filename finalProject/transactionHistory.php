@@ -12,15 +12,26 @@ if (!isset($_SESSION["login"])) {
 }
 
 
-
+$_SESSION["currentPage"] = "transaction";
 $idUser = $_SESSION["idUser"];
 
 $queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
 $role = $queryUser["role"];
 
-
 if ($role == 1) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_admin A WHERE U.idDetailUser = A.idDetailUser AND idUser = '$idUser'")[0];
+    // var_dump($queryUser);
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
 
+    // $PemasukanHariIni = 128000;
 
 } elseif ($role == 2) {
     $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
@@ -38,6 +49,26 @@ if ($role == 1) {
     $namaToko = $queryUser["namaToko"];
     $logoToko = $queryUser["logoToko"];
     $PemasukanHariIni = 128000;
+} elseif ($role == 3) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
+
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $idOrangTua = $queryUser["idOrangTua"];
+    $saldo = $queryUser["saldo"];
+    $spendingLimit = $queryUser["spendingLimit"];
+    $additionalLimit = $queryUser["additionalLimit"];
+    $totalLimit = $spendingLimit + $additionalLimit;
+    $Pengeluaran = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
+    $PengeluaranHariIni = 17000;
 } else {
 
 }
@@ -56,23 +87,7 @@ $category = query("SELECT DISTINCT namaCategory, C.idCategory FROM tbl_menu M, t
 // var_dump($saldoUser);
 
 
-if (isset($_POST['buttonCancel'])) {
-    // $idPembeli = $_POST['idPembeli'];
-    $querydOrder = query("SELECT idOrder FROM tbl_order WHERE idPenjual = $idUser AND statusOrder = 0 ORDER BY idOrder DESC LIMIT 1");
-    $idOrder = $querydOrder[0]["idOrder"];
-    var_dump($idOrder);
 
-    $queryDeleteOrder ="DELETE FROM tbl_order WHERE idOrder = $idOrder;";
-    mysqli_query($koneksi, $queryDeleteOrder);
-
-
-    $queryDeletePesan ="DELETE FROM tbl_pesan WHERE idOrder = $idOrder;";
-    mysqli_query($koneksi, $queryDeletePesan);
-    // SELECT hargaMenu, jumlahPesan, hargaMenu * jumlahPesan AS total FROM tbl_pesan INNER JOIN tbl_menu ON tbl_pesan.idMenu = tbl_menu.idMenu;
-    header("Location: entryMenu.php");
-    exit;
-
-}
 
 // $idPenjual = 1;
 
@@ -80,24 +95,24 @@ if (isset($_POST['buttonCancel'])) {
 
 
 
-$querydOrder = query("SELECT idOrder FROM tbl_order WHERE idPenjual = '$idUser' AND statusOrder = 0 ORDER BY idOrder DESC LIMIT 1");
+// $querydOrder = query("SELECT idOrder FROM tbl_order WHERE idPenjual = '$idUser' AND statusOrder = 0 ORDER BY idOrder DESC LIMIT 1");
 
-if (!empty($querydOrder)) {
-    $idOrder = $querydOrder[0]["idOrder"];
-    // var_dump($idOrder);
+// if (!empty($querydOrder)) {
+//     $idOrder = $querydOrder[0]["idOrder"];
+//     // var_dump($idOrder);
 
-    $dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder");
-    // var_dump($dataOrderan);
+//     $dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'");
+//     // var_dump($dataOrderan);
 
-    $totalHarga = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder")[0]["total"];
-    // var_dump($totalHarga);
-}
+//     $totalHarga = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder")[0]["total"];
+//     // var_dump($totalHarga);
+// }
 
-$pembayaran = $querydOrder;
-
-
+// $pembayaran = $querydOrder;
 
 
+
+$dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'");
 
 
 ?>
@@ -114,7 +129,7 @@ $pembayaran = $querydOrder;
 </head>
 
 <body>
-
+<?php include 'dist/template/navbar.php'; ?>
 
     <?php //include 'dist/template/navbar.php'; ?>
     <?php
@@ -150,7 +165,7 @@ $pembayaran = $querydOrder;
             <form action="" method="post">
 
                 <div>
-                    <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">Total Tagihan
+                    <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">Transaksi Hari Ini
                     </h2>
                 </div>
 
@@ -221,11 +236,11 @@ $pembayaran = $querydOrder;
 
 
                 <div>
-                    <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">Menunggu pembayaran Sebesar
+                    <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">Total Transaksi
                     </h2>
                     <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">
                         Rp.
-                        <span id="spanTotalHarga"><?= number_format($totalHarga, 0, ",", ".") ?></span>
+                        <span id="spanTotalHarga"><?= number_format($Pengeluaran, 0, ",", ".") ?></span>
                     </h2>
                     <input class="span8" id="tot" name="total_harga" type="hidden" value="" placeholder="" />
 
@@ -234,7 +249,6 @@ $pembayaran = $querydOrder;
                         <div id="qrPane" class="grid grid-cols-1 justify-items-center gap-3 p-5 w-64 items-center"></div>
                     </div>
 
-                    <button class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300" type="submit" id="buttonCancel" name="buttonCancel">Batalkan Pesanan</button>
 
 
                 </div>
@@ -243,109 +257,7 @@ $pembayaran = $querydOrder;
 
 
     </div>
-    <!-- <div class="h-32">
-sfs
-  </div> -->
 
-
-    <script src="dist/js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
-
-        jQuery.ajax({
-            type: "GET",
-            url: "dist/ajax/ajaxGenerateQR.php",
-            data: "",
-            success: function (data) {
-                console.log(data);
-                if (data) {
-                    $("#qrPane").html(data);
-                }
-            }
-        });
-
-
-        setInterval(function () {
-            
-            jQuery.ajax({
-                type: "GET",
-                url: "dist/ajax/ajaxVerificationPayment.php",
-                data: "",
-                success: function (data) {
-                    console.log(data);
-                    if (data) {
-                        $("#allContent").html(data);
-                    }
-                }
-            });
-        }, 1000);
-
-        function insertDataPesan(idMenu) {
-            $.ajax({
-                url: "dist/function/insertDataPesan.php",
-                type: "post",
-                data: { insertDataPesan: idMenu },
-                success: function (response) {
-                    console.log(response);
-
-                    $.ajax({
-                        type: "GET",
-                        url: "assets/ajax/ajaxIndex.php",
-                        data: "",
-                        success: function (data) {
-                            $("#allContent").html(data);
-                            operasi();
-                        }
-                    });
-                }
-            });
-        }
-
-        function deleteDataPesan(idMenu) {
-            $.ajax({
-                url: "dist/function/deleteDataPesan.php",
-                type: "post",
-                data: { deleteDataPesan: idMenu },
-                success: function (response) {
-                    console.log(response);
-                    $.ajax({
-                        type: "GET",
-                        url: "assets/ajax/ajaxIndex.php",
-                        data: "",
-                        success: function (data) {
-                            $("#allContent").html(data);
-                            operasi();
-                        }
-                    });
-
-                }
-            });
-        }
-
-
-        function operasi() {
-            var pesan = new Array();
-            var jumlah = new Array();
-
-            var total = 0;
-            for (var a = 0; a < 1000; a++) {
-                pesan[a] = $("#harga" + a).val();
-                jumlah[a] = $("#jumlahPesan" + a).val();
-
-            }
-            for (var a = 0; a < 1000; a++) {
-                if (pesan[a] == null || pesan[a] == "") {
-                    pesan[a] = 0;
-                    jumlah[a] = 0;
-                }
-                total += Number(pesan[a] * jumlah[a]);
-            }
-
-            //alert(total);
-            $("#spanTotalHarga").text(total);
-            $("#tot").val(total);
-        }
-
-    </script>
     <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
 </body>
 

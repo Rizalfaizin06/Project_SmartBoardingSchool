@@ -168,7 +168,7 @@ $pembayaran = $querydOrder;
                                     Jumlah
                                 </th>
                                 <th scope="col" class="px-2 py-3">
-                                    Hapus
+                                    Total
                                 </th>
                             </tr>
                             <tr>
@@ -316,7 +316,6 @@ sfs
                             operasi();
                         }
                     });
-
                 }
             });
         }
