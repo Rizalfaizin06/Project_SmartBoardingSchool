@@ -17,7 +17,18 @@ $role = $queryUser["role"];
 
 
 if ($role == 1) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
 
+    // $PemasukanHariIni = 128000;
 
 } elseif ($role == 2) {
     $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
@@ -35,7 +46,7 @@ if ($role == 1) {
     $namaToko = $queryUser["namaToko"];
     $logoToko = $queryUser["logoToko"];
     $PemasukanHariIni = 128000;
-} else {
+} elseif ($role == 3) {
     $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
 
     $realName = $queryUser["realName"];
@@ -54,6 +65,8 @@ if ($role == 1) {
     $additionalLimit = $queryUser["additionalLimit"];
     $totalLimit = $spendingLimit + $additionalLimit;
     $PengeluaranHariIni = 17000;
+} else {
+
 }
 
 
@@ -88,15 +101,46 @@ if (isset($_POST['buttonBayar'])) {
     //     END WHERE U.idUser IN ($idPenjual, $idUser) AND idOrder = $idOrder;";
     // mysqli_query($koneksi, $query);
 
-    $query = "UPDATE tbl_users U, tbl_penjual P SET saldo = saldo + $totalHarga WHERE U.idDetailUser = P.idDetailUser AND idUser = $idPenjual";
-    mysqli_query($koneksi, $query);
-    $query = "UPDATE tbl_users U, tbl_siswa S SET saldo = saldo - $totalHarga WHERE U.idDetailUser = S.idDetailUser AND idUser = $idUser";
-    mysqli_query($koneksi, $query);
-    $query = "UPDATE tbl_order SET statusOrder = 1 WHERE idOrder = $idOrder;";
-    mysqli_query($koneksi, $query);
 
+    // START OLD METHOD
 
+    // $query = "UPDATE tbl_users U, tbl_penjual P SET saldo = saldo + $totalHarga WHERE U.idDetailUser = P.idDetailUser AND idUser = $idPenjual";
+    // mysqli_query($koneksi, $query);
+    // $query = "UPDATE tbl_users U, tbl_siswa S SET saldo = saldo - $totalHarga WHERE U.idDetailUser = S.idDetailUser AND idUser = $idUser";
+    // mysqli_query($koneksi, $query);
+    // $query = "UPDATE tbl_order SET statusOrder = 1, idPembeli = $idUser WHERE idOrder = $idOrder;";
+    // mysqli_query($koneksi, $query);
 
+    // END OLD METHOD
+
+    //memulai transaction
+    mysqli_autocommit($koneksi, false);
+
+    try {
+        //menambah saldo pengguna penerima
+        $sql = "UPDATE tbl_users U, tbl_penjual P SET saldo = saldo + $totalHarga WHERE U.idDetailUser = P.idDetailUser AND idUser = $idPenjual";
+        mysqli_query($koneksi, $sql);
+
+        //mengurangi saldo pengguna pengirim
+        $sql = "UPDATE tbl_users U, tbl_siswa S SET saldo = saldo - $totalHarga WHERE U.idDetailUser = S.idDetailUser AND idUser = $idUser";
+        mysqli_query($koneksi, $sql);
+
+        //menyelesaikan orderan
+        $sql = "UPDATE tbl_order SET statusOrder = 1, idPembeli = $idUser WHERE idOrder = $idOrder";
+        mysqli_query($koneksi, $sql);
+
+        //commit transaction jika operasi transfer berhasil
+        mysqli_commit($koneksi);
+
+        // echo "Transfer saldo berhasil!";
+    } catch (Exception $e) {
+        //rollback transaction jika terjadi kesalahan pada operasi transfer
+        mysqli_rollback($koneksi);
+        // echo "Transfer saldo gagal: " . $e->getMessage();
+    }
+
+    //aktifkan kembali mode autocommit
+    mysqli_autocommit($koneksi, true);
 
     $_SESSION["idPenjual"] = '';
     header("Location: index.php");
@@ -213,7 +257,7 @@ if (isset($_POST['buttonBayar'])) {
                     codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
                         if (result) {
                             console.log(result);
-                            document.getElementById('result').textContent = result.text;
+                            // document.getElementById('result').textContent = result.text;
                             codeReader.reset();
                             $.ajax({
                                 url: "dist/ajax/ajaxConfirmPayment.php",

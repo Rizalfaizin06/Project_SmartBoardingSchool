@@ -19,7 +19,19 @@ $role = $queryUser["role"];
 
 
 if ($role == 1) {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_admin A WHERE U.idDetailUser = A.idDetailUser AND idUser = '$idUser'")[0];
+    // var_dump($queryUser);
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
 
+    // $PemasukanHariIni = 128000;
 
 } elseif ($role == 2) {
     $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
@@ -37,7 +49,7 @@ if ($role == 1) {
     $namaToko = $queryUser["namaToko"];
     $logoToko = $queryUser["logoToko"];
     $PemasukanHariIni = 128000;
-} else {
+} elseif ($role == 3) {
     $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
 
     $realName = $queryUser["realName"];
@@ -55,13 +67,16 @@ if ($role == 1) {
     $spendingLimit = $queryUser["spendingLimit"];
     $additionalLimit = $queryUser["additionalLimit"];
     $totalLimit = $spendingLimit + $additionalLimit;
+    $Pengeluaran = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
     $PengeluaranHariIni = 17000;
+} else {
+
 }
 
 
 
-
 // var_dump($_SESSION['sal$saldo']);
+// var_dump($tanggal);
 
 
 
@@ -102,6 +117,14 @@ if ($role == 1) {
     <div class="grid grid-cols-1 items-center justify-items-center bg-primary h-64 w-full rounded-b-3xl shadow-xl p-5">
 
         <?php if ($role == 1): ?>
+            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
+                class="object-cover rounded-full h-24 w-2h-24">
+            <h3 class="text-xl font-poppins font-bold text-white">
+                <?= $realName; ?>
+            </h3>
+            <h3 class="font-poppins font-bold text-white">
+                <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+            </h3>
         <?php elseif ($role == 2): ?>
             <img src="assets/images/avatar/<?= $logoToko; ?>" alt="avatar" class="object-cover rounded-full h-24 w-2h-24">
             <h3 class="text-xl font-poppins font-bold text-white">
@@ -119,29 +142,85 @@ if ($role == 1) {
             <h3 class="font-poppins font-bold text-white">
                 <?="Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
+            <div class=" w-full grid grid-cols-1 justify-items-center">
+                <button id="buttonTopUpSiswa"
+                    class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
+                    <div class="grid grid-cols-2 h-10 items-center justify-items-center">
+                        <img src="assets/icon/topUp.png" alt="" class="h-6">
+
+                        <h3 class="text-md font-poppins font-bold px-1">
+                            Top Up
+                        </h3>
+                    </div>
+                </button>
+            </div>
+
+            <script src="dist/js/jquery-3.6.0.min.js"></script>
+            <script>
+                $("#buttonTopUpSiswa").click(function () {
+                    $(this).hide();
+                    $("#buttonBayar").hide();
+                    $.ajax({
+                        type: "GET",
+                        url: "dist/ajax/ajaxGenerateQR.php",
+                        data: "",
+                        success: function (data) {
+                            console.log(data);
+                            $("#siswaPane").html(data)
+                        }
+                    });
+                });
+
+
+            </script>
         <?php else: ?>
         <?php endif; ?>
 
-
-
-        <div class=" w-full grid grid-cols-1 justify-items-center">
-            <button
-                class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
-                <div class="grid grid-cols-2 h-10 items-center justify-items-center">
-                    <img src="assets/icon/topUp.png" alt="" class="h-6">
-                    <h3 class="text-md font-poppins font-bold px-1">
-                        Top Up
-                    </h3>
-                </div>
-            </button>
-        </div>
     </div>
 
     <div class="w-xl grid  items-center justify-items-center ">
         <div class="grid grid-cols-1 gap-8 p-5 w-full max-w-xl">
 
             <?php
-            if ($role == 2): ?>
+            if ($role == 1): ?>
+                <div id="adminPane">
+                    <button id="buttonQR"
+                        class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-2 gap-5 items-center">
+                        <h3 class="text-2xl font-poppins font-bold justify-self-end ">
+                            <img src="assets/icon/topUp.png" alt="" class="">
+                        </h3>
+                        <h3 class="text-xl font-poppins font-bold justify-self-start">
+                            Top Up
+                        </h3>
+
+                    </button>
+                    <a class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-2 gap-5 items-center">
+                        <h3 class="text-2xl font-poppins font-bold justify-self-end ">
+                            <img src="assets/icon/withdraw.png" alt="" class="">
+                        </h3>
+                        <h3 class="text-xl font-poppins font-bold justify-self-start">
+                            withdraw
+                        </h3>
+
+                    </a>
+                </div>
+                <script src="dist/js/jquery-3.6.0.min.js"></script>
+                <script>
+                    $("#buttonQR").click(function () {
+                        $.ajax({
+                            type: "GET",
+                            url: "dist/ajax/ajaxGenerateQR.php",
+                            data: "",
+                            success: function (data) {
+                                console.log(data);
+                                $("#adminPane").html(data)
+                            }
+                        });
+                    });
+
+
+                </script>
+            <?php elseif ($role == 2): ?>
                 <div
                     class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-1 gap-5 justify-items-center">
                     <h3 class="text-xl font-poppins font-bold">
@@ -153,19 +232,19 @@ if ($role == 1) {
 
                 </div>
             <?php elseif ($role == 3): ?>
-                <div
+                <div id="siswaPane"
                     class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-1 gap-5 justify-items-center">
                     <h3 class="text-xl font-poppins font-bold">
                         Pengeluaran Harian
                     </h3>
                     <h3 class="text-2xl font-poppins font-bold">
-                        <?="Rp " . number_format($PengeluaranHariIni, 0, ",", ".") ?>/
+                        <?="Rp " . number_format($Pengeluaran, 0, ",", ".") ?>/
                         <?="Rp " . number_format($totalLimit, 0, ",", ".") ?>
                     </h3>
                     <h3 class="font-poppins font-bold">
                         <?php
 
-                        $persentase = ($PengeluaranHariIni / $totalLimit) * 100;
+                        $persentase = ($Pengeluaran / $totalLimit) * 100;
 
                         echo round($persentase, 2) . "%";
                         ?>
@@ -191,7 +270,7 @@ if ($role == 1) {
                         </div>
                     </a>
                 <?php elseif ($role == 3): ?>
-                    <a href="pay.php"
+                    <a href="pay.php" id="buttonBayar"
                         class="px-4 py-2 mt-2 text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
                         <div class="grid grid-cols-2 h-10 items-center justify-items-center">
                             <img src="assets/icon/scanQR.png" alt="" class="h-6">

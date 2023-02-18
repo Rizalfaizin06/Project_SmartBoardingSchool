@@ -157,7 +157,7 @@ foreach ($dataPesanan as $oneView) {
                     $idCategory = $categorySingle['idCategory'];
                     $menu = query("SELECT * FROM tbl_menu WHERE idPenjual = '$idUser' AND idCategory = $idCategory"); ?>
 
-                    <div class="grid grid-cols-2 gap-5">
+                    <div class="grid grid-cols-2 gap-5 w-full">
 
 
                         <div class="justify-self-start col-span-2">
@@ -171,7 +171,7 @@ foreach ($dataPesanan as $oneView) {
                             ?>
 
                             <div
-                                class="block w-40 md:w-full h-full bg-white border border-gray-200 rounded-xl shadow overflow-hidden">
+                                class="block w-40 md:w-full md:max-w-xs h-full bg-white border border-gray-200 rounded-xl shadow overflow-hidden">
                                 <div class="grid grid-cols-1 md:grid-cols-2 h-full">
                                     <img src="assets/images/<?= $oneView["gambarMenu"]; ?>" alt="esdgtsdf"
                                         class="object-cover w-full h-36">

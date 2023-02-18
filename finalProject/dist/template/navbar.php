@@ -11,7 +11,20 @@ $idUser = $_SESSION["idUser"];
 
 
 if ($role == 1) {
+   $queryUser = query("SELECT * FROM tbl_users U, tbl_admin A WHERE U.idDetailUser = A.idDetailUser AND idUser = '$idUser'")[0];
+   // var_dump($queryUser);
+   $realName = $queryUser["realName"];
+   $tempatLahir = $queryUser["tempatLahir"];
+   $tanggalLahir = $queryUser["tanggalLahir"];
+   $alamat = $queryUser["alamat"];
+   $nomorTelfon = $queryUser["nomorTelfon"];
+   $email = $queryUser["email"];
+   $profileImage = $queryUser["profileImage"];
+   $role = $queryUser["role"];
+   $idDetailUser = $queryUser["idDetailUser"];
+   $saldo = $queryUser["saldo"];
 
+   // $PemasukanHariIni = 128000;
 
 } elseif ($role == 2) {
    $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
@@ -29,7 +42,7 @@ if ($role == 1) {
    $namaToko = $queryUser["namaToko"];
    $logoToko = $queryUser["logoToko"];
    $PemasukanHariIni = 128000;
-} else {
+} elseif ($role == 3) {
    $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
 
    $realName = $queryUser["realName"];
@@ -48,6 +61,8 @@ if ($role == 1) {
    $additionalLimit = $queryUser["additionalLimit"];
    $totalLimit = $spendingLimit + $additionalLimit;
    $PengeluaranHariIni = 17000;
+} else {
+
 }
 
 
@@ -127,31 +142,33 @@ if ($role == 1) {
 
 
 
-         <?php if ($_SESSION["currentPage"] == "profile"): ?>
-            <li>
-               <a href="profile.php" data-drawer-toggle="default-sidebar"
-                  class="flex items-center p-2 text-base font-normal rounded-lg bg-primary hover:bg-opacity-80">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75"
-                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
-                     </path>
-                  </svg>
-                  <span class="ml-3 font-poppins text-white whitespace-nowrap">Profil</span>
-               </a>
-            </li>
-         <?php else: ?>
-            <li>
-               <a href="profile.php" data-drawer-toggle="default-sidebar"
-                  class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75"
-                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
-                     </path>
-                  </svg>
-                  <span class="flex-1 ml-3 whitespace-nowrap">Profil</span>
-               </a>
-            </li>
+         <?php if ($role != 1): ?>
+            <?php if ($_SESSION["currentPage"] == "profile"): ?>
+               <li>
+                  <a href="profile.php" data-drawer-toggle="default-sidebar"
+                     class="flex items-center p-2 text-base font-normal rounded-lg bg-primary hover:bg-opacity-80">
+                     <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75"
+                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
+                        </path>
+                     </svg>
+                     <span class="ml-3 font-poppins text-white whitespace-nowrap">Profil</span>
+                  </a>
+               </li>
+            <?php else: ?>
+               <li>
+                  <a href="profile.php" data-drawer-toggle="default-sidebar"
+                     class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg">
+                     <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75"
+                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
+                        </path>
+                     </svg>
+                     <span class="flex-1 ml-3 whitespace-nowrap">Profil</span>
+                  </a>
+               </li>
 
+            <?php endif; ?>
          <?php endif; ?>
          <?php if ($role == 2): ?>
             <?php if ($_SESSION["currentPage"] == "entryMenu"): ?>

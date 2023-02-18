@@ -85,7 +85,7 @@ if (!empty($querydOrder)) {
 } else {
     // echo $idPenjual;
     echo '<div>
-    <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">QR Code Salah
+    <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">Belum ada pembayaran
     </h2>
 </div>
 <button onClick="window.location.reload();"
