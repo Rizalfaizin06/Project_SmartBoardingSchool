@@ -17,7 +17,7 @@ $role = $queryUser["role"];
 
 
 if ($role == 1) {
-    $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_admin P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
     $realName = $queryUser["realName"];
     $tempatLahir = $queryUser["tempatLahir"];
     $tanggalLahir = $queryUser["tanggalLahir"];
@@ -82,51 +82,20 @@ if ($role == 1) {
 
 
 if (isset($_POST['buttonBayar'])) {
-    $idPenjual = $_SESSION["idPenjual"];
-    $pembayaran = query("SELECT idOrder FROM tbl_order WHERE idPenjual = '$idPenjual' AND statusOrder = 0 ORDER BY idOrder DESC LIMIT 1");
-    $idOrder = $pembayaran[0]["idOrder"];
-    var_dump($idOrder);
+    $jumlahBayar = $_POST['jumlahBayar'];
+    $idPenerima = $_POST['idPenerima'];
 
-    $dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder");
-    var_dump($dataOrderan);
-
-    $totalHarga = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder")[0]["total"];
-    var_dump($totalHarga);
-
-    // $query = "UPDATE tbl_users U, tbl_order O SET O.statusOrder = 1, saldoUser = 
-    //     CASE 
-    //         WHEN idUser = $idPenjual THEN saldoUser + $totalHarga
-    //         WHEN idUser = $idUser THEN saldoUser - $totalHarga
-    //         ELSE saldoUser
-    //     END WHERE U.idUser IN ($idPenjual, $idUser) AND idOrder = $idOrder;";
-    // mysqli_query($koneksi, $query);
-
-
-    // START OLD METHOD
-
-    // $query = "UPDATE tbl_users U, tbl_penjual P SET saldo = saldo + $totalHarga WHERE U.idDetailUser = P.idDetailUser AND idUser = $idPenjual";
-    // mysqli_query($koneksi, $query);
-    // $query = "UPDATE tbl_users U, tbl_siswa S SET saldo = saldo - $totalHarga WHERE U.idDetailUser = S.idDetailUser AND idUser = $idUser";
-    // mysqli_query($koneksi, $query);
-    // $query = "UPDATE tbl_order SET statusOrder = 1, idPembeli = $idUser WHERE idOrder = $idOrder;";
-    // mysqli_query($koneksi, $query);
-
-    // END OLD METHOD
 
     //memulai transaction
     mysqli_autocommit($koneksi, false);
 
     try {
         //menambah saldo pengguna penerima
-        $sql = "UPDATE tbl_users U, tbl_penjual P SET saldo = saldo + $totalHarga WHERE U.idDetailUser = P.idDetailUser AND idUser = $idPenjual";
+        $sql = "UPDATE tbl_users U, tbl_admin A SET saldo = saldo - $jumlahBayar WHERE U.idDetailUser = A.idDetailUser AND idUser = $idUser";
         mysqli_query($koneksi, $sql);
 
         //mengurangi saldo pengguna pengirim
-        $sql = "UPDATE tbl_users U, tbl_siswa S SET saldo = saldo - $totalHarga WHERE U.idDetailUser = S.idDetailUser AND idUser = $idUser";
-        mysqli_query($koneksi, $sql);
-
-        //menyelesaikan orderan
-        $sql = "UPDATE tbl_order SET statusOrder = 1, idPembeli = $idUser WHERE idOrder = $idOrder";
+        $sql = "UPDATE tbl_users U, tbl_siswa S SET saldo = saldo + $jumlahBayar WHERE U.idDetailUser = S.idDetailUser AND idUser = $idPenerima";
         mysqli_query($koneksi, $sql);
 
         //commit transaction jika operasi transfer berhasil
@@ -142,7 +111,6 @@ if (isset($_POST['buttonBayar'])) {
     //aktifkan kembali mode autocommit
     mysqli_autocommit($koneksi, true);
 
-    $_SESSION["idPenjual"] = '';
     header("Location: index.php");
     exit;
 }
@@ -178,45 +146,62 @@ if (isset($_POST['buttonBayar'])) {
         <h3 class="font-poppins font-bold text-white">
             <?="Rp " . number_format($saldo, 0, ",", ".") ?>
         </h3>
-        <div class=" w-full grid grid-cols-1 justify-items-center">
-            <button
-                class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
-                <div class="grid grid-cols-2 h-10 items-center justify-items-center">
-                    <img src="assets/icon/topUp.png" alt="" class="h-6">
-                    <h3 class="text-md font-poppins font-bold px-1">
-                        Top Up
-                    </h3>
-                </div>
-            </button>
-        </div>
     </div>
 
 
     <div class="grid grid-cols-1 justify-items-center w-full gap-3 p-5" id="allContent">
+        <div id="scanQR">
+            <h3 class="font-poppins font-bold">Scan QR untuk membayar</h3>
 
-        <h3 id="result" class="font-poppins font-bold">Scan QR untuk membayar</h3>
-
-        <div class="grid grid-cols-1 justify-items-center bg-white h-64 w-64 rounded-2xl overflow-hidden ">
-            <div class="h-64 w-64 overflow-hidden">
-                <video id="video" class="object-fill"></video>
+            <div class="grid grid-cols-1 justify-items-center bg-white h-64 w-64 rounded-2xl overflow-hidden ">
+                <div class="h-64 w-64 overflow-hidden">
+                    <video id="video" class="object-fill"></video>
+                </div>
+                <div class="relative w-64 h-[50px] -top-64 bg-black bg-opacity-60 justify-self-start"></div>
+                <div class="grid gap-2 grid-cols-2 relative w-64 h-[155px]">
+                    <div class="relative w-[46px] h-[155px] -top-64 bg-black bg-opacity-60 justify-self-start"></div>
+                    <div class="relative w-[46px] h-[155px] -top-64 bg-black bg-opacity-60 justify-self-end"></div>
+                </div>
+                <div class="relative w-64 h-[50px] -top-64 bg-black bg-opacity-60 justify-self-start"></div>
+                <img src="assets/icon/camScan.png" alt="avatar" class="relative h-48 -top-[480px]">
             </div>
-            <div class="relative w-64 h-[50px] -top-64 bg-black bg-opacity-60 justify-self-start"></div>
-            <div class="grid gap-2 grid-cols-2 relative w-64 h-[155px]">
-                <div class="relative w-[46px] h-[155px] -top-64 bg-black bg-opacity-60 justify-self-start"></div>
-                <div class="relative w-[46px] h-[155px] -top-64 bg-black bg-opacity-60 justify-self-end"></div>
-            </div>
-            <div class="relative w-64 h-[50px] -top-64 bg-black bg-opacity-60 justify-self-start"></div>
-            <img src="assets/icon/camScan.png" alt="avatar" class="relative h-48 -top-[480px]">
         </div>
+        <div id="bayarTopUp">
+            <form class="grid grid-cols-1 gap-5 items-center" action="" method="POST">
+                <input type="hidden" id="idPenerima" name="idPenerima" value="">
 
+                <span class="text-sm text-center font-poppins font-bold">Top up kepada <span
+                        id="spanNama"></span></span>
+                <div>
+                    <label for="jumlahBayar" class="ml-2 block text-sm text-gray-900 text-center">
+                        Masukkan jumlah
+                    </label>
+                    <input id="jumlahBayar" name="jumlahBayar"
+                        class=" w-full text-base py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-indigo-500"
+                        type="text" placeholder="" value="">
+                </div>
+                <button type="submit" name="buttonBayar" class="px-7 py-3 rounded-lg bg-primary hover:bg-opacity-80">
+                    <span class="text-sm font-poppins font-bold text-white">Transfer</span>
+                </button>
+            </form>
+        </div>
         <a href="index.php" class="px-7 py-3 rounded-lg bg-primary hover:bg-opacity-80">
 
 
             <span class="text-sm font-poppins font-bold text-white">Back</span>
         </a>
+
     </div>
 
-
+    <div id="wrongQR" class="grid grid-cols-1 justify-items-center w-full gap-3 p-5">
+        <div>
+            <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">QR Code Salah
+            </h2>
+        </div>
+        <button onClick="window.location.reload();"
+            class="px-4 py-2 mt-2 text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
+            id="buttonUlang" name="buttonUlang">Ulangi</button>
+    </div>
 
 
     <script src="dist/js/jquery-3.6.0.min.js"></script>
@@ -227,6 +212,8 @@ if (isset($_POST['buttonBayar'])) {
 
     <script type="text/javascript">
         window.addEventListener('load', function () {
+            $("#bayarTopUp").hide();
+            $("#wrongQR").hide();
             let selectedDeviceId;
             const codeReader = new ZXing.BrowserMultiFormatReader()
             console.log('ZXing code reader initialized')
@@ -259,15 +246,26 @@ if (isset($_POST['buttonBayar'])) {
                             console.log(result);
                             // document.getElementById('result').textContent = result.text;
                             codeReader.reset();
+
                             $.ajax({
-                                url: "dist/ajax/ajaxConfirmPayment.php",
+                                url: "dist/ajax/ajaxTopUp.php",
                                 type: "post",
-                                data: { idPenjual: result.text },
+                                data: { idPenerima: result.text },
                                 success: function (response) {
                                     console.log(response);
-                                    $("#allContent").html(response);
+                                    if (response) {
+                                        $('#spanNama').text(response);
+                                        $('#idPenerima').val(result);
+                                        $("#scanQR").hide();
+                                        $("#bayarTopUp").show();
+                                    } else {
+                                        $("#allContent").hide();
+                                        $("#wrongQR").show();
+                                    }
+
                                 }
                             });
+                            // echo $idPenerima;
 
 
                         }
@@ -292,11 +290,11 @@ if (isset($_POST['buttonBayar'])) {
                     //   console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
                     // })
 
-                    // document.getElementById('resetButton').addEventListener('click', () => {
-                    //     codeReader.reset()
-                    //     document.getElementById('result').textContent = '';
-                    //     console.log('Reset.')
-                    // })
+                    document.getElementById('resetButton').addEventListener('click', () => {
+                        codeReader.reset()
+                        document.getElementById('result').textContent = '';
+                        console.log('Reset.')
+                    })
 
                 })
                 .catch((err) => {

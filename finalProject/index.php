@@ -73,7 +73,8 @@ if ($role == 1) {
 
 }
 
-
+$myuuid = createUUID();
+echo $myuuid;
 
 // var_dump($_SESSION['sal$saldo']);
 // var_dump($tanggal);
@@ -133,6 +134,18 @@ if ($role == 1) {
             <h3 class="font-poppins font-bold text-white">
                 <?="Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
+            <div class=" w-full grid grid-cols-1 justify-items-center">
+                <a href="withdraw.php" id="buttonWithdrawPenjual"
+                    class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
+                    <div class="grid grid-cols-2 h-10 items-center justify-items-center">
+                        <img src="assets/icon/withdraw.png" alt="" class="h-6">
+
+                        <h3 class="text-md font-poppins font-bold ">
+                            Withdraw
+                        </h3>
+                    </div>
+                </a>
+            </div>
         <?php elseif ($role == 3): ?>
             <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
                 class="object-cover rounded-full h-24 w-2h-24">
@@ -178,13 +191,13 @@ if ($role == 1) {
 
     </div>
 
-    <div class="w-xl grid  items-center justify-items-center ">
+    <div class="w-xl grid items-center justify-items-center ">
         <div class="grid grid-cols-1 gap-8 p-5 w-full max-w-xl">
 
             <?php
             if ($role == 1): ?>
-                <div id="adminPane">
-                    <button id="buttonQR"
+                <div id="adminPane" class="grid grid-cols-1 gap-5 justify-items-center">
+                    <a href="topUp.php" id="buttonQR"
                         class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-2 gap-5 items-center">
                         <h3 class="text-2xl font-poppins font-bold justify-self-end ">
                             <img src="assets/icon/topUp.png" alt="" class="">
@@ -193,8 +206,9 @@ if ($role == 1) {
                             Top Up
                         </h3>
 
-                    </button>
-                    <a class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-2 gap-5 items-center">
+                    </a>
+                    <button id="buttonWithdraw"
+                        class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-2 gap-5 items-center">
                         <h3 class="text-2xl font-poppins font-bold justify-self-end ">
                             <img src="assets/icon/withdraw.png" alt="" class="">
                         </h3>
@@ -202,11 +216,11 @@ if ($role == 1) {
                             withdraw
                         </h3>
 
-                    </a>
+                    </button>
                 </div>
                 <script src="dist/js/jquery-3.6.0.min.js"></script>
                 <script>
-                    $("#buttonQR").click(function () {
+                    $("#buttonWithdraw").click(function () {
                         $.ajax({
                             type: "GET",
                             url: "dist/ajax/ajaxGenerateQR.php",
