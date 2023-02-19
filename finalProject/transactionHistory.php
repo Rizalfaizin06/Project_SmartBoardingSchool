@@ -114,6 +114,8 @@ $category = query("SELECT DISTINCT namaCategory, C.idCategory FROM tbl_menu M, t
 
 $dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'");
 
+$logTransaksi = query("SELECT * FROM tbl_log WHERE DATE(waktuTransfer) = '$tanggal' ORDER BY idLog DESC");
+
 
 ?>
 <!doctype html>
@@ -168,7 +170,79 @@ $dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMe
                     <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">Transaksi Hari Ini
                     </h2>
                 </div>
+<?php if ($role == 1): ?>
+    <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase   dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-2 py-3">
+                                    Pengirim
+                                </th>
+                                <th scope="col" class="px-2 py-3">
+                                    Penerima
+                                </th>
+                                <th scope="col" class="px-2 py-3">
+                                    Jumlah
+                                </th>
+                                <th scope="col" class="px-2 py-3">
+                                    Waktu
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="4">
+                                    <div class="border-t-2 border-gray-400 w-full"></div>
+                                </th>
+                            </tr>
+                        </thead>
 
+                        <tbody>
+                            <?php foreach ($logTransaksi as $oneView):
+                                ?>
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row"
+                                        class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <?= $oneView["uuidPengirim"]; ?>
+                                    </th>
+                                    <td class="px-2 py-4">
+                                        <?= $oneView["uuidPenerima"]; ?>
+                                    </td>
+                                    
+                                    <td class="px-2 py-4">
+                                    <?= $oneView["jumlahTransfer"]; ?>
+                                    </td>
+                                    
+                                    <td class="px-2 py-4">
+                                    <?= $oneView["waktuTransfer"]; ?>
+                                    </td>
+                                </tr>
+
+                            <?php endforeach;
+                            
+                            ?>
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <!-- <div>
+                    <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">Total Transaksi
+                    </h2>
+                    <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">
+                        Rp.
+                        <span id="spanTotalHarga"><?= number_format($Pengeluaran, 0, ",", ".") ?></span>
+                    </h2>
+                    <input class="span8" id="tot" name="total_harga" type="hidden" value="" placeholder="" />
+
+                    <input type="hidden" name="idMenu" value="<?= $oneView["idMenu"]; ?>">
+                    <div class="w-full grid grid-cols-1 items-center justify-items-center">
+                        <div id="qrPane" class="grid grid-cols-1 justify-items-center gap-3 p-5 w-64 items-center"></div>
+                    </div>
+                </div> -->
+<?php elseif ($role == 2): ?>
+<?php elseif ($role == 3): ?>
                 <div class="relative overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase   dark:bg-gray-700 dark:text-gray-400">
@@ -249,9 +323,13 @@ $dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMe
                         <div id="qrPane" class="grid grid-cols-1 justify-items-center gap-3 p-5 w-64 items-center"></div>
                     </div>
 
-
-
+                
                 </div>
+<?php else: ?>
+<?php endif; ?>
+                
+
+
             </form>
         </div>
 

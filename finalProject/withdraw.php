@@ -85,6 +85,14 @@ if (isset($_POST['buttonBayar'])) {
     $jumlahBayar = $_POST['jumlahBayar'];
     $idPenerima = $_POST['idPenerima'];
 
+    $queryAdmin = query("SELECT * FROM tbl_users U, tbl_admin A WHERE U.idDetailUser = A.idDetailUser AND idUser = '$idPenerima'")[0];
+    $realNameAdmin = $queryAdmin["realName"];
+    $saldoAdmin = $queryAdmin["saldo"];
+
+    $queryPenjual = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $realNamePenjual = $queryPenjual["realName"];
+    $saldoPenjual = $queryPenjual["saldo"];
+
 
     //memulai transaction
     mysqli_autocommit($koneksi, false);
@@ -96,6 +104,10 @@ if (isset($_POST['buttonBayar'])) {
 
         //mengurangi saldo pengguna pengirim
         $sql = "UPDATE tbl_users U, tbl_admin A SET saldo = saldo + $jumlahBayar WHERE U.idDetailUser = A.idDetailUser AND idUser = $idPenerima";
+        mysqli_query($koneksi, $sql);
+
+        //menulis Log transaksi
+        $sql = "INSERT INTO tbl_log (idLog, uuidPengirim, saldoPengirim, uuidPenerima, saldoPenerima, jumlahTransfer, waktuTransfer) VALUES (NULL, '$realNamePenjual', '$saldoPenjual', '$realNameAdmin', '$saldoAdmin', '$jumlahBayar', '$jamTanggal');";
         mysqli_query($koneksi, $sql);
 
         //commit transaction jika operasi transfer berhasil

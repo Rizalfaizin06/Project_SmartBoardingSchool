@@ -10,6 +10,7 @@ $koneksi = mysqli_connect("127.0.0.1", "rizal", "rizal", "db_ssm");
 date_default_timezone_set('Asia/Jakarta');
 $tanggal = date("Y-m-d");
 $jam = date("H:i:s");
+$jamTanggal = date("Y-m-d H:i:s");
 
 
 

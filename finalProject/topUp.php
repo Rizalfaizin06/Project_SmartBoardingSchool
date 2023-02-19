@@ -85,6 +85,13 @@ if (isset($_POST['buttonBayar'])) {
     $jumlahBayar = $_POST['jumlahBayar'];
     $idPenerima = $_POST['idPenerima'];
 
+    $queryAdmin = query("SELECT * FROM tbl_users U, tbl_admin A WHERE U.idDetailUser = A.idDetailUser AND idUser = '$idUser'")[0];
+    $realNameAdmin = $queryAdmin["realName"];
+    $saldoAdmin = $queryAdmin["saldo"];
+
+    $querySiswa = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idPenerima'")[0];
+    $realNameSiswa = $querySiswa["realName"];
+    $saldoSiswa = $querySiswa["saldo"];
 
     //memulai transaction
     mysqli_autocommit($koneksi, false);
@@ -98,6 +105,10 @@ if (isset($_POST['buttonBayar'])) {
         $sql = "UPDATE tbl_users U, tbl_siswa S SET saldo = saldo + $jumlahBayar WHERE U.idDetailUser = S.idDetailUser AND idUser = $idPenerima";
         mysqli_query($koneksi, $sql);
 
+        //menulis Log transaksi
+        $sql = "INSERT INTO tbl_log (idLog, uuidPengirim, saldoPengirim, uuidPenerima, saldoPenerima, jumlahTransfer, waktuTransfer) VALUES (NULL, '$realNameAdmin', '$saldoAdmin', '$realNameSiswa', '$saldoSiswa', '$jumlahBayar', '$jamTanggal');";
+        mysqli_query($koneksi, $sql);
+
         //commit transaction jika operasi transfer berhasil
         mysqli_commit($koneksi);
 
@@ -105,7 +116,8 @@ if (isset($_POST['buttonBayar'])) {
     } catch (Exception $e) {
         //rollback transaction jika terjadi kesalahan pada operasi transfer
         mysqli_rollback($koneksi);
-        // echo "Transfer saldo gagal: " . $e->getMessage();
+        echo "Transfer saldo gagal: " . $e->getMessage();
+        die;
     }
 
     //aktifkan kembali mode autocommit

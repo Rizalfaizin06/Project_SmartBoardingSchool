@@ -73,8 +73,8 @@ if ($role == 1) {
 
 }
 
-$myuuid = createUUID();
-echo $myuuid;
+// $myuuid = createUUID();
+// echo $myuuid;
 
 // var_dump($_SESSION['sal$saldo']);
 // var_dump($tanggal);
@@ -218,8 +218,12 @@ echo $myuuid;
 
                     </button>
                 </div>
+                <a href="index.php" id="buttonBack"
+                    class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
+                    type="submit" id="buttonCancel" name="buttonCancel">Back</a>
                 <script src="dist/js/jquery-3.6.0.min.js"></script>
                 <script>
+                    $("#buttonBack").hide();
                     $("#buttonWithdraw").click(function () {
                         $.ajax({
                             type: "GET",
@@ -228,6 +232,7 @@ echo $myuuid;
                             success: function (data) {
                                 console.log(data);
                                 $("#adminPane").html(data)
+                                $("#buttonBack").show();
                             }
                         });
                     });
@@ -264,6 +269,7 @@ echo $myuuid;
                         ?>
                     </h3>
                 </div>
+
             <?php endif; ?>
 
 
