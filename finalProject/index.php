@@ -67,6 +67,8 @@ if ($role == 1) {
     $spendingLimit = $queryUser["spendingLimit"];
     $additionalLimit = $queryUser["additionalLimit"];
     $totalLimit = $spendingLimit + $additionalLimit;
+    $listPesanan = query("SELECT *, hargaMenu * jumlahPesan total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'");
+
     $Pengeluaran = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
     $PengeluaranHariIni = 17000;
 } else {
@@ -169,20 +171,7 @@ if ($role == 1) {
             </div>
 
             <script src="dist/js/jquery-3.6.0.min.js"></script>
-            <script>
-                $("#buttonTopUpSiswa").click(function () {
-                    $(this).hide();
-                    $("#buttonBayar").hide();
-                    $.ajax({
-                        type: "GET",
-                        url: "dist/ajax/ajaxGenerateQR.php",
-                        data: "",
-                        success: function (data) {
-                            console.log(data);
-                            $("#siswaPane").html(data)
-                        }
-                    });
-                });
+            <script>             $("#buttonTopUpSiswa").click(function () { $(this).hide(); $("#buttonBayar").hide(); $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#siswaPane").html(data) } }); });
 
 
             </script>
@@ -222,20 +211,7 @@ if ($role == 1) {
                     class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
                     type="submit" id="buttonCancel" name="buttonCancel">Back</a>
                 <script src="dist/js/jquery-3.6.0.min.js"></script>
-                <script>
-                    $("#buttonBack").hide();
-                    $("#buttonWithdraw").click(function () {
-                        $.ajax({
-                            type: "GET",
-                            url: "dist/ajax/ajaxGenerateQR.php",
-                            data: "",
-                            success: function (data) {
-                                console.log(data);
-                                $("#adminPane").html(data)
-                                $("#buttonBack").show();
-                            }
-                        });
-                    });
+                <script>                 $("#buttonBack").hide(); $("#buttonWithdraw").click(function () { $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#adminPane").html(data)                             $("#buttonBack").show(); } }); });
 
 
                 </script>
