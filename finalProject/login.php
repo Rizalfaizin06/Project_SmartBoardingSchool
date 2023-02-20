@@ -78,6 +78,7 @@ if (isset($_POST["login"])) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <title>Student Spending Management</title>
+    <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
@@ -157,6 +158,9 @@ if (isset($_POST["login"])) {
             </form>
         </div>
     </div>
+
+
+    <script src="/PWA/test1/main.js"></script>
 </body>
 
 </html>

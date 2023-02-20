@@ -18,7 +18,7 @@ $idUser = $_SESSION["idUser"];
 $queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
 $role = $queryUser["role"];
 
-
+// var_dump($queryUser);
 if ($role == 1) {
     $queryUser = query("SELECT * FROM tbl_users U, tbl_admin A WHERE U.idDetailUser = A.idDetailUser AND idUser = '$idUser'")[0];
     // var_dump($queryUser);
@@ -75,7 +75,24 @@ if ($role == 1) {
     $Pengeluaran = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
     $PengeluaranHariIni = 17000;
 } else {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_orangtua O WHERE U.idDetailUser = O.idDetailUser AND idUser = '$idUser'")[0];
 
+
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $idAnak = $queryUser["idAnak"];
+
+    $queryAnak = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idAnak'")[0];
+
+    $saldo = $queryAnak["saldo"];
 }
 
 // $myuuid = createUUID();
@@ -179,6 +196,32 @@ if ($role == 1) {
 
             </script>
         <?php else: ?>
+            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
+                class="object-cover rounded-full h-24 w-2h-24">
+            <h3 class="text-xl font-poppins font-bold text-white">
+                <?= $realName; ?>
+            </h3>
+            <h3 class="font-poppins font-bold text-white">
+                <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+            </h3>
+            <!-- <div class=" w-full grid grid-cols-1 justify-items-center">
+                                    <button id="buttonTopUpSiswa"
+                                        class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
+                                        <div class="grid grid-cols-2 h-10 items-center justify-items-center">
+                                            <img src="assets/icon/topUp.png" alt="" class="h-6">
+
+                                            <h3 class="text-md font-poppins font-bold px-1">
+                                                Top Up
+                                            </h3>
+                                        </div>
+                                    </button>
+                                </div> -->
+
+            <script src="dist/js/jquery-3.6.0.min.js"></script>
+            <script>             $("#buttonTopUpSiswa").click(function () { $(this).hide(); $("#buttonBayar").hide(); $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#siswaPane").html(data) } }); });
+
+
+            </script>
         <?php endif; ?>
 
     </div>
@@ -260,6 +303,53 @@ if ($role == 1) {
                     </h3>
                 </div>
 
+
+            <?php else: ?>
+                <div id="ortuPane" class="grid grid-cols-1 gap-5 justify-items-center">
+                    <button id="buttonTopUpOrtu" name="buttonTopUpOrtu"
+                        class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-2 gap-5 items-center">
+                        <h3 class="text-2xl font-poppins font-bold justify-self-end ">
+                            <img src="assets/icon/topUp.png" alt="" class="">
+                        </h3>
+                        <h3 class="text-xl font-poppins font-bold justify-self-start">
+                            Top Up
+                        </h3>
+
+                    </button>
+                    <a href="transactionHistory.php"
+                        class="p-5 w-full border border-gray-200 shadow-lg rounded-xl grid grid-cols-2 gap-5 items-center">
+                        <h3 class="text-2xl font-poppins font-bold justify-self-end ">
+                            <img src="assets/icon/topUp.png" alt="" class="">
+                        </h3>
+                        <h3 class="text-xl font-poppins font-bold justify-self-start">
+                            Transaksi
+                        </h3>
+
+                    </a>
+                </div>
+                <a href="index.php" id="buttonBack"
+                    class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
+                    type="submit" id="buttonCancel" name="buttonCancel">Back</a>
+                <script src="dist/js/jquery-3.6.0.min.js"></script>
+                <script>
+                    $("#buttonBack").hide();
+                    $("#buttonTopUpOrtu").click(function () {
+                        $(this).hide();
+                        $("#buttonBayar").hide();
+                        $("#buttonBack").show();
+                        $.ajax({
+                            type: "GET",
+                            url: "dist/ajax/ajaxGenerateQR.php",
+                            data: "",
+                            success: function (data) {
+                                console.log(data);
+                                $("#ortuPane").html(data)
+                            }
+                        });
+                    });
+
+
+                </script>
             <?php endif; ?>
 
 
