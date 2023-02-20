@@ -219,33 +219,36 @@ if ($role == 1) {
                   </a>
                </li>
             <?php endif; ?>
-         <?php elseif ($role == 3): ?>
-            <?php if ($_SESSION["currentPage"] == "pay"): ?>
-               <li>
-                  <a href="pay.php" data-drawer-toggle="default-sidebar"
-                     class="flex items-center p-2 text-base font-normal rounded-lg bg-primary hover:bg-opacity-80">
-                     <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75"
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                           d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                           clip-rule="evenodd"></path>
-                     </svg>
-                     <span class="ml-3 font-poppins text-white whitespace-nowrap">Bayar Pesanan</span>
-                  </a>
-               </li>
-            <?php else: ?>
-               <li>
-                  <a href="pay.php" data-drawer-toggle="default-sidebar"
-                     class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg">
-                     <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75"
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                           d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                           clip-rule="evenodd"></path>
-                     </svg>
-                     <span class="ml-3 whitespace-nowrap">Bayar Pesanan</span>
-                  </a>
-               </li>
+         <?php elseif ($role == 3 || $role == 4): ?>
+
+            <?php if ($role == 3): ?>
+               <?php if ($_SESSION["currentPage"] == "pay"): ?>
+                  <li>
+                     <a href="pay.php" data-drawer-toggle="default-sidebar"
+                        class="flex items-center p-2 text-base font-normal rounded-lg bg-primary hover:bg-opacity-80">
+                        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75"
+                           fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                           <path fill-rule="evenodd"
+                              d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
+                              clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3 font-poppins text-white whitespace-nowrap">Bayar Pesanan</span>
+                     </a>
+                  </li>
+               <?php else: ?>
+                  <li>
+                     <a href="pay.php" data-drawer-toggle="default-sidebar"
+                        class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg">
+                        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75"
+                           fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                           <path fill-rule="evenodd"
+                              d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
+                              clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3 whitespace-nowrap">Bayar Pesanan</span>
+                     </a>
+                  </li>
+               <?php endif; ?>
             <?php endif; ?>
             <?php if ($_SESSION["currentPage"] == "request"): ?>
                <li>
@@ -301,7 +304,7 @@ if ($role == 1) {
             <li>
                <a href="transactionHistory.php" data-drawer-toggle="default-sidebar"
                   class="flex items-center p-2 text-base font-normal rounded-lg bg-primary hover:bg-opacity-80">
-                  <svg aria-hidden="true" class="w-6 h-6 text-gray-500 transition duration-75" fill="currentColor"
+                  <svg aria-hidden="true" class="w-6 h-6 text-white transition duration-75" fill="currentColor"
                      viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                      <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                      <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>

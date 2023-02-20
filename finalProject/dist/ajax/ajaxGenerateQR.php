@@ -28,8 +28,6 @@ $options = new QROptions(
 
 $idUser = $_SESSION["idUser"];
 
-$qrcode = (new QRCode($options))->render($idUser);
-
 $queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
 $role = $queryUser["role"];
 
@@ -85,8 +83,33 @@ if ($role == 1) {
     $totalLimit = $spendingLimit + $additionalLimit;
     $PengeluaranHariIni = 17000;
 } else {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_orangtua O WHERE U.idDetailUser = O.idDetailUser AND idUser = '$idUser'")[0];
 
+
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $idAnak = $queryUser["idAnak"];
+
+    $queryAnak = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idAnak'")[0];
+
+    $saldo = $queryAnak["saldo"];
 }
+
+if ($role > 3) {
+    $qrcode = (new QRCode($options))->render($idAnak);
+} else {
+
+    $qrcode = (new QRCode($options))->render($idUser);
+}
+
 
 
 

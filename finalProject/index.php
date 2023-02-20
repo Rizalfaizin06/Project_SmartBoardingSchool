@@ -73,6 +73,7 @@ if ($role == 1) {
     $listPesanan = query("SELECT *, hargaMenu * jumlahPesan total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'");
 
     $Pengeluaran = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
+    $sisaLimit = $totalLimit - $Pengeluaran;
     $PengeluaranHariIni = 17000;
 } else {
     $queryUser = query("SELECT * FROM tbl_users U, tbl_orangtua O WHERE U.idDetailUser = O.idDetailUser AND idUser = '$idUser'")[0];
@@ -205,17 +206,17 @@ if ($role == 1) {
                 <?="Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
             <!-- <div class=" w-full grid grid-cols-1 justify-items-center">
-                                    <button id="buttonTopUpSiswa"
-                                        class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
-                                        <div class="grid grid-cols-2 h-10 items-center justify-items-center">
-                                            <img src="assets/icon/topUp.png" alt="" class="h-6">
+                                            <button id="buttonTopUpSiswa"
+                                                class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
+                                                <div class="grid grid-cols-2 h-10 items-center justify-items-center">
+                                                    <img src="assets/icon/topUp.png" alt="" class="h-6">
 
-                                            <h3 class="text-md font-poppins font-bold px-1">
-                                                Top Up
-                                            </h3>
-                                        </div>
-                                    </button>
-                                </div> -->
+                                                    <h3 class="text-md font-poppins font-bold px-1">
+                                                        Top Up
+                                                    </h3>
+                                                </div>
+                                            </button>
+                                        </div> -->
 
             <script src="dist/js/jquery-3.6.0.min.js"></script>
             <script>             $("#buttonTopUpSiswa").click(function () { $(this).hide(); $("#buttonBayar").hide(); $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#siswaPane").html(data) } }); });

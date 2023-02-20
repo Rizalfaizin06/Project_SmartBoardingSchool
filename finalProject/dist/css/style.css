@@ -1244,10 +1244,6 @@ input:checked + .toggle-bg {
   margin-top: 2rem;
 }
 
-.mt-7 {
-  margin-top: 1.75rem;
-}
-
 .box-border {
   box-sizing: border-box;
 }
@@ -2459,6 +2455,10 @@ input:checked + .toggle-bg {
   border-width: 0px;
 }
 
+.border-2 {
+  border-width: 2px;
+}
+
 .border-x {
   border-left-width: 1px;
   border-right-width: 1px;
@@ -2497,8 +2497,8 @@ input:checked + .toggle-bg {
   border-top-width: 2px;
 }
 
-.border-b-2 {
-  border-bottom-width: 2px;
+.border-l-2 {
+  border-left-width: 2px;
 }
 
 .border-solid {
@@ -2563,6 +2563,26 @@ input:checked + .toggle-bg {
 .border-separate {
   --tw-border-opacity: 1;
   border-color: rgb(249 249 251 / var(--tw-border-opacity));
+}
+
+.border-slate-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(148 163 184 / var(--tw-border-opacity));
+}
+
+.border-slate-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(203 213 225 / var(--tw-border-opacity));
+}
+
+.border-slate-800 {
+  --tw-border-opacity: 1;
+  border-color: rgb(30 41 59 / var(--tw-border-opacity));
+}
+
+.border-gray-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(107 114 128 / var(--tw-border-opacity));
 }
 
 .bg-\[rgb\(255\2c 0\2c 0\)\] {
@@ -2866,11 +2886,6 @@ input:checked + .toggle-bg {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
-}
-
-.py-7 {
-  padding-top: 1.75rem;
-  padding-bottom: 1.75rem;
 }
 
 .pt-2 {
