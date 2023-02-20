@@ -49,6 +49,8 @@ if ($role == 1) {
     $namaToko = $queryUser["namaToko"];
     $logoToko = $queryUser["logoToko"];
     $PemasukanHariIni = 128000;
+    $pemasukan = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND O.idPenjual = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
+
 } elseif ($role == 3) {
     $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
 
@@ -112,7 +114,7 @@ $category = query("SELECT DISTINCT namaCategory, C.idCategory FROM tbl_menu M, t
 
 
 
-$dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'");
+
 
 $logTransaksi = query("SELECT * FROM tbl_log WHERE DATE(waktuTransfer) = '$tanggal' ORDER BY idLog DESC");
 
@@ -167,7 +169,7 @@ $logTransaksi = query("SELECT * FROM tbl_log WHERE DATE(waktuTransfer) = '$tangg
             <form action="" method="post">
 
                 <div>
-                    <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">Transaksi Hari Ini
+                    <h2 class="text-2xl font-poppins font-bold underline text-center">Transaksi Hari Ini
                     </h2>
                 </div>
 <?php if ($role == 1): ?>
@@ -242,10 +244,32 @@ $logTransaksi = query("SELECT * FROM tbl_log WHERE DATE(waktuTransfer) = '$tangg
                     </div>
                 </div> -->
 <?php elseif ($role == 2): ?>
-<?php elseif ($role == 3): ?>
+    <?php 
+        $NamaPembeli = query("SELECT DISTINCT O.idPembeli, realName FROM tbl_order O, tbl_pesan P, tbl_menu M, tbl_users U, tbl_siswa S WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND O.idPembeli = U.idUser AND U.idDetailUser = S.idDetailUser AND O.idPenjual = '$idUser' AND DATE(waktuOrder) = '$tanggal'");
+
+        
+        ?>
                 <div class="relative overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase   dark:bg-gray-700 dark:text-gray-400">
+                
+                    <table class="w-full text-sm text-left text-gray-500  dark:text-gray-400">
+                    <?php foreach ($NamaPembeli as $PembeliSingle):
+                    $idPembeliSingle =  $PembeliSingle["idPembeli"];
+
+
+                    $dataPesanan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND O.idPenjual = '$idUser' AND O.idPembeli = '$idPembeliSingle' AND DATE(waktuOrder) = '$tanggal'");
+                    
+                    $totalPesanan = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND O.idPenjual = '$idUser' AND O.idPembeli = '$idPembeliSingle' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
+                    ?>
+                        <thead class="text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400 w-full">
+                            <tr>
+                                <th colspan="4" class="p-5">
+                                </th>
+                            </tr>
+                            <tr class="">
+                                <th colspan="4" class="text-center text-2xl bg-slate-300 font-bold">
+                                <?= $PembeliSingle["realName"]; ?>
+                                </th>
+                            </tr>
                             <tr>
                                 <th scope="col" class="px-2 py-3">
                                     Menu
@@ -262,13 +286,13 @@ $logTransaksi = query("SELECT * FROM tbl_log WHERE DATE(waktuTransfer) = '$tangg
                             </tr>
                             <tr>
                                 <th colspan="4">
-                                    <div class="border-t-2 border-gray-400 w-full"></div>
+                                    <div class="border-t-2 border-dashed border-gray-400 w-full"></div>
                                 </th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            <?php foreach ($dataOrderan as $oneView):
+                            <?php foreach ($dataPesanan as $oneView):
                                 ?>
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <th scope="row"
@@ -290,27 +314,169 @@ $logTransaksi = query("SELECT * FROM tbl_log WHERE DATE(waktuTransfer) = '$tangg
                                     <?= $oneView["total"]; ?>
                                     </td>
                                 </tr>
-
+                                
                             <?php endforeach;
-                            if ((empty($dataOrderan))) {
-                                echo '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th colspan="4" scope="row"
-                                            class="px-2 py-4 font-medium text-center text-red-500 whitespace-nowrap dark:text-white">
-                                            Belum ada pesanan
-                                        </th>
-                                    </tr>';
-                            }
+                            
                             ?>
 
-
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    
+                                    <td colspan="4" class="px-2 py-4">
+                                        
+                                            <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">Total Transaksi
+                                            </h2>
+                                            <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">
+                                                Rp.
+                                                <span id="spanTotalHarga"><?= number_format($totalPesanan, 0, ",", ".") ?></span>
+                                            </h2>
+                                            
+                                        
+                                    </td>
+                                </tr>
                         </tbody>
-                    </table>
+                        <?php endforeach;
+                    
+                    ?>
+                        </table>
+                        <?php 
+                    if ((empty($dataPesanan))) {
+                        echo '<table class="w-full"><tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th colspan="4" scope="row"
+                                    class="px-2 py-4 font-medium text-center text-red-500 whitespace-nowrap dark:text-white">
+                                    Belum ada pesanan
+                                </th>
+                            </tr></table>';
+                    }?>
                 </div>
 
 
 
                 <div>
-                    <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">Total Transaksi
+                    <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-5">Total Pemasukan
+                    </h2>
+                    <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">
+                        Rp.
+                        <span id="spanTotalHarga"><?= number_format($pemasukan, 0, ",", ".") ?></span>
+                    </h2>
+                    <input class="span8" id="tot" name="total_harga" type="hidden" value="" placeholder="" />
+
+                    <input type="hidden" name="idMenu" value="<?= $oneView["idMenu"]; ?>">
+                    <div class="w-full grid grid-cols-1 items-center justify-items-center">
+                        <div id="qrPane" class="grid grid-cols-1 justify-items-center gap-3 p-5 w-64 items-center"></div>
+                    </div>
+
+                
+                </div>
+<?php elseif ($role == 3): ?>
+        <?php 
+        $NamaPenjual = query("SELECT DISTINCT O.idPenjual, realName, namaToko FROM tbl_order O, tbl_pesan P, tbl_menu M, tbl_users U, tbl_penjual J WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND O.idPenjual = U.idUser AND U.idDetailUser = J.idDetailUser AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'");
+
+        
+        ?>
+                <div class="relative overflow-x-auto">
+                
+                    <table class="w-full text-sm text-left text-gray-500  dark:text-gray-400">
+                    <?php foreach ($NamaPenjual as $penjualSingle):
+                    $idPenjualSingle =  $penjualSingle["idPenjual"];
+
+
+                    $dataPesanan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND O.idPenjual = '$idPenjualSingle' AND DATE(waktuOrder) = '$tanggal'");
+                    
+                    $totalPesanan = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND O.idPenjual = '$idPenjualSingle' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
+                    ?>
+                        <thead class="text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400 w-full">
+                            <tr>
+                                <th colspan="4" class="p-5">
+                                </th>
+                            </tr>
+                            <tr class="">
+                                <th colspan="4" class="text-center text-2xl bg-slate-300 font-bold">
+                                <?= $penjualSingle["namaToko"]; ?>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th scope="col" class="px-2 py-3">
+                                    Menu
+                                </th>
+                                <th scope="col" class="px-2 py-3">
+                                    Harga
+                                </th>
+                                <th scope="col" class="px-2 py-3">
+                                    Jumlah
+                                </th>
+                                <th scope="col" class="px-2 py-3">
+                                    Hapus
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="4">
+                                    <div class="border-t-2 border-dashed border-gray-400 w-full"></div>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <?php foreach ($dataPesanan as $oneView):
+                                ?>
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row"
+                                        class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <?= $oneView["namaMenu"]; ?>
+                                    </th>
+                                    <td class="px-2 py-4">
+                                        <?= $oneView["hargaMenu"]; ?>
+                                    </td>
+                                    <input id="<?='harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
+                                        value="<?= $oneView["hargaMenu"]; ?>" />
+                                    <td class="px-2 py-4">
+                                        <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number"
+                                            class="border border-gray-300 borderad rounded-lg w-16"
+                                            name="<?='jumlahPesan' . $oneView['idMenu']; ?>" value="<?= $oneView["jumlahPesan"]; ?>"
+                                            disabled>
+                                    </td>
+                                    <td class="px-2 py-4">
+                                    <?= $oneView["total"]; ?>
+                                    </td>
+                                </tr>
+                                
+                            <?php endforeach;
+                            
+                            ?>
+
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    
+                                    <td colspan="4" class="px-2 py-4">
+                                        
+                                            <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">Total Transaksi
+                                            </h2>
+                                            <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">
+                                                Rp.
+                                                <span id="spanTotalHarga"><?= number_format($totalPesanan, 0, ",", ".") ?></span>
+                                            </h2>
+                                            
+                                        
+                                    </td>
+                                </tr>
+                        </tbody>
+                        <?php endforeach;
+                    
+                    ?>
+                        </table>
+                        <?php 
+                    if ((empty($dataPesanan))) {
+                        echo '<table class="w-full"><tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th colspan="4" scope="row"
+                                    class="px-2 py-4 font-medium text-center text-red-500 whitespace-nowrap dark:text-white">
+                                    Belum ada pesanan
+                                </th>
+                            </tr></table>';
+                    }?>
+                </div>
+
+
+
+                <div>
+                    <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-5">Total Pengeluaran
                     </h2>
                     <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">
                         Rp.

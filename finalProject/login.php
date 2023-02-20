@@ -20,6 +20,7 @@ if (isset($_POST["login"])) {
             if ($queryUser['status'] == 1) {
                 //set session
                 $_SESSION["idUser"] = $queryUser['idUser'];
+                $_SESSION["uuidUser"] = $queryUser['uuidUser'];
                 $_SESSION["login"] = true;
 
                 header("location: index.php");

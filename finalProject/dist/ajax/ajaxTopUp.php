@@ -62,14 +62,19 @@ if (is_numeric($idPenerima) == false) {
     return false;
 }
 
-$queryCheckUser = query("SELECT * FROM tbl_users WHERE idUser = $idPenerima");
+$queryCheckUser = query("SELECT * FROM tbl_users WHERE idUser = $idPenerima")[0];
 
 if (!empty($queryCheckUser)) {
-    $realName = $queryCheckUser[0]["realName"];
+    $realName = $queryCheckUser["realName"];
+    if ($role == 2) {
+        if ($queryCheckUser['role'] != 1) {
+            return false;
+        }
+    }
     // var_dump($idOrder);
 
     echo $realName;
 } else {
 
-    return false;
+
 }

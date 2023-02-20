@@ -10,6 +10,7 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
+$_SESSION["currentPage"] = "pay";
 $idUser = $_SESSION["idUser"];
 
 $queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
@@ -178,7 +179,7 @@ if (isset($_POST['buttonBayar'])) {
         <h3 class="font-poppins font-bold text-white">
             <?="Rp " . number_format($saldo, 0, ",", ".") ?>
         </h3>
-        <div class=" w-full grid grid-cols-1 justify-items-center">
+        <!-- <div class=" w-full grid grid-cols-1 justify-items-center">
             <button
                 class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
                 <div class="grid grid-cols-2 h-10 items-center justify-items-center">
@@ -188,7 +189,7 @@ if (isset($_POST['buttonBayar'])) {
                     </h3>
                 </div>
             </button>
-        </div>
+        </div> -->
     </div>
 
 

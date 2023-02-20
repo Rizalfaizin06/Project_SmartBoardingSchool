@@ -7,6 +7,8 @@ if (!session_id()) {
 
 $idUser = $_SESSION["idUser"];
 
+$queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
+$role = $queryUser["role"];
 
 
 
@@ -42,6 +44,8 @@ if ($role == 1) {
    $namaToko = $queryUser["namaToko"];
    $logoToko = $queryUser["logoToko"];
    $PemasukanHariIni = 128000;
+
+
 } elseif ($role == 3) {
    $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
 

@@ -12,6 +12,7 @@ if (!isset($_SESSION["login"])) {
 }
 
 $_SESSION["currentPage"] = "dashboard";
+
 $idUser = $_SESSION["idUser"];
 
 $queryUser = query("SELECT * FROM tbl_users WHERE idUser = '$idUser'")[0];
@@ -49,6 +50,8 @@ if ($role == 1) {
     $namaToko = $queryUser["namaToko"];
     $logoToko = $queryUser["logoToko"];
     $PemasukanHariIni = 128000;
+    $pemasukan = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND O.idPenjual = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
+
 } elseif ($role == 3) {
     $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
 
@@ -211,9 +214,20 @@ if ($role == 1) {
                     class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
                     type="submit" id="buttonCancel" name="buttonCancel">Back</a>
                 <script src="dist/js/jquery-3.6.0.min.js"></script>
-                <script>                 $("#buttonBack").hide(); $("#buttonWithdraw").click(function () { $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#adminPane").html(data)                             $("#buttonBack").show(); } }); });
-
-
+                <script>
+                    $("#buttonBack").hide();
+                    $("#buttonWithdraw").click(function () {
+                        $.ajax({
+                            type: "GET",
+                            url: "dist/ajax/ajaxGenerateQR.php",
+                            data: "",
+                            success: function (data) {
+                                console.log(data);
+                                $("#adminPane").html(data)
+                                $("#buttonBack").show();
+                            }
+                        });
+                    });
                 </script>
             <?php elseif ($role == 2): ?>
                 <div
@@ -222,7 +236,7 @@ if ($role == 1) {
                         Pendapatan Harian
                     </h3>
                     <h3 class="text-2xl font-poppins font-bold">
-                        <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+                        <?="Rp " . number_format($pemasukan, 0, ",", ".") ?>
                     </h3>
 
                 </div>
