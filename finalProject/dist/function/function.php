@@ -186,56 +186,67 @@ function query($query)
 function registrasi($data)
 {
     global $koneksi;
-    $usernameSiswa = strtolower(stripcslashes($data["usernameSiswa"]));
-    $passwordSiswa = mysqli_real_escape_string($koneksi, $data["passwordSiswa"]);
-    $konfirmasiPasswordSiswa = mysqli_real_escape_string($koneksi, $data["konfirmasiPasswordSiswa"]);
-    $realNameSiswa = $data['realNameSiswa'];
-    $tempatLahirSiswa = $data['tempatLahirSiswa'];
-    $tanggalLahirSiswa = $data['tanggalLahirSiswa'];
-    $nomorTelfonSiswa = $data['nomorTelfonSiswa'];
-    $emailSiswa = $data['emailSiswa'];
-    $alamatSiswa = $data['alamatSiswa'];
     $role = $data['role'];
 
-    $usernameOrangTua = strtolower(stripcslashes($data["usernameOrangTua"]));
-    $passwordOrangTua = mysqli_real_escape_string($koneksi, $data["passwordOrangTua"]);
-    $konfirmasiPasswordOrangTua = mysqli_real_escape_string($koneksi, $data["konfirmasiPasswordOrangTua"]);
-    $realNameOrangTua = $data['realNameOrangTua'];
-    $tempatLahirOrangTua = $data['tempatLahirOrangTua'];
-    $tanggalLahirOrangTua = $data['tanggalLahirOrangTua'];
-    $nomorTelfonOrangTua = $data['nomorTelfonOrangTua'];
-    $emailOrangTua = $data['emailOrangTua'];
-    $alamatOrangTua = $data['alamatOrangTua'];
+    if ($role == "3") {
+
+        $usernameSiswa = strtolower(stripcslashes($data["usernameSiswa"]));
+        $passwordSiswa = mysqli_real_escape_string($koneksi, $data["passwordSiswa"]);
+        $konfirmasiPasswordSiswa = mysqli_real_escape_string($koneksi, $data["konfirmasiPasswordSiswa"]);
+        $realNameSiswa = $data['realNameSiswa'];
+        $tempatLahirSiswa = $data['tempatLahirSiswa'];
+        $tanggalLahirSiswa = $data['tanggalLahirSiswa'];
+        $nomorTelfonSiswa = $data['nomorTelfonSiswa'];
+        $emailSiswa = $data['emailSiswa'];
+        $alamatSiswa = $data['alamatSiswa'];
 
 
-    // $username = 
-    // $password = 
-    // $password2 = mysqli_real_escape_string($koneksi, $data["password2"]);
+        $usernameOrangTua = strtolower(stripcslashes($data["usernameOrangTua"]));
+        $passwordOrangTua = mysqli_real_escape_string($koneksi, $data["passwordOrangTua"]);
+        $konfirmasiPasswordOrangTua = mysqli_real_escape_string($koneksi, $data["konfirmasiPasswordOrangTua"]);
+        $realNameOrangTua = $data['realNameOrangTua'];
+        $tempatLahirOrangTua = $data['tempatLahirOrangTua'];
+        $tanggalLahirOrangTua = $data['tanggalLahirOrangTua'];
+        $nomorTelfonOrangTua = $data['nomorTelfonOrangTua'];
+        $emailOrangTua = $data['emailOrangTua'];
+        $alamatOrangTua = $data['alamatOrangTua'];
 
-    $result = mysqli_query($koneksi, "SELECT username FROM tbl_users WHERE username = '$usernameSiswa' ");
 
-    if (mysqli_fetch_assoc($result)) {
-        echo "<script>
+        // $username = 
+        // $password = 
+        // $password2 = mysqli_real_escape_string($koneksi, $data["password2"]);
+
+        $result = mysqli_query($koneksi, "SELECT username FROM tbl_users WHERE username = '$usernameSiswa' ");
+
+        if (mysqli_fetch_assoc($result)) {
+            echo "<script>
     			alert('username sudah ada');
     		</script>";
-        return false;
-    }
+            return false;
+        }
 
-    if ($passwordOrangTua !== $konfirmasiPasswordOrangTua) {
-        echo "<script>
+        $result = mysqli_query($koneksi, "SELECT username FROM tbl_users WHERE username = '$usernameOrangTua' ");
+
+        if (mysqli_fetch_assoc($result)) {
+            echo "<script>
+    			alert('username sudah ada');
+    		</script>";
+            return false;
+        }
+
+        if ($passwordOrangTua !== $konfirmasiPasswordOrangTua) {
+            echo "<script>
 				alert('konfirmasi password tidak sesuai');
 			</script>";
-        return false;
-    }
+            return false;
+        }
 
-    if ($passwordSiswa !== $konfirmasiPasswordSiswa) {
-        echo "<script>
+        if ($passwordSiswa !== $konfirmasiPasswordSiswa) {
+            echo "<script>
 				alert('konfirmasi password tidak sesuai');
 			</script>";
-        return false;
-    }
-
-    if ($role == "3") {
+            return false;
+        }
         $passwordSiswa = password_hash($passwordSiswa, PASSWORD_DEFAULT);
         $passwordOrangTua = password_hash($passwordOrangTua, PASSWORD_DEFAULT);
         $fotoProfilSiswa = upload('fotoProfilSiswa', 'assets/images/avatar/');
