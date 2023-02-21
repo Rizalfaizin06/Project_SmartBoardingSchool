@@ -200,7 +200,7 @@ if (isset($_POST['buttonBayar'])) {
             <button
                 class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
                 <div class="grid grid-cols-2 h-10 items-center justify-items-center">
-                    <img src="assets/icon/topUp.png" alt="" class="h-6">
+                    <img src="assets/icons/topUp.png" alt="" class="h-6">
                     <h3 class="text-md font-poppins font-bold px-1">
                         Top Up
                     </h3>
@@ -224,7 +224,7 @@ if (isset($_POST['buttonBayar'])) {
                 <div class="relative w-[46px] h-[155px] -top-64 bg-black bg-opacity-60 justify-self-end"></div>
             </div>
             <div class="relative w-64 h-[50px] -top-64 bg-black bg-opacity-60 justify-self-start"></div>
-            <img src="assets/icon/camScan.png" alt="avatar" class="relative h-48 -top-[480px]">
+            <img src="assets/icons/camScan.png" alt="avatar" class="relative h-48 -top-[480px]">
         </div>
 
         <a href="index.php" class="px-7 py-3 rounded-lg bg-primary hover:bg-opacity-80">

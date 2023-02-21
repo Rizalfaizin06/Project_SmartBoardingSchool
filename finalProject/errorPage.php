@@ -190,7 +190,7 @@ if (isset($_POST['buttonBayar'])) {
             <button
                 class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
                 <div class="grid grid-cols-2 h-10 items-center justify-items-center">
-                    <img src="assets/icon/topUp.png" alt="" class="h-6">
+                    <img src="assets/icons/topUp.png" alt="" class="h-6">
                     <h3 class="text-md font-poppins font-bold px-1">
                         Top Up
                     </h3>

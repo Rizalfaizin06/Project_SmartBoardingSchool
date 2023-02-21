@@ -1,8 +1,6 @@
 
 const CACHE_NAME = 'contoh-pwa-cache-v2';
 const urlsToCache = [
-  '/Project_SmartBoardingSchool/finalProject/',
-  '/Project_SmartBoardingSchool/finalProject/login.php',
   '/Project_SmartBoardingSchool/finalProject/assets/images/avatar/gb.jpg'
 ];
 

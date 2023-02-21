@@ -175,7 +175,7 @@ if (isset($_POST['buttonBayar'])) {
                     <div class="relative w-[46px] h-[155px] -top-64 bg-black bg-opacity-60 justify-self-end"></div>
                 </div>
                 <div class="relative w-64 h-[50px] -top-64 bg-black bg-opacity-60 justify-self-start"></div>
-                <img src="assets/icon/camScan.png" alt="avatar" class="relative h-48 -top-[480px]">
+                <img src="assets/icons/camScan.png" alt="avatar" class="relative h-48 -top-[480px]">
             </div>
         </div>
         <div id="bayarTopUp">

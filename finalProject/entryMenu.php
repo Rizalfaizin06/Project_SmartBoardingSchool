@@ -273,7 +273,7 @@ foreach ($dataPesanan as $oneView) {
                                             <div class="px-1 py-1 w-8 text-sm font-medium text-center text-primary bg-primary rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
                                                 id="buttonHapus" name="buttonHapus"
                                                 onclick="deleteDataPesan(<?= $oneView['idMenu']; ?>)">
-                                                <img src="assets/icon/trash.png" alt="" class="w-6">
+                                                <img src="assets/icons/trash.png" alt="" class="w-6">
                                             </div>
                                         </td>
                                     </tr>

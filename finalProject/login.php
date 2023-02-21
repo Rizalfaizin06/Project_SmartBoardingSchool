@@ -3,10 +3,37 @@ if (!session_id()) {
     session_start();
     require 'dist/function/function.php';
 }
+
 if (isset($_SESSION["login"])) {
     header("location: index.php");
     exit;
 }
+
+if (isset($_COOKIE['uuid'])) {
+    $uuidUser = $_COOKIE['uuid'];
+    $hashRealName = $_COOKIE['key'];
+    $queryUser = query("SELECT * FROM tbl_users WHERE uuidUser = '$uuidUser'")[0];
+    if (hash('sha256', $queryUser['realName']) == $hashRealName) {
+        $idUser = $queryUser['idUser'];
+        $realName = $queryUser['realName'];
+        $uuidUser = $queryUser['uuidUser'];
+        $hashRealName = hash('sha256', $realName);
+
+        if (isset($_POST['rememberMe'])) {
+            setcookie('uuid', $uuidUser, time() + 3600);
+            setcookie('key', $hashRealName, time() + 3600);
+        }
+
+        //set session
+        $_SESSION["idUser"] = $idUser;
+        $_SESSION["uuidUser"] = $uuidUser;
+        $_SESSION["login"] = true;
+
+        header("location: index.php");
+        exit;
+    }
+}
+
 
 if (isset($_POST["login"])) {
     $username = $_POST["username"];
@@ -18,9 +45,20 @@ if (isset($_POST["login"])) {
 
         if (password_verify($password, $queryUser['password'])) {
             if ($queryUser['status'] == 1) {
+
+                $idUser = $queryUser['idUser'];
+                $realName = $queryUser['realName'];
+                $uuidUser = $queryUser['uuidUser'];
+                $hashRealName = hash('sha256', $realName);
+
+                if (isset($_POST['rememberMe'])) {
+                    setcookie('uuid', $uuidUser, time() + (3600 * 24 * 2));
+                    setcookie('key', $hashRealName, time() + (3600 * 24 * 2));
+                }
+
                 //set session
-                $_SESSION["idUser"] = $queryUser['idUser'];
-                $_SESSION["uuidUser"] = $queryUser['uuidUser'];
+                $_SESSION["idUser"] = $idUser;
+                $_SESSION["uuidUser"] = $uuidUser;
                 $_SESSION["login"] = true;
 
                 header("location: index.php");
@@ -95,7 +133,7 @@ if (isset($_POST["login"])) {
 
 
     <div class="relative min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8  bg-no-repeat bg-cover"
-        style="background-image: url(https://images.unsplash.com/photo-1525302220185-c387a117886e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80);">
+        style="background-image: url('assets/images/background/bgLogin.jpg');">
         <div class="absolute bg-black opacity-60 inset-0 z-0"></div>
         <div class="max-w-md w-full space-y-8 p-10 bg-white rounded-xl z-10">
             <div class="text-center">
@@ -117,7 +155,7 @@ if (isset($_POST["login"])) {
 
                     <label class="text-sm font-bold text-gray-700 tracking-wide">Username</label>
                     <input id="username" name="username"
-                        class=" w-full text-base py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-indigo-500"
+                        class=" w-full text-base py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-primary focus:border-primary"
                         type="text" placeholder="Masukkan username" value="">
                 </div>
                 <div class="mt-8 content-center">
@@ -125,34 +163,34 @@ if (isset($_POST["login"])) {
                         Password
                     </label>
                     <input id="password" name="password"
-                        class="w-full content-center text-base py-2  border border-gray-300 rounded-xl  focus:outline-none focus:border-indigo-500"
+                        class="w-full content-center text-base py-2  border border-gray-300 rounded-xl  focus:outline-none focus:ring-primary focus:border-primary"
                         type="password" placeholder="Masukkan password" value="">
                 </div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <input id="rememberMe" name="rememberMe" type="checkbox"
-                            class="h-4 w-4 bg-indigo-500 focus:ring-indigo-400 border-gray-300 rounded">
+                            class="h-4 w-4 bg-primary focus:ring-primary border-gray-300 rounded">
                         <label for="rememberMe" class="ml-2 block text-sm text-gray-900">
                             Remember me
                         </label>
                     </div>
                     <div class="text-sm">
-                        <a href="#" class="font-medium text-indigo-500 hover:text-indigo-500">
+                        <a href="#" class="font-medium text-primary hover:text-primary">
                             Forgot your password?
                         </a>
                     </div>
                 </div>
                 <div>
                     <button type="submit" name="login"
-                        class="w-full flex justify-center bg-indigo-500 text-gray-100 p-4  rounded-full tracking-wide
-                                font-semibold  focus:outline-none focus:shadow-outline hover:bg-indigo-600 shadow-lg cursor-pointer transition ease-in duration-300">
+                        class="w-full flex justify-center bg-primary text-gray-100 p-4  rounded-full tracking-wide
+                                font-semibold  focus:outline-none focus:shadow-outline hover:bg-orange-300 shadow-lg cursor-pointer transition ease-in duration-100">
                         Sign in
                     </button>
                 </div>
                 <p class="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
                     <span>Belum terdaftar sebagai member?</span>
-                    <a href="#"
-                        class="text-indigo-500 hover:text-indigo-500 no-underline hover:underline cursor-pointer transition ease-in duration-300">Sign
+                    <a href="registrasi.php"
+                        class="text-primary hover:text-primary no-underline hover:underline cursor-pointer transition ease-in duration-300">Sign
                         up</a>
                 </p>
             </form>
@@ -160,7 +198,7 @@ if (isset($_POST["login"])) {
     </div>
 
 
-    <script src="/PWA/test1/main.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>

@@ -3,10 +3,10 @@ if (!session_id()) {
     session_start();
     require 'dist/function/function.php';
 }
-if (isset($_SESSION["login"])) {
-    header("location: index.php");
-    exit;
-}
+// if (isset($_SESSION["login"])) {
+//     header("location: index.php");
+//     exit;
+// }
 
 if (isset($_POST["login"])) {
     $username = $_POST["username"];
