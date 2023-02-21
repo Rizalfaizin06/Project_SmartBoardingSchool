@@ -33,46 +33,61 @@ function createUUID($data = null)
 function tambah($data)
 {
     global $koneksi;
-    $jenisGambar = $data['jenisGambar'];
+    $username = $data['username'];
+    $password = $data['password'];
+    $realName = $data['realName'];
+    $tempatLahir = $data['tempatLahir'];
+    $tanggalLahir = $data['tanggalLahir'];
+    $alamat = $data['alamat'];
+    $nomorTelfon = $data['nomorTelfon'];
+    $email = $data['email'];
+    $role = $data['role'];
 
-    if ($jenisGambar == "banner") {
-        $desktopImage = upload('desktopImage');
-        $mobileImage = upload('mobileImage');
+    if ($role == "3") {
+        $fotoProfilSiswa = upload('fotoProfilSiswa', 'assets/images/avatar/');
+        $fotoProfilOrangTua = upload('fotoProfilOrangTua', 'assets/images/avatar/');
+        $uuidSiswa = createUUID();
+        $uuidOrangTua = createUUID();
 
-        if (!$mobileImage || !$desktopImage) {
+        $idDetail = query("SELECT COUNT(*) jumlahBaris FROM tbl_users")[0]['jumlahBaris'];
+        $idDetailSiswa = $idDetail + 1;
+        $idDetailOrangTua = $idDetail + 2;
+        if (!$fotoProfilOrangTua || !$fotoProfilSiswa) {
             return false;
+            // defaultProfile.jpg
         }
-        $query = "INSERT INTO banner VALUES ('', '$desktopImage', '$mobileImage')";
+
+        $query = "INSERT INTO tbl_users (idUser, uuidUser, username, password, realName, tempatLahir, tanggalLahir, alamat, nomorTelfon, email, profileImage, role, status, idDetailUser) VALUES (NULL, '$uuidSiswa', '$username', '$password', '$realName', '$tempatLahir', '$tanggalLahir', '$alamat', '$nomorTelfon', '$email', '$fotoProfilSiswa', '3', '0', '9');";
 
         mysqli_query($koneksi, $query);
     }
 
-    if ($jenisGambar == "paket") {
-        $letakPaket = $data['letakPaket'];
-        $paketImage = upload('paketImage');
+    // if ($jenisGambar == "paket") {
+    //     $letakPaket = $data['letakPaket'];
+    //     $paketImage = upload('paketImage');
 
-        if (!$paketImage) {
-            return false;
-        }
-        $query = "INSERT INTO paket VALUES ('', '$letakPaket', '$paketImage')";
+    //     if (!$paketImage) {
+    //         return false;
+    //     }
+    //     $query = "INSERT INTO paket VALUES ('', '$letakPaket', '$paketImage')";
 
-        mysqli_query($koneksi, $query);
-    }
+    //     mysqli_query($koneksi, $query);
+    // }
 
-    if ($jenisGambar == "promo") {
-        $judul = $data['judul'];
-        $text1 = $data['text1'];
-        $text2 = $data['text2'];
-        $text3 = $data['text3'];
-        $harga = $data['harga'];
-        $text5 = $data['text5'];
-        $text6 = $data['text6'];
-        $text7 = $data['text7'];
+    // if ($jenisGambar == "promo") {
+    //     $judul = $data['judul'];
+    //     $text1 = $data['text1'];
+    //     $text2 = $data['text2'];
+    //     $text3 = $data['text3'];
+    //     $harga = $data['harga'];
+    //     $text5 = $data['text5'];
+    //     $text6 = $data['text6'];
+    //     $text7 = $data['text7'];
 
-        $query = "INSERT INTO promo VALUES ('', '$judul', '$text1', '$text2', '$text3', '$harga', '$text5', '$text6', '$text7')";
+    //     $query = "INSERT INTO promo VALUES ('', '$judul', '$text1', '$text2', '$text3', '$harga', '$text5', '$text6', '$text7')";
 
-        mysqli_query($koneksi, $query);
-    }
+    //     mysqli_query($koneksi, $query);
+    // }
 
     return mysqli_affected_rows($koneksi);
 }
@@ -89,11 +104,11 @@ function hapus($data)
     }
 
     if ($jenisGambar == "banner") {
-        $desktopImage = $dataImageName['desktopImage'];
-        $mobileImage = $dataImageName['mobileImage'];
+        $fotoProfilSiswa = $dataImageName['fotoProfilSiswa'];
+        $fotoProfilOrangTua = $dataImageName['fotoProfilOrangTua'];
 
-        unlink("../images/$desktopImage");
-        unlink("../images/$mobileImage");
+        unlink("../images/$fotoProfilSiswa");
+        unlink("../images/$fotoProfilOrangTua");
     }
 
     if ($jenisGambar == "paket") {
@@ -107,7 +122,7 @@ function hapus($data)
     return mysqli_affected_rows($koneksi);
 }
 
-function upload($namaGambar)
+function upload($namaGambar, $tempatPenyimpanan)
 {
     $namaFile = $_FILES[$namaGambar]['name'];
     $ukuranFile = $_FILES[$namaGambar]['size'];
@@ -152,7 +167,7 @@ function upload($namaGambar)
 
     //gambar siap diupload
 
-    move_uploaded_file($tnpName, '../images/' . $namaFileBaru);
+    move_uploaded_file($tnpName, $tempatPenyimpanan . $namaFileBaru);
     return $namaFileBaru;
 }
 
@@ -168,227 +183,97 @@ function query($query)
     return $baris;
 }
 
-function tambahAnggotaArduino($data)
-{
-    global $koneksi;
-    $RFIDP = $data["Data1"];
-
-    $query = "INSERT INTO anggota VALUES ('$RFIDP', '', '', '')";
-
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-}
-
-function tambahAnggota($data)
-{
-    global $koneksi;
-    $RFIDP = $data["RFIDP"];
-    $namaAnggota = $data["namaAnggota"];
-    $kelas = $data["kelas"];
-    $email = $data["email"];
-
-    $query = "INSERT INTO anggota VALUES ('$RFIDP', '$namaAnggota', '$kelas', '$email')";
-
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-}
-
-function ubahAnggota($data)
-{
-    global $koneksi;
-    $RFIDP = $data["RFIDP"];
-    $RFIDPBaru = $data["RFIDPBaru"];
-    $namaAnggota = $data["namaAnggota"];
-    $kelas = $data["kelas"];
-    $email = $data["email"];
-
-    $query = "UPDATE anggota SET RFIDP = '$RFIDPBaru', namaAnggota = '$namaAnggota', kelas = '$kelas', email = '$email' WHERE RFIDP = '$RFIDP'";
-
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-}
-
-function hapusAnggota($data)
-{
-    global $koneksi;
-
-    $query = "DELETE FROM anggota WHERE RFIDP = '$data'";
-
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-}
-
-function tambahMapel($data)
-{
-    global $koneksi;
-    $idBuku = $data["idBuku"];
-    $namaBuku = $data["namaBuku"];
-
-    $query = "INSERT INTO mapel VALUES ('$idBuku', '$namaBuku')";
-
-    mysqli_query($koneksi, $query);
-    return mysqli_affected_rows($koneksi);
-}
-
-function ubahMapel($data)
-{
-    global $koneksi;
-    $idBuku = $data["idBuku"];
-    $idBukuBaru = $data["idBukuBaru"];
-    $namaBuku = $data["namaBuku"];
-    // //$query = "UPDATE `mapel` SET `namaBuku`='MTK' WHERE idBuku = 'B001'";
-    // var_dump($data);
-    // die;
-    $query = "UPDATE mapel SET namaBuku = '$namaBuku', idBuku = '$idBukuBaru' WHERE idBuku = '$idBuku'";
-
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-}
-
-function hapusMapel($data)
-{
-    global $koneksi;
-
-    $query = "DELETE FROM mapel WHERE idBuku = '$data'";
-
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-}
-
-function tambahBuku($data)
-{
-    global $koneksi;
-    $RFIDB = $data["RFIDB"];
-    $idBuku = $data["idBuku"];
-    $status = $data["status"];
-
-    $query = "INSERT INTO buku VALUES ('$RFIDB', '$idBuku', '$status')";
-
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-}
-
-function tambahBukuArduino($data)
-{
-    global $koneksi;
-    $RFIDB = $data["Data1"];
-    if (empty($RFIDB)) {
-        return 0;
-    }
-    $query = "INSERT INTO buku VALUES ('$RFIDB', NULL, 1)";
-
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-}
-
-function ubahBuku($data)
-{
-    global $koneksi;
-    $RFIDB = $data["RFIDB"];
-    $RFIDBBaru = $data["RFIDBBaru"];
-    $idBuku = $data["idBuku"];
-    $status = $data["status"];
-
-    $query = "UPDATE buku SET idBuku = '$idBuku', RFIDB = '$RFIDBBaru', status = '$status' WHERE RFIDB = '$RFIDB'";
-
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-}
-
-function hapusBuku($data)
-{
-    global $koneksi;
-
-    $query = "DELETE FROM buku WHERE RFIDB = '$data'";
-
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-}
-
-function pinjam($data)
-{
-    global $koneksi;
-    global $tanggal;
-    global $jam;
-    $rfidP = $data['Data1'];
-    $rfidB = $data['Data2'];
-    $Da4 = $data['Data3'];
-    $mode = $data['sendMode'];
-
-    mysqli_query($koneksi, "INSERT INTO peminjaman VALUES (NULL, '$rfidP', '$rfidB', '2022-05-02','0000-00-00', 0)");
-
-    mysqli_query($koneksi, "UPDATE buku SET status = 0 WHERE RFIDB = '$rfidB'");
-    return mysqli_affected_rows($koneksi);
-}
-
-function kembali($data)
-{
-    global $koneksi;
-    global $tanggal;
-    global $jam;
-    $rfidP = $data['Data1'];
-    $rfidB = $data['Data2'];
-    $Da4 = $data['Data3'];
-    $mode = $data['sendMode'];
-
-    mysqli_query($koneksi, "UPDATE peminjaman, buku SET tanggalKembali='$tanggal', status=1 WHERE peminjaman.RFIDB=buku.RFIDB AND RFIDP='$rfidP' AND buku.RFIDB='$rfidB' AND tanggalKembali='0000-00-00'");
-    return mysqli_affected_rows($koneksi);
-}
-
-function absen($data)
-{
-    global $koneksi;
-    global $tanggal;
-    global $jam;
-    $rfidP = $data['Data1'];
-    $temp = $data['Data2'];
-    $Da4 = $data['Data3'];
-    $mode = $data['sendMode'];
-
-    mysqli_query($koneksi, "INSERT INTO absensi VALUES (NULL, '$rfidP', '$tanggal', '$jam','$temp')");
-
-    $nama = query("SELECT namaAnggota FROM anggota WHERE RFIDP = '$rfidP'")[0];
-    echo "nama:" . $nama['namaAnggota'] . "|";
-
-    return mysqli_affected_rows($koneksi);
-}
-
 function registrasi($data)
 {
     global $koneksi;
-    $username = strtolower(stripcslashes($data["username"]));
-    $password = mysqli_real_escape_string($koneksi, $data["password"]);
-    $password2 = mysqli_real_escape_string($koneksi, $data["password2"]);
+    $usernameSiswa = strtolower(stripcslashes($data["usernameSiswa"]));
+    $passwordSiswa = mysqli_real_escape_string($koneksi, $data["passwordSiswa"]);
+    $konfirmasiPasswordSiswa = mysqli_real_escape_string($koneksi, $data["konfirmasiPasswordSiswa"]);
+    $realNameSiswa = $data['realNameSiswa'];
+    $tempatLahirSiswa = $data['tempatLahirSiswa'];
+    $tanggalLahirSiswa = $data['tanggalLahirSiswa'];
+    $nomorTelfonSiswa = $data['nomorTelfonSiswa'];
+    $emailSiswa = $data['emailSiswa'];
+    $alamatSiswa = $data['alamatSiswa'];
+    $role = $data['role'];
 
-    $result = mysqli_query($koneksi, "SELECT username FROM tbl_users WHERE username = '$username' ");
+    $usernameOrangTua = strtolower(stripcslashes($data["usernameOrangTua"]));
+    $passwordOrangTua = mysqli_real_escape_string($koneksi, $data["passwordOrangTua"]);
+    $konfirmasiPasswordOrangTua = mysqli_real_escape_string($koneksi, $data["konfirmasiPasswordOrangTua"]);
+    $realNameOrangTua = $data['realNameOrangTua'];
+    $tempatLahirOrangTua = $data['tempatLahirOrangTua'];
+    $tanggalLahirOrangTua = $data['tanggalLahirOrangTua'];
+    $nomorTelfonOrangTua = $data['nomorTelfonOrangTua'];
+    $emailOrangTua = $data['emailOrangTua'];
+    $alamatOrangTua = $data['alamatOrangTua'];
+
+
+    // $username = 
+    // $password = 
+    // $password2 = mysqli_real_escape_string($koneksi, $data["password2"]);
+
+    $result = mysqli_query($koneksi, "SELECT username FROM tbl_users WHERE username = '$usernameSiswa' ");
 
     if (mysqli_fetch_assoc($result)) {
         echo "<script>
-				alert('username sudah ada');
-			</script>";
+    			alert('username sudah ada');
+    		</script>";
         return false;
     }
 
-    if ($password !== $password2) {
+    if ($passwordOrangTua !== $konfirmasiPasswordOrangTua) {
         echo "<script>
 				alert('konfirmasi password tidak sesuai');
 			</script>";
         return false;
     }
 
-    $password = password_hash($password, PASSWORD_DEFAULT);
+    if ($passwordSiswa !== $konfirmasiPasswordSiswa) {
+        echo "<script>
+				alert('konfirmasi password tidak sesuai');
+			</script>";
+        return false;
+    }
 
-    mysqli_query($koneksi, "INSERT INTO tbl_users VALUES (NULL, '$username', '$password', 'Penjualll', '2', '20000', '1')");
+    if ($role == "3") {
+        $passwordSiswa = password_hash($passwordSiswa, PASSWORD_DEFAULT);
+        $passwordOrangTua = password_hash($passwordOrangTua, PASSWORD_DEFAULT);
+        $fotoProfilSiswa = upload('fotoProfilSiswa', 'assets/images/avatar/');
+        $fotoProfilOrangTua = upload('fotoProfilOrangTua', 'assets/images/avatar/');
+        $uuidSiswa = createUUID();
+        $uuidOrangTua = createUUID();
+
+        $idDetail = query("SELECT COUNT(*) jumlahBaris FROM tbl_users")[0]['jumlahBaris'];
+        $idDetailSiswa = $idDetail + 1;
+        $idDetailOrangTua = $idDetail + 2;
+        if (!$fotoProfilSiswa) {
+            $fotoProfilSiswa = "defaultProfile.jpg";
+        }
+
+        if (!$fotoProfilOrangTua) {
+            $fotoProfilOrangTua = "defaultProfile.jpg";
+        }
+
+        $query = "INSERT INTO tbl_users (idUser, uuidUser, username, password, realName, tempatLahir, tanggalLahir, alamat, nomorTelfon, email, profileImage, role, status, idDetailUser) VALUES (NULL, '$uuidSiswa', '$usernameSiswa', '$passwordSiswa', '$realNameSiswa', '$tempatLahirSiswa', '$tanggalLahirSiswa', '$alamatSiswa', '$nomorTelfonSiswa', '$emailSiswa', '$fotoProfilSiswa', '3', '0', '$idDetailSiswa');";
+        mysqli_query($koneksi, $query);
+
+        $query = "INSERT INTO tbl_users (idUser, uuidUser, username, password, realName, tempatLahir, tanggalLahir, alamat, nomorTelfon, email, profileImage, role, status, idDetailUser) VALUES (NULL, '$uuidOrangTua', '$usernameOrangTua', '$passwordOrangTua', '$realNameOrangTua', '$tempatLahirOrangTua', '$tanggalLahirOrangTua', '$alamatOrangTua', '$nomorTelfonOrangTua', '$emailOrangTua', '$fotoProfilOrangTua', '4', '0', '$idDetailOrangTua');";
+        mysqli_query($koneksi, $query);
+
+        $idOrangTua = query("SELECT idUser FROM tbl_users WHERE uuidUser = '$uuidOrangTua'")[0]['idUser'];
+
+        $idAnak = query("SELECT idUser FROM tbl_users WHERE uuidUser = '$uuidSiswa'")[0]['idUser'];
+
+        $query = "INSERT INTO tbl_siswa (idDetailUser, idOrangTua, saldo, spendingLimit, additionalLimit) VALUES ('$idDetailSiswa', '$idOrangTua', '0', '0', '0')";
+        mysqli_query($koneksi, $query);
+
+        $query = "INSERT INTO tbl_orangtua (idDetailUser, idAnak) VALUES ('$idDetailOrangTua', '$idAnak')";
+        mysqli_query($koneksi, $query);
+    }
+
+    // $password = password_hash($password, PASSWORD_DEFAULT);
+
+    // mysqli_query($koneksi, "INSERT INTO tbl_users VALUES (NULL, '$username', '$password', 'Penjualll', '2', '20000', '1')");
 
     return mysqli_affected_rows($koneksi);
 }

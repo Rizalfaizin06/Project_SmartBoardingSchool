@@ -178,8 +178,7 @@ if (isset($_POST['buttonBayar'])) {
 
 
     <div class="grid grid-cols-1 items-center justify-items-center bg-primary h-64 w-full rounded-b-3xl shadow-xl p-5">
-        <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
-            class="object-cover rounded-full h-24 w-2h-24">
+        <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar" class="object-cover rounded-full h-24 w-24">
         <h3 class="text-xl font-poppins font-bold text-white">
             <?= $realName; ?>
         </h3>

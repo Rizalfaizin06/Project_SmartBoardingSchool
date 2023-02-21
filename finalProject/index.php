@@ -170,8 +170,7 @@ if ($role == 1) {
                 </a>
             </div>
         <?php elseif ($role == 3): ?>
-            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
-                class="object-cover rounded-full h-24 w-2h-24">
+            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar" class="object-cover rounded-full h-24 w-24">
             <h3 class="text-xl font-poppins font-bold text-white">
                 <?= $realName; ?>
             </h3>
@@ -197,8 +196,7 @@ if ($role == 1) {
 
             </script>
         <?php else: ?>
-            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
-                class="object-cover rounded-full h-24 w-2h-24">
+            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar" class="object-cover rounded-full h-24 w-24">
             <h3 class="text-xl font-poppins font-bold text-white">
                 <?= $realName; ?>
             </h3>
@@ -206,17 +204,17 @@ if ($role == 1) {
                 <?="Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
             <!-- <div class=" w-full grid grid-cols-1 justify-items-center">
-                                                <button id="buttonTopUpSiswa"
-                                                    class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
-                                                    <div class="grid grid-cols-2 h-10 items-center justify-items-center">
-                                                        <img src="assets/icons/topUp.png" alt="" class="h-6">
+                                                                            <button id="buttonTopUpSiswa"
+                                                                                class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
+                                                                                <div class="grid grid-cols-2 h-10 items-center justify-items-center">
+                                                                                    <img src="assets/icons/topUp.png" alt="" class="h-6">
 
-                                                        <h3 class="text-md font-poppins font-bold px-1">
-                                                            Top Up
-                                                        </h3>
-                                                    </div>
-                                                </button>
-                                            </div> -->
+                                                                                    <h3 class="text-md font-poppins font-bold px-1">
+                                                                                        Top Up
+                                                                                    </h3>
+                                                                                </div>
+                                                                            </button>
+                                                                        </div> -->
 
             <script src="dist/js/jquery-3.6.0.min.js"></script>
             <script>             $("#buttonTopUpSiswa").click(function () { $(this).hide(); $("#buttonBayar").hide(); $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#siswaPane").html(data) } }); });
@@ -291,15 +289,16 @@ if ($role == 1) {
                         Pengeluaran Harian
                     </h3>
                     <h3 class="text-2xl font-poppins font-bold">
+
                         <?="Rp " . number_format($Pengeluaran, 0, ",", ".") ?>/
                         <?="Rp " . number_format($totalLimit, 0, ",", ".") ?>
                     </h3>
                     <h3 class="font-poppins font-bold">
                         <?php
-
-                        $persentase = ($Pengeluaran / $totalLimit) * 100;
-
-                        echo round($persentase, 2) . "%";
+                        if ($saldo != 0 && $totalLimit != 0) {
+                            $persentase = ($Pengeluaran / $totalLimit) * 100;
+                            echo round($persentase, 2) . "%";
+                        }
                         ?>
                     </h3>
                 </div>
@@ -385,6 +384,9 @@ if ($role == 1) {
             </div>
         </div>
     </div>
+
+
+
     <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
 </body>
 

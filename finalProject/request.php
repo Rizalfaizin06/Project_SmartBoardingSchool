@@ -209,8 +209,7 @@ if (isset($_POST['buttonTolak'])) {
     <div class="grid grid-cols-1 items-center justify-items-center bg-primary h-64 w-full rounded-b-3xl shadow-xl p-5">
 
         <?php if ($role == 1): ?>
-            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
-                class="object-cover rounded-full h-24 w-2h-24">
+            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar" class="object-cover rounded-full h-24 w-24">
             <h3 class="text-xl font-poppins font-bold text-white">
                 <?= $realName; ?>
             </h3>
@@ -218,7 +217,7 @@ if (isset($_POST['buttonTolak'])) {
                 <?="Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
         <?php elseif ($role == 2): ?>
-            <img src="assets/images/avatar/<?= $logoToko; ?>" alt="avatar" class="object-cover rounded-full h-24 w-2h-24">
+            <img src="assets/images/avatar/<?= $logoToko; ?>" alt="avatar" class="object-cover rounded-full h-24 w-24">
             <h3 class="text-xl font-poppins font-bold text-white">
                 <?= $namaToko; ?>
             </h3>
@@ -238,8 +237,7 @@ if (isset($_POST['buttonTolak'])) {
                 </a>
             </div>
         <?php elseif ($role == 3): ?>
-            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
-                class="object-cover rounded-full h-24 w-2h-24">
+            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar" class="object-cover rounded-full h-24 w-24">
             <h3 class="text-xl font-poppins font-bold text-white">
                 <?= $realName; ?>
             </h3>
@@ -265,8 +263,7 @@ if (isset($_POST['buttonTolak'])) {
 
             </script>
         <?php else: ?>
-            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar"
-                class="object-cover rounded-full h-24 w-2h-24">
+            <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar" class="object-cover rounded-full h-24 w-24">
             <h3 class="text-xl font-poppins font-bold text-white">
                 <?= $realName; ?>
             </h3>
@@ -274,23 +271,23 @@ if (isset($_POST['buttonTolak'])) {
                 <?="Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
             <!-- <div class=" w-full grid grid-cols-1 justify-items-center">
-                                                <button id="buttonTopUpSiswa"
-                                                    class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
-                                                    <div class="grid grid-cols-2 h-10 items-center justify-items-center">
-                                                        <img src="assets/icons/topUp.png" alt="" class="h-6">
+                                                    <button id="buttonTopUpSiswa"
+                                                        class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
+                                                        <div class="grid grid-cols-2 h-10 items-center justify-items-center">
+                                                            <img src="assets/icons/topUp.png" alt="" class="h-6">
 
-                                                        <h3 class="text-md font-poppins font-bold px-1">
-                                                            Top Up
-                                                        </h3>
-                                                    </div>
-                                                </button>
-                                            </div>
+                                                            <h3 class="text-md font-poppins font-bold px-1">
+                                                                Top Up
+                                                            </h3>
+                                                        </div>
+                                                    </button>
+                                                </div>
 
-                                            <script src="dist/js/jquery-3.6.0.min.js"></script>
-                                            <script>             $("#buttonTopUpSiswa").click(function () { $(this).hide(); $("#buttonBayar").hide(); $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#siswaPane").html(data) } }); });
+                                                <script src="dist/js/jquery-3.6.0.min.js"></script>
+                                                <script>             $("#buttonTopUpSiswa").click(function () { $(this).hide(); $("#buttonBayar").hide(); $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#siswaPane").html(data) } }); });
 
 
-                                            </script> -->
+                                                </script> -->
         <?php endif; ?>
 
     </div>
