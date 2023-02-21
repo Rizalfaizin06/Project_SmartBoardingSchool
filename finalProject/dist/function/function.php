@@ -280,6 +280,57 @@ function registrasi($data)
 
         $query = "INSERT INTO tbl_orangtua (idDetailUser, idAnak) VALUES ('$idDetailOrangTua', '$idAnak')";
         mysqli_query($koneksi, $query);
+    } else {
+        $usernamePenjual = strtolower(stripcslashes($data["usernamePenjual"]));
+        $passwordPenjual = mysqli_real_escape_string($koneksi, $data["passwordPenjual"]);
+        $konfirmasiPasswordPenjual = mysqli_real_escape_string($koneksi, $data["konfirmasiPasswordPenjual"]);
+        $realNamePenjual = $data['realNamePenjual'];
+        $tempatLahirPenjual = $data['tempatLahirPenjual'];
+        $tanggalLahirPenjual = $data['tanggalLahirPenjual'];
+        $nomorTelfonPenjual = $data['nomorTelfonPenjual'];
+        $emailPenjual = $data['emailPenjual'];
+        $alamatPenjual = $data['alamatPenjual'];
+        $namaToko = $data['namaToko'];
+
+
+        $result = mysqli_query($koneksi, "SELECT username FROM tbl_users WHERE username = '$usernamePenjual' ");
+
+        if (mysqli_fetch_assoc($result)) {
+            echo "<script>
+    			alert('username sudah ada');
+    		</script>";
+            return false;
+        }
+
+        if ($passwordPenjual !== $konfirmasiPasswordPenjual) {
+            echo "<script>
+				alert('konfirmasi password tidak sesuai');
+			</script>";
+            return false;
+        }
+
+        $passwordPenjual = password_hash($passwordPenjual, PASSWORD_DEFAULT);
+        $fotoProfilPenjual = upload('fotoProfilPenjual', 'assets/images/avatar/');
+        $logoToko = upload('fotoProfilOrangTua', 'assets/images/avatar/');
+        $uuidPenjual = createUUID();
+
+        $idDetail = query("SELECT COUNT(*) jumlahBaris FROM tbl_users")[0]['jumlahBaris'];
+        $idDetailPenjual = $idDetail + 1;
+
+        if (!$fotoProfilPenjual) {
+            $fotoProfilPenjual = "defaultProfile.jpg";
+        }
+
+        if (!$logoToko) {
+            $logoToko = "defaultProfile.jpg";
+        }
+
+        $query = "INSERT INTO tbl_users (idUser, uuidUser, username, password, realName, tempatLahir, tanggalLahir, alamat, nomorTelfon, email, profileImage, role, status, idDetailUser) VALUES (NULL, '$uuidPenjual', '$usernamePenjual', '$passwordPenjual', '$realNamePenjual', '$tempatLahirPenjual', '$tanggalLahirPenjual', '$alamatPenjual', '$nomorTelfonPenjual', '$emailPenjual', '$fotoProfilPenjual', '2', '0', '$idDetailPenjual');";
+        mysqli_query($koneksi, $query);
+
+        $query = "INSERT INTO tbl_Penjual (idDetailUser, namaToko, logoToko, saldo) VALUES ('$idDetailPenjual', '$namaToko', '$logoToko', '0')";
+        mysqli_query($koneksi, $query);
+
     }
 
     // $password = password_hash($password, PASSWORD_DEFAULT);

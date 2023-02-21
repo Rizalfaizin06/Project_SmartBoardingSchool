@@ -106,7 +106,7 @@ if (isset($_POST["buttonDaftar"])) {
 
 
 
-		<div id="siswaPane" class="max-w-xl w-full space-y-8 p-10 bg-white rounded-xl shadow-lg z-10">
+		<div id="siswaPane" class="hidden max-w-xl w-full space-y-8 p-10 bg-white rounded-xl shadow-lg z-10">
 			<div class="grid  gap-8 grid-cols-1">
 				<div class="flex flex-col ">
 					<div class="flex flex-col sm:flex-row items-center">
@@ -395,7 +395,7 @@ if (isset($_POST["buttonDaftar"])) {
 
 
 
-		<div id="penjualPane" class="max-w-xl w-full space-y-8 p-10 bg-white rounded-xl shadow-lg z-10">
+		<div id="penjualPane" class="hidden max-w-xl w-full space-y-8 p-10 bg-white rounded-xl shadow-lg z-10">
 			<div class="grid  gap-8 grid-cols-1">
 				<div class="flex flex-col ">
 					<div class="flex flex-col sm:flex-row items-center">
@@ -417,7 +417,7 @@ if (isset($_POST["buttonDaftar"])) {
 									<!-- <label class="font-poppins text-xs font-semibold text-gray-600 py-2">Profil<abbr
 										class="hidden" title="required">*</abbr></label> -->
 									<div class="flex flex-col sm:flex-row items-center">
-										<h2 class="font-semibold font-poppins text-xl text-center">Siswa</h2>
+										<h2 class="font-semibold font-poppins text-xl text-center">Penjual</h2>
 										<div class="w-full sm:w-auto sm:ml-auto mt-3 sm:mt-0"></div>
 									</div>
 									<div class="flex items-center">
@@ -431,7 +431,7 @@ if (isset($_POST["buttonDaftar"])) {
 												for="file_input">Foto profil</span>
 											<input
 												class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-												id="file_input" type="file" name="fotoProfilSiswa">
+												id="file_input" type="file" name="fotoProfilPenjual">
 										</label>
 									</div>
 								</div>
@@ -441,7 +441,7 @@ if (isset($_POST["buttonDaftar"])) {
 											lengkap</label>
 										<input placeholder="Masukkan Nama Lengkap"
 											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											required type="text" name="realNameSiswa" id="realNameSiswa">
+											required type="text" name="realNamePenjual" id="realNamePenjual">
 										<p class="font-poppins text-red text-xs hidden">Please fill out this field.</p>
 									</div>
 								</div>
@@ -452,14 +452,14 @@ if (isset($_POST["buttonDaftar"])) {
 											Lahir</label>
 										<input placeholder="Masukkan Tempat Lahir"
 											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											type="text" name="tempatLahirSiswa" id="tempatLahirSiswa">
+											type="text" name="tempatLahirPenjual" id="tempatLahirPenjual">
 									</div>
 									<div class="w-full flex flex-col mb-3">
 										<label class="font-poppins font-semibold text-gray-600 py-2">Tanggal
 											Lahir</label>
 										<input placeholder="Masukkan Tanggal Lahir"
 											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											type="date" name="tanggalLahirSiswa" id="tanggalLahirSiswa">
+											type="date" name="tanggalLahirPenjual" id="tanggalLahirPenjual">
 										<p class="font-poppins text-sm text-red-500 hidden mt-3" id="error">Please fill
 											out
 											this field.
@@ -472,13 +472,13 @@ if (isset($_POST["buttonDaftar"])) {
 											Telfon</label>
 										<input placeholder="Masukkan Nomor Telfon"
 											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											type="text" name="nomorTelfonSiswa" id="nomorTelfonSiswa">
+											type="text" name="nomorTelfonPenjual" id="nomorTelfonPenjual">
 									</div>
 									<div class="w-full flex flex-col mb-3">
 										<label class="font-poppins font-semibold text-gray-600 py-2">Email</label>
 										<input placeholder="Masukkan Email"
 											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											required type="text" name="emailSiswa" id="emailSiswa">
+											required type="text" name="emailPenjual" id="emailPenjual">
 										<p class="font-poppins text-sm text-red-500 hidden mt-3" id="error">Please fill
 											out
 											this field.
@@ -487,18 +487,50 @@ if (isset($_POST["buttonDaftar"])) {
 								</div>
 								<div class="flex-auto w-full mb-1 text-xs space-y-2">
 									<label class="font-poppins font-semibold text-gray-600 py-2">Alamat</label>
-									<textarea name="alamatSiswa" id="alamatSiswa"
+									<textarea name="alamatPenjual" id="alamatPenjual"
 										class="min-h-[100px] max-h-[300px] h-28 appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg  py-4 px-4"
 										placeholder="Masukkan Alamat Lengkap" spellcheck="false"></textarea>
 									<!-- <p class="font-poppins text-xs text-gray-400 text-left my-3">You inserted 0 characters
 								</p> -->
+								</div>
+								<div class="md:space-y-2 mb-3">
+									<!-- <label class="font-poppins text-xs font-semibold text-gray-600 py-2">Profil<abbr
+										class="hidden" title="required">*</abbr></label> -->
+									<div class="flex flex-col sm:flex-row items-center">
+										<h2 class="font-semibold font-poppins text-xl text-center">Toko</h2>
+										<div class="w-full sm:w-auto sm:ml-auto mt-3 sm:mt-0"></div>
+									</div>
+									<div class="flex items-center">
+										<div class="w-20 h-20 mr-4 flex-none rounded-xl border overflow-hidden">
+											<img class="w-20 h-20 mr-4 object-cover"
+												src="assets/images/avatar/defaultProfile.jpg">
+										</div>
+										<label class="font-poppins cursor-pointer ">
+
+											<span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+												for="file_input">Logo Toko</span>
+											<input
+												class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+												id="file_input" type="file" name="fotoProfilOrangTua">
+										</label>
+									</div>
+								</div>
+
+								<div class="md:flex flex-row md:space-x-4 w-full text-xs">
+									<div class="mb-3 space-y-2 w-full text-xs">
+										<label class="font-poppins font-semibold text-gray-600 py-2">Nama Toko</label>
+										<input placeholder="Masukkan Nama Toko"
+											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
+											required type="text" name="namaToko" id="namaToko">
+										<p class="font-poppins text-red text-xs hidden">Please fill out this field.</p>
+									</div>
 								</div>
 								<div class="md:flex flex-row md:space-x-4 w-full text-xs">
 									<div class="mb-3 space-y-2 w-full text-xs">
 										<label class="font-poppins font-semibold text-gray-600 py-2">Username</label>
 										<input placeholder="Masukkan Username"
 											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											required type="text" name="usernameSiswa" id="usernameSiswa">
+											required type="text" name="usernamePenjual" id="usernamePenjual">
 										<p class="font-poppins text-red text-xs hidden">Please fill out this field.</p>
 									</div>
 								</div>
@@ -508,14 +540,14 @@ if (isset($_POST["buttonDaftar"])) {
 										<label class="font-poppins font-semibold text-gray-600 py-2">Password</label>
 										<input placeholder="Masukkan Password"
 											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											type="text" name="passwordSiswa" id="passwordSiswa">
+											type="text" name="passwordPenjual" id="passwordPenjual">
 									</div>
 									<div class="w-full flex flex-col mb-3">
 										<label class="font-poppins font-semibold text-gray-600 py-2">Konfirmasi
 											Password</label>
 										<input placeholder="Masukkan Password"
 											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											type="text" name="konfirmasiPasswordSiswa" id="konfirmasiPasswordSiswa">
+											type="text" name="konfirmasiPasswordPenjual" id="konfirmasiPasswordPenjual">
 										<p class="font-poppins text-sm text-red-500 hidden mt-3" id="error">Please fill
 											out
 											this field.
@@ -524,120 +556,6 @@ if (isset($_POST["buttonDaftar"])) {
 								</div>
 
 								<div class="p-5"></div>
-
-								<div class="md:space-y-2 mb-3">
-									<!-- <label class="font-poppins text-xs font-semibold text-gray-600 py-2">Profil<abbr
-										class="hidden" title="required">*</abbr></label> -->
-									<div class="flex flex-col sm:flex-row items-center">
-										<h2 class="font-semibold font-poppins text-xl text-center">Orang Tua</h2>
-										<div class="w-full sm:w-auto sm:ml-auto mt-3 sm:mt-0"></div>
-									</div>
-									<div class="flex items-center">
-										<div class="w-20 h-20 mr-4 flex-none rounded-xl border overflow-hidden">
-											<img class="w-20 h-20 mr-4 object-cover"
-												src="assets/images/avatar/defaultProfile.jpg">
-										</div>
-										<label class="font-poppins cursor-pointer ">
-
-											<span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-												for="file_input">Foto profil</span>
-											<input
-												class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-												id="file_input" type="file" name="fotoProfilOrangTua">
-										</label>
-									</div>
-								</div>
-								<div class="md:flex flex-row md:space-x-4 w-full text-xs">
-									<div class="mb-3 space-y-2 w-full text-xs">
-										<label class="font-poppins font-semibold text-gray-600 py-2">Nama
-											lengkap</label>
-										<input placeholder="Masukkan Nama Lengkap"
-											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											required type="text" name="realNameOrangTua" id="realNameOrangTua">
-										<p class="font-poppins text-red text-xs hidden">Please fill out this field.</p>
-									</div>
-								</div>
-
-								<div class="md:flex md:flex-row md:space-x-4 w-full text-xs">
-									<div class="w-full flex flex-col mb-3">
-										<label class="font-poppins font-semibold text-gray-600 py-2">Tempat
-											Lahir</label>
-										<input placeholder="Masukkan Tempat Lahir"
-											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											type="text" name="tempatLahirOrangTua" id="tempatLahirOrangTua">
-									</div>
-									<div class="w-full flex flex-col mb-3">
-										<label class="font-poppins font-semibold text-gray-600 py-2">Tanggal
-											Lahir</label>
-										<input placeholder="Masukkan Tanggal Lahir"
-											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											type="date" name="tanggalLahirOrangTua" id="tanggalLahirOrangTua">
-										<p class="font-poppins text-sm text-red-500 hidden mt-3" id="error">Please fill
-											out
-											this field.
-										</p>
-									</div>
-								</div>
-								<div class="md:flex md:flex-row md:space-x-4 w-full text-xs">
-									<div class="w-full flex flex-col mb-3">
-										<label class="font-poppins font-semibold text-gray-600 py-2">Nomor
-											Telfon</label>
-										<input placeholder="Masukkan Nomor Telfon"
-											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											type="text" name="nomorTelfonOrangTua" id="nomorTelfonOrangTua">
-									</div>
-									<div class="w-full flex flex-col mb-3">
-										<label class="font-poppins font-semibold text-gray-600 py-2">Email</label>
-										<input placeholder="Masukkan Email"
-											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											required type="text" name="emailOrangTua" id="emailOrangTua">
-										<p class="font-poppins text-sm text-red-500 hidden mt-3" id="error">Please fill
-											out
-											this field.
-										</p>
-									</div>
-								</div>
-								<div class="flex-auto w-full mb-1 text-xs space-y-2">
-									<label class="font-poppins font-semibold text-gray-600 py-2">Alamat</label>
-									<textarea name="alamatOrangTua" id="alamatOrangTua"
-										class="min-h-[100px] max-h-[300px] h-28 appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg  py-4 px-4"
-										placeholder="Masukkan Alamat Lengkap" spellcheck="false"></textarea>
-									<!-- <p class="font-poppins text-xs text-gray-400 text-left my-3">You inserted 0 characters
-								</p> -->
-								</div>
-								<div class="md:flex flex-row md:space-x-4 w-full text-xs">
-									<div class="mb-3 space-y-2 w-full text-xs">
-										<label class="font-poppins font-semibold text-gray-600 py-2">Username</label>
-										<input placeholder="Masukkan Username"
-											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											required type="text" name="usernameOrangTua" id="usernameOrangTua">
-										<p class="font-poppins text-red text-xs hidden">Please fill out this field.</p>
-									</div>
-								</div>
-
-								<div class="md:flex md:flex-row md:space-x-4 w-full text-xs">
-									<div class="w-full flex flex-col mb-3">
-										<label class="font-poppins font-semibold text-gray-600 py-2">Password</label>
-										<input placeholder="Masukkan Password"
-											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											type="text" name="passwordOrangTua" id="passwordOrangTua">
-									</div>
-									<div class="w-full flex flex-col mb-3">
-										<label class="font-poppins font-semibold text-gray-600 py-2">Konfirmasi
-											Password</label>
-										<input placeholder="Masukkan Password"
-											class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-											type="text" name="konfirmasiPasswordOrangTua"
-											id="konfirmasiPasswordOrangTua">
-										<p class="font-poppins text-sm text-red-500 hidden mt-3" id="error">Please fill
-											out
-											this field.
-										</p>
-									</div>
-								</div>
-
-
-
 
 
 
@@ -652,7 +570,7 @@ if (isset($_POST["buttonDaftar"])) {
 								an
 								asterisk <abbr title="Required field">*</abbr></p> -->
 								<div class="mt-5 text-center md:text-right md:space-x-3 md:block flex flex-col-reverse">
-									<input type="hidden" name="role" value="3">
+									<input type="hidden" name="role" value="2">
 									<a href="login.php"
 										class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
 										<span class="">Cancel</span> </a>
@@ -680,8 +598,8 @@ if (isset($_POST["buttonDaftar"])) {
 	<script src="dist/js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript">
 
-		$("#siswaPane").hide();
-		$("#penjualPane").hide();
+		// $("#siswaPane").hide();
+		// $("#penjualPane").hide();
 
 
 		$("#buttonSiswa").click(function () {
