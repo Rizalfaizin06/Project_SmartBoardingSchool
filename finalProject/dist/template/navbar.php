@@ -191,6 +191,72 @@ if ($role == 1) {
 
             <?php endif; ?>
          <?php endif; ?>
+         <?php if ($role == 1): ?>
+            <?php if ($_SESSION["currentPage"] == "verificationUser"): ?>
+               <li>
+                  <a href="profile.php" data-drawer-toggle="default-sidebar"
+                     class="flex items-center p-2 text-base font-normal rounded-lg bg-primary hover:bg-opacity-80">
+                     <img src="assets/icons/identityOrange.png" alt="" class="w-6 h-6">
+                     <span class="ml-3 font-poppins text-white whitespace-nowrap">Verifikasi User</span>
+                  </a>
+               </li>
+            <?php else: ?>
+               <li>
+                  <a href="profile.php" data-drawer-toggle="default-sidebar"
+                     class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg">
+                     <img src="assets/icons/identityGray.png" alt="" class="w-6 h-6">
+
+                     <span class="flex-1 ml-3 whitespace-nowrap">Verifikasi User</span>
+                  </a>
+               </li>
+
+            <?php endif; ?>
+            <?php if ($_SESSION["currentPage"] == "verificationProduct"): ?>
+               <li>
+                  <a href="profile.php" data-drawer-toggle="default-sidebar"
+                     class="flex items-center p-2 text-base font-normal rounded-lg bg-primary hover:bg-opacity-80">
+                     <img src="assets/icons/verifikasiProdutOrange.png" alt="" class="w-6 h-6">
+                     <span class="ml-3 font-poppins text-white whitespace-nowrap">Verifikasi Product</span>
+                  </a>
+               </li>
+            <?php else: ?>
+               <li>
+                  <a href="profile.php" data-drawer-toggle="default-sidebar"
+                     class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg">
+                     <img src="assets/icons/verifikasiProdutGray.png" alt="" class="w-6 h-6">
+
+                     <span class="flex-1 ml-3 whitespace-nowrap">Verifikasi Product</span>
+                  </a>
+               </li>
+
+            <?php endif; ?>
+            <?php if ($_SESSION["currentPage"] == "listUser"): ?>
+               <li>
+                  <a href="profile.php" data-drawer-toggle="default-sidebar"
+                     class="flex items-center p-2 text-base font-normal rounded-lg bg-primary hover:bg-opacity-80">
+                     <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75"
+                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
+                        </path>
+                     </svg>
+                     <span class="ml-3 font-poppins text-white whitespace-nowrap">List User</span>
+                  </a>
+               </li>
+            <?php else: ?>
+               <li>
+                  <a href="profile.php" data-drawer-toggle="default-sidebar"
+                     class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg">
+                     <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75"
+                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
+                        </path>
+                     </svg>
+                     <span class="flex-1 ml-3 whitespace-nowrap">List User</span>
+                  </a>
+               </li>
+
+            <?php endif; ?>
+         <?php endif; ?>
          <?php if ($role == 2): ?>
             <?php if ($_SESSION["currentPage"] == "daftarMenu"): ?>
                <li>
