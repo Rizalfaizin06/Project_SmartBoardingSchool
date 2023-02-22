@@ -48,6 +48,7 @@ if (isset($_POST['buttonTambahCategory'])) {
     mysqli_query($koneksi, $query);
 
 }
+
 if (isset($_POST['buttonTambahMenu'])) {
     if (addMenu($_POST) > 0) {
 
@@ -62,10 +63,14 @@ if (isset($_POST['buttonHapusMenu'])) {
     $idMenu = $_POST['idMenu'];
     $query = "DELETE FROM tbl_menu WHERE idMenu = '$idMenu'";
     mysqli_query($koneksi, $query);
+}
 
-    header("Location: i.php");
-    exit;
-
+if (isset($_POST['buttonHapusCategory'])) {
+    $idCategory = $_POST['idCategory'];
+    $query = "DELETE FROM tbl_menu WHERE idCategory= '$idCategory'";
+    mysqli_query($koneksi, $query);
+    $query = "DELETE FROM tbl_Category WHERE idCategory= '$idCategory'";
+    mysqli_query($koneksi, $query);
 }
 
 $menu = query("SELECT * FROM tbl_menu M, tbl_category C WHERE M.idCategory = C.idCategory AND idPenjual = '$idUser' ORDER BY namaCategory DESC, namaMenu");
@@ -162,8 +167,8 @@ $category = query("SELECT namaCategory, idCategory, idUserCat FROM tbl_category 
                                     <input type="hidden" name="idMenu" value="<?= $oneView['idMenu']; ?>">
                                     <th scope="row"
                                         class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                        <img class="w-10 h-10 rounded-full" src="assets/images/avatar/gb.jpg"
-                                            alt="Jese image">
+                                        <img class="w-10 h-10 rounded-full"
+                                            src="assets/images/menu/<?= $oneView['gambarMenu']; ?>" alt="Jese image">
                                         <div class="pl-3">
                                             <div class="text-base font-semibold">
                                                 <?= $oneView['namaMenu']; ?>
@@ -178,7 +183,7 @@ $category = query("SELECT namaCategory, idCategory, idUserCat FROM tbl_category 
                                         <?= $oneView['hargaMenu']; ?>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <button type="submit" name="buttonHapusMenu"
+                                        <button type="submit" name="buttonHapusMenu" onclick="return confirm('Yakin?');"
                                             class="px-3 py-2 rounded-lg bg-primary hover:bg-opacity-80">
 
 
@@ -314,6 +319,7 @@ $category = query("SELECT namaCategory, idCategory, idUserCat FROM tbl_category 
 
                                     <td class="px-6 py-4">
                                         <button type="submit" name="buttonHapusCategory"
+                                            onclick="return confirm('Semua Menu yang menggunakan kategori ini akan dihapus?');"
                                             class="px-3 py-2 rounded-lg bg-primary hover:bg-opacity-80">
 
 
