@@ -17,11 +17,83 @@ $jamTanggal = date("Y-m-d H:i:s");
 if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
     // absen($_POST);
 
-    if (tambahBukuArduino($_POST) > 0) {
+    if (payFromArduino($_POST) > 0) {
         echo "status:BERHASIL|";
     } else {
         echo "status:GAGAL|";
     }
+
+    //aktifkan kembali mode autocommit
+    mysqli_autocommit($koneksi, true);
+
+}
+
+
+function payFromArduino($data)
+{
+    global $koneksi;
+    global $tanggal;
+
+    $rfidUser = $data['Data1'];
+    $idPenjual = $data['Data2'];
+
+    $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];
+    $idUser = $detailUser['idUser'];
+    $saldo = $detailUser['saldo'];
+    $spendingLimit = $detailUser["spendingLimit"];
+    $additionalLimit = $detailUser["additionalLimit"];
+    $totalLimit = $spendingLimit + $additionalLimit;
+    $Pengeluaran = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
+    $sisaLimit = $totalLimit - $Pengeluaran;
+
+
+    $pembayaran = query("SELECT idOrder FROM tbl_order WHERE idPenjual = '$idPenjual' AND statusOrder = 0 ORDER BY idOrder DESC LIMIT 1")[0];
+    if (!empty($pembayaran)) {
+        $idOrder = $pembayaran["idOrder"];
+        // var_dump($idOrder);
+
+        // $dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder");
+        // var_dump($dataOrderan);
+
+        $totalHarga = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder")[0]["total"];
+        // var_dump($totalHarga);
+        // die;
+        if ($totalHarga > $saldo) {
+            return false;
+        }
+        if ($totalHarga > $sisaLimit) {
+            return false;
+        }
+
+        mysqli_autocommit($koneksi, false);
+
+        try {
+            //menambah saldo pengguna penerima
+            $sql = "UPDATE tbl_users U, tbl_penjual P SET saldo = saldo + $totalHarga WHERE U.idDetailUser = P.idDetailUser AND idUser = $idPenjual";
+            mysqli_query($koneksi, $sql);
+
+            //mengurangi saldo pengguna pengirim
+            $sql = "UPDATE tbl_users U, tbl_siswa S SET saldo = saldo - $totalHarga WHERE U.idDetailUser = S.idDetailUser AND idUser = $idUser";
+            mysqli_query($koneksi, $sql);
+
+            //menyelesaikan orderan
+            $sql = "UPDATE tbl_order SET statusOrder = 1, idPembeli = $idUser WHERE idOrder = $idOrder";
+            mysqli_query($koneksi, $sql);
+
+            //commit transaction jika operasi transfer berhasil
+            mysqli_commit($koneksi);
+
+            // echo "Transfer saldo berhasil!";
+        } catch (Exception $e) {
+            //rollback transaction jika terjadi kesalahan pada operasi transfer
+            mysqli_rollback($koneksi);
+            // echo "Transfer saldo gagal: " . $e->getMessage();
+        }
+        return 1;
+    } else {
+        return false;
+    }
+
 
 }
 

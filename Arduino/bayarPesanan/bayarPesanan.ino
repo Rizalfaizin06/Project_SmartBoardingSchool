@@ -26,7 +26,7 @@ const int btn2 = 16;
 int button2;
 
 bool quit = 0;
-String iData1 = "1";
+String iData1 = "2";
 String iData2 = "2";
 String iData3 = "3";
 String iData4 = "36";
@@ -39,17 +39,22 @@ String Data1;
 String Data2;
 String Data3;
 String Data4;
+String host = "192.168.0.103";
 //String host = "192.168.43.160";
 //String host = "testingstarproject.000webhostapp.com";
-String host = "wirapustaka.ninapst.com";
-const char* ssid = "STAR";
-const char* password = "skansawira";
+//String host = "wirapustaka.ninapst.com";
+//const char* ssid = "STAR";
+//const char* password = "skansawira";
+
+const char* ssid = "LAB TITL";
+const char* password = "titlsuksesselalu";
 
 //String url = "http://" + host + "/Krenova/GitFolder/Peminjaman-Buku-1/PHP/admin/fungsiAdmin.php";
 //String url = "https://" + host + "/index.php";
-String url = "http://" + host + "/admin/fungsiAdmin.php";
+//String url = "http://" + host + "/admin/fungsiAdmin.php";
+String url = "http://" + host + "/Project_SmartBoardingSchool/finalProject/dist/function/function.php";
 String dataUpload[10];
-
+String rfidUser;
 
 void setup() {
   Serial.begin(115200);
@@ -94,35 +99,6 @@ void loop() {
   
 }
 
-void jalan() {
-  lcd.setCursor (2,0);
-  lcd.print("TAMBAH BUKU");
-  
-  button1 = digitalRead(btn1);
-  Serial.println(button1);
-  delay(50);
-  if ( button1 == 1 ) {
-    buzzer(1);
-    tambahAnggota();
-    
-  }
-  if ( ! mfrc522.PICC_IsNewCardPresent()) 
-  {
-    return;
-  }
-  
-  if ( ! mfrc522.PICC_ReadCardSerial()) 
-  {
-    return;
-  }
-  if (quit == 1 ) {
-    quit = 0;
-    return;
-  }
-  tambahBuku();
-}
-
-
 String scann() {
   while ( ! mfrc522.PICC_IsNewCardPresent()) 
   {
@@ -153,6 +129,38 @@ String scann() {
   guid.replace(" ", "");
   return guid;
 }
+
+void jalan() {
+  lcd.setCursor (2,0);
+  lcd.print("TAMBAH BUKU");
+  
+//  button1 = digitalRead(btn1);
+//  Serial.println(button1);
+//  delay(50);
+//  if ( button1 == 1 ) {
+//    buzzer(1);
+//    tambahAnggota();
+//    
+//  }
+  if ( ! mfrc522.PICC_IsNewCardPresent()) 
+  {
+    return;
+  }
+  
+  if ( ! mfrc522.PICC_ReadCardSerial()) 
+  {
+    return;
+  }
+//  if (quit == 1 ) {
+//    quit = 0;
+//    return;
+//  }
+  rfidUser = scann();
+  Serial.println(rfidUser);
+  request(rfidUser, iData1, iData2, iData3);
+}
+
+
 void request(String satu, String dua, String tiga, String empat) {
   HTTPClient http;
   Data1 = String(satu);
@@ -334,7 +342,7 @@ void tambahBuku() {
   dataUpload[0] = scann();
   Serial.print(dataUpload[0]);
   delay(700);
-  uploadDB(dataUpload[0], iData2, iData4, sendMode);
+//  uploadDB(dataUpload[0], iData2, iData4, sendMode);
 }
 
 void tambahAnggota() {
@@ -359,7 +367,7 @@ void tambahAnggota() {
   dataUpload[0] = scann();
   Serial.print(dataUpload[0]);
   delay(700);
-  uploadDB(dataUpload[0], iData2, iData4, sendMode);
+  request(dataUpload[0], iData2, iData4, sendMode);
   sendMode = "tambahBuku";
 }
 
