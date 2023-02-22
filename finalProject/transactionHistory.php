@@ -322,7 +322,7 @@ $logTransaksi = query("SELECT * FROM tbl_log WHERE DATE(waktuTransfer) = '$tangg
                                     <input id="<?='harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
                                         value="<?= $oneView["hargaMenu"]; ?>" />
                                     <td class="px-2 py-4">
-                                        <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number"
+                                        <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number"  min="1"
                                             class="border border-gray-300 borderad rounded-lg w-16"
                                             name="<?='jumlahPesan' . $oneView['idMenu']; ?>" value="<?= $oneView["jumlahPesan"]; ?>"
                                             disabled>
@@ -446,7 +446,7 @@ $logTransaksi = query("SELECT * FROM tbl_log WHERE DATE(waktuTransfer) = '$tangg
                                     <input id="<?='harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
                                         value="<?= $oneView["hargaMenu"]; ?>" />
                                     <td class="px-2 py-4">
-                                        <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number"
+                                        <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number" min="1"
                                             class="border border-gray-300 borderad rounded-lg w-16"
                                             name="<?='jumlahPesan' . $oneView['idMenu']; ?>" value="<?= $oneView["jumlahPesan"]; ?>"
                                             disabled>
@@ -573,7 +573,7 @@ $logTransaksi = query("SELECT * FROM tbl_log WHERE DATE(waktuTransfer) = '$tangg
                                     <input id="<?='harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
                                         value="<?= $oneView["hargaMenu"]; ?>" />
                                     <td class="px-2 py-4">
-                                        <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number"
+                                        <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number" min="1"
                                             class="border border-gray-300 borderad rounded-lg w-16"
                                             name="<?='jumlahPesan' . $oneView['idMenu']; ?>" value="<?= $oneView["jumlahPesan"]; ?>"
                                             disabled>

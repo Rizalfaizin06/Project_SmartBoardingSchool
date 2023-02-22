@@ -253,30 +253,30 @@ foreach ($dataPesanan as $oneView) {
                             <tbody>
                                 <?php foreach ($dataPesanan as $oneView):
                                     ?>
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row"
-                                                class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                <?= $oneView["namaMenu"]; ?>
-                                            </th>
-                                            <td class="px-2 py-4">
-                                                <?= $oneView["hargaMenu"]; ?>
-                                            </td>
-                                            <input id="<?='harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
-                                                value="<?= $oneView["hargaMenu"]; ?>" />
-                                            <td class="px-2 py-4">
-                                                <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number"
-                                                    class="border border-gray-300 borderad rounded-lg w-16"
-                                                    name="<?='jumlahPesan' . $oneView['idMenu']; ?>" value="1"
-                                                    onchange="return operasi()">
-                                            </td>
-                                            <td class="px-2 py-4">
-                                                <div class="px-1 py-1 w-8 text-sm font-medium text-center text-primary bg-primary rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
-                                                    id="buttonHapus" name="buttonHapus"
-                                                    onclick="deleteDataPesan(<?= $oneView['idMenu']; ?>)">
-                                                    <img src="assets/icons/trash.png" alt="" class="w-6">
-                                                </div>
-                                            </td>
-                                        </tr>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row"
+                                                    class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <?= $oneView["namaMenu"]; ?>
+                                                </th>
+                                                <td class="px-2 py-4">
+                                                    <?= $oneView["hargaMenu"]; ?>
+                                                </td>
+                                                <input id="<?='harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
+                                                    value="<?= $oneView["hargaMenu"]; ?>" />
+                                                <td class="px-2 py-4">
+                                                    <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number"  min="1"
+                                                        class="border border-gray-300 borderad rounded-lg w-16"
+                                                        name="<?='jumlahPesan' . $oneView['idMenu']; ?>" value="1"
+                                                        onchange="return operasi()">
+                                                </td>
+                                                <td class="px-2 py-4">
+                                                    <div class="px-1 py-1 w-8 text-sm font-medium text-center text-primary bg-primary rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
+                                                        id="buttonHapus" name="buttonHapus"
+                                                        onclick="deleteDataPesan(<?= $oneView['idMenu']; ?>)">
+                                                        <img src="assets/icons/trash.png" alt="" class="w-6">
+                                                    </div>
+                                                </td>
+                                            </tr>
 
                                 <?php endforeach;
                                 if ((empty($dataPesanan))) {
@@ -305,13 +305,13 @@ foreach ($dataPesanan as $oneView) {
 
                         <input type="hidden" name="idMenu" value="<?= $oneView["idMenu"]; ?>">
                         <?php if (empty($dataPesanan)): ?>
-                                <button
-                                    class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg bg-opacity-50 focus:ring-4 focus:outline-none focus:ring-stone-300"
-                                    type="submit" id="buttonOrder" name="buttonOrder" disabled>Order</button>
+                                    <button
+                                        class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg bg-opacity-50 focus:ring-4 focus:outline-none focus:ring-stone-300"
+                                        type="submit" id="buttonOrder" name="buttonOrder" disabled>Order</button>
                         <?php else: ?>
-                                <button
-                                    class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
-                                    type="submit" id="buttonOrder" name="buttonOrder">Order</button>
+                                    <button
+                                        class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
+                                        type="submit" id="buttonOrder" name="buttonOrder">Order</button>
                         <?php endif; ?>
 
                     </div>

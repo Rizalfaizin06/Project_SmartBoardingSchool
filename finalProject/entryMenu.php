@@ -173,7 +173,7 @@ foreach ($dataPesanan as $oneView) {
                             <div
                                 class="block w-40 md:w-full md:max-w-xs h-full bg-white border border-gray-200 rounded-xl shadow overflow-hidden">
                                 <div class="grid grid-cols-1 md:grid-cols-2 h-full">
-                                    <img src="assets/images/<?= $oneView["gambarMenu"]; ?>" alt="esdgtsdf"
+                                    <img src="assets/images/menu/<?= $oneView["gambarMenu"]; ?>" alt="esdgtsdf"
                                         class="object-cover w-full h-36">
                                     <div class="grid grid-cols-1 gap-0 p-2 h-full">
 
@@ -266,7 +266,7 @@ foreach ($dataPesanan as $oneView) {
                                         <td class="px-2 py-4">
                                             <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number"
                                                 class="border border-gray-300 borderad rounded-lg w-16"
-                                                name="<?='jumlahPesan' . $oneView['idMenu']; ?>" value="1"
+                                                name="<?='jumlahPesan' . $oneView['idMenu']; ?>" value="1" min="1"
                                                 onchange="return operasi()">
                                         </td>
                                         <td class="px-2 py-4">
