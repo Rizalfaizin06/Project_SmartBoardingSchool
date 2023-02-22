@@ -14,6 +14,17 @@ $jamTanggal = date("Y-m-d H:i:s");
 
 
 
+if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
+    // absen($_POST);
+
+    if (tambahBukuArduino($_POST) > 0) {
+        echo "status:BERHASIL|";
+    } else {
+        echo "status:GAGAL|";
+    }
+
+}
+
 //query
 function createUUID($data = null)
 {
