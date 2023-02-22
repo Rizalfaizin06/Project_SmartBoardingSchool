@@ -55,6 +55,8 @@ const char* password = "titlsuksesselalu";
 String url = "http://" + host + "/Project_SmartBoardingSchool/finalProject/dist/function/function.php";
 String dataUpload[10];
 String rfidUser;
+String bayarPesanan;
+String confirm;
 
 void setup() {
   Serial.begin(115200);
@@ -131,10 +133,13 @@ String scann() {
 }
 
 void jalan() {
-  lcd.setCursor (2,0);
-  lcd.print("TAMBAH BUKU");
+  lcd.setCursor (3,0);
+  lcd.print("TAP KARTU");
+  lcd.setCursor (1,1);
+  lcd.print("UNTUK MEMBAYAR");
   
-//  button1 = digitalRead(btn1);
+  button1 = digitalRead(btn1);
+  button2 = digitalRead(btn2);
 //  Serial.println(button1);
 //  delay(50);
 //  if ( button1 == 1 ) {
@@ -157,11 +162,66 @@ void jalan() {
 //  }
   rfidUser = scann();
   Serial.println(rfidUser);
-  request(rfidUser, iData1, iData2, iData3);
+  bayarPesanan = request(rfidUser, iData1, "", "");
+  if (bayarPesanan != "GAGAL") {
+    lcd.clear();
+    lcd.setCursor (0,0);
+    lcd.print("TOTAL PEMBAYARAN");
+    lcd.setCursor (0,1);
+    lcd.print("RP. " + bayarPesanan);
+    buzzer(1);
+    while ( button1 == 0 ) {
+      button1 = digitalRead(btn1);
+      button2 = digitalRead(btn2);
+      if ( button2 == 1 ) {
+        lcd.clear();
+        lcd.setCursor (3,0);
+        lcd.print("TRANSAKSI");
+        lcd.setCursor (3,1);
+        lcd.print("DIBATALKAN");
+        buzzer(5);
+        delay(500);
+        lcd.clear();
+        
+        return;
+      }
+      delay(50);
+    }
+    buzzer(1);
+    confirm = request("", "", rfidUser, iData1);
+    if (confirm == "BERHASIL") {
+      lcd.clear();
+      lcd.setCursor (3,0);
+      lcd.print("TRANSAKSI");
+      lcd.setCursor (3,1);
+      lcd.print("BERHASIL");
+      buzzer(1);
+      delay(500);
+      lcd.clear();
+      
+    } else {
+       lcd.clear();
+        lcd.setCursor (3,0);
+        lcd.print("TRANSAKSI");
+        lcd.setCursor (5,1);
+        lcd.print("GAGAL");
+        buzzer(5);
+        delay(500);
+        lcd.clear();
+    }
+  } else {
+    lcd.clear();
+    lcd.setCursor (3,0);
+    lcd.print("BELUM ADA");
+    lcd.setCursor (3,1);
+    lcd.print("PEMBAYARAN");
+    buzzer(5);
+    delay(500);
+    lcd.clear();
+  }
 }
 
-
-void request(String satu, String dua, String tiga, String empat) {
+String request(String satu, String dua, String tiga, String empat) {
   HTTPClient http;
   Data1 = String(satu);
   Data2 = String(dua);
@@ -175,9 +235,9 @@ void request(String satu, String dua, String tiga, String empat) {
   Serial.println(url);
   
   http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-  lcd.clear();
-  lcd.setCursor (1,0);
-  lcd.print("MENGIRIM DATA");
+//  lcd.clear();
+//  lcd.setCursor (1,0);
+//  lcd.print("MENGIRIM DATA");
   int httpCode = http.POST(postData);
   Serial.print("uploading");
   
@@ -186,31 +246,57 @@ void request(String satu, String dua, String tiga, String empat) {
   Serial.println(httpCode);
   Serial.println(payload);
   
-  String statusKirim = ambilData(payload, "status");
+  String response = ambilData(payload, "status");
   
-  if (Data4 == "tambahBuku") {
-    lcd.clear();
-    lcd.setCursor (2,0);
-    lcd.print("TAMBAH BUKU");
+//  if (Data4 == "tambahBuku") {
+//    lcd.clear();
+//    lcd.setCursor (2,0);
+//    lcd.print("TAMBAH BUKU");
+//
+//  }
 
-  }
+//  if (response != "1" || response != "GAGAL") {
+//    lcd.setCursor (1,1);
+//    lcd.print(response);
+//    buzzer(1);
+//  } else {
+//    lcd.setCursor (5,1);
+//    lcd.print("GAGAL");
+//    buzzer(5);
+//  }
   
-  
-  if (statusKirim == "BERHASIL") {
-    lcd.setCursor (4,1);
-    lcd.print("BERHASIL");
-    buzzer(1);
-  } else {
-    lcd.setCursor (5,1);
-    lcd.print("GAGAL");
-    buzzer(5);
-  }
+//  if (response == "BERHASIL") {
+//    lcd.setCursor (1,1);
+//    lcd.print("BERHASIL");
+//    buzzer(1);
+//  } else {
+//    lcd.setCursor (5,1);
+//    lcd.print("GAGAL");
+//    buzzer(5);
+//  }
   
   http.end();
-  delay(1000);
-  lcd.clear();
-  
+//  delay(1000);
+//  lcd.clear();
+  return response;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //void uploadDB(String satu, String dua, String tiga, String empat) {
 //  HTTPClient http;
 //  Data1 = String(satu);

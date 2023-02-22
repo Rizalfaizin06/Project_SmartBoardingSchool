@@ -14,11 +14,27 @@ $jamTanggal = date("Y-m-d H:i:s");
 
 
 
+if (isset($_POST['Data3']) && !empty($_POST['Data3'])) {
+    // absen($_POST);
+    $payingArduino = payFromArduino($_POST);
+
+    if ($payingArduino > 0) {
+        // echo "status:" . $payingArduino . "|";
+        echo "status:BERHASIL|";
+    } else {
+        echo "status:GAGAL|";
+    }
+
+    //aktifkan kembali mode autocommit
+    mysqli_autocommit($koneksi, true);
+
+}
 if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
     // absen($_POST);
-
-    if (payFromArduino($_POST) > 0) {
-        echo "status:BERHASIL|";
+    $payingArduino = checkPayment($_POST);
+    if ($payingArduino > 0) {
+        echo "status:" . $payingArduino . "|";
+        // echo "status:BERHASIL|";
     } else {
         echo "status:GAGAL|";
     }
@@ -29,13 +45,48 @@ if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
 }
 
 
-function payFromArduino($data)
+function checkPayment($data)
 {
     global $koneksi;
     global $tanggal;
 
     $rfidUser = $data['Data1'];
     $idPenjual = $data['Data2'];
+
+    $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];
+    $idUser = $detailUser['idUser'];
+    $saldo = $detailUser['saldo'];
+    $spendingLimit = $detailUser["spendingLimit"];
+    $additionalLimit = $detailUser["additionalLimit"];
+    $totalLimit = $spendingLimit + $additionalLimit;
+    $Pengeluaran = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
+    $sisaLimit = $totalLimit - $Pengeluaran;
+
+
+    $pembayaran = query("SELECT idOrder FROM tbl_order WHERE idPenjual = '$idPenjual' AND statusOrder = 0 ORDER BY idOrder DESC LIMIT 1");
+    if (!empty($pembayaran)) {
+        $idOrder = $pembayaran[0]["idOrder"];
+        // var_dump($idOrder);
+
+        // $dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder");
+        // var_dump($dataOrderan);
+
+        $totalHarga = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder")[0]["total"];
+        return $totalHarga;
+
+    } else {
+        return false;
+    }
+
+
+}
+function payFromArduino($data)
+{
+    global $koneksi;
+    global $tanggal;
+
+    $rfidUser = $data['Data3'];
+    $idPenjual = $data['Data'];
 
     $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];
     $idUser = $detailUser['idUser'];
@@ -56,6 +107,7 @@ function payFromArduino($data)
         // var_dump($dataOrderan);
 
         $totalHarga = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder")[0]["total"];
+        // return $totalHarga;
         // var_dump($totalHarga);
         // die;
         if ($totalHarga > $saldo) {
@@ -88,6 +140,7 @@ function payFromArduino($data)
             //rollback transaction jika terjadi kesalahan pada operasi transfer
             mysqli_rollback($koneksi);
             // echo "Transfer saldo gagal: " . $e->getMessage();
+            return false;
         }
         return 1;
     } else {
