@@ -189,7 +189,7 @@ if (isset($_POST['buttonBayar'])) {
                     </label>
                     <input id="jumlahBayar" name="jumlahBayar"
                         class=" w-full text-base py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-indigo-500"
-                        type="text" placeholder="" value="">
+                        type="number" min="1000" placeholder="" value="">
                 </div>
                 <button type="submit" name="buttonBayar" class="px-7 py-3 rounded-lg bg-primary hover:bg-opacity-80">
                     <span class="text-sm font-poppins font-bold text-white">Transfer</span>
