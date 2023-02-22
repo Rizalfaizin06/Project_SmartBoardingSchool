@@ -190,11 +190,7 @@ if ($role == 1) {
                 </button>
             </div>
 
-            <script src="dist/js/jquery-3.6.0.min.js"></script>
-            <script>             $("#buttonTopUpSiswa").click(function () { $(this).hide(); $("#buttonBayar").hide(); $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#siswaPane").html(data) } }); });
 
-
-            </script>
         <?php else: ?>
             <img src="assets/images/avatar/<?= $profileImage; ?>" alt="avatar" class="object-cover rounded-full h-24 w-24">
             <h3 class="text-xl font-poppins font-bold text-white">
@@ -204,17 +200,17 @@ if ($role == 1) {
                 <?="Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
             <!-- <div class=" w-full grid grid-cols-1 justify-items-center">
-                                                                            <button id="buttonTopUpSiswa"
-                                                                                class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
-                                                                                <div class="grid grid-cols-2 h-10 items-center justify-items-center">
-                                                                                    <img src="assets/icons/topUp.png" alt="" class="h-6">
+                                                                                    <button id="buttonTopUpSiswa"
+                                                                                        class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
+                                                                                        <div class="grid grid-cols-2 h-10 items-center justify-items-center">
+                                                                                            <img src="assets/icons/topUp.png" alt="" class="h-6">
 
-                                                                                    <h3 class="text-md font-poppins font-bold px-1">
-                                                                                        Top Up
-                                                                                    </h3>
-                                                                                </div>
-                                                                            </button>
-                                                                        </div> -->
+                                                                                            <h3 class="text-md font-poppins font-bold px-1">
+                                                                                                Top Up
+                                                                                            </h3>
+                                                                                        </div>
+                                                                                    </button>
+                                                                                </div> -->
 
             <script src="dist/js/jquery-3.6.0.min.js"></script>
             <script>             $("#buttonTopUpSiswa").click(function () { $(this).hide(); $("#buttonBayar").hide(); $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#siswaPane").html(data) } }); });
@@ -302,7 +298,29 @@ if ($role == 1) {
                         ?>
                     </h3>
                 </div>
+                <a href="index.php" id="buttonBackSiswa"
+                    class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300 "
+                    type="submit" name="buttonCancel">Back</a>
+                <script src="dist/js/jquery-3.6.0.min.js"></script>
+                <script>
+                    $("#buttonBackSiswa").hide();
+                    $("#buttonTopUpSiswa").click(function () {
 
+                        $(this).hide();
+                        $("#buttonBayar").hide();
+                        $.ajax({
+                            type: "GET",
+                            url: "dist/ajax/ajaxGenerateQR.php",
+                            data: "",
+                            success: function (data) {
+                                $("#buttonBackSiswa").show();
+                                console.log(data);
+                                $("#siswaPane").html(data)
+                            }
+                        });
+                    });
+
+                </script>
 
             <?php else: ?>
                 <div id="ortuPane" class="grid grid-cols-1 gap-5 justify-items-center">
@@ -329,7 +347,7 @@ if ($role == 1) {
                 </div>
                 <a href="index.php" id="buttonBack"
                     class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
-                    type="submit" id="buttonCancel" name="buttonCancel">Back</a>
+                    type="submit" name="buttonCancel">Back</a>
                 <script src="dist/js/jquery-3.6.0.min.js"></script>
                 <script>
                     $("#buttonBack").hide();

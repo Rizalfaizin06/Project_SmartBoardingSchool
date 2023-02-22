@@ -339,3 +339,33 @@ function registrasi($data)
 
     return mysqli_affected_rows($koneksi);
 }
+
+
+
+function addMenu($data)
+{
+    global $koneksi;
+
+    $idUser = $data['idUser'];
+    $namaMenu = $data['namaMenu'];
+    $hargaMenu = $data['hargaMenu'];
+    $idCategory = $data['idCategory'];
+    $fotoMenu = upload('fotoMenu', 'assets/images/menu/');
+
+
+    if (!$fotoMenu) {
+        $fotoMenu = "defaultProfile.jpg";
+    }
+
+    $query = "INSERT INTO tbl_menu (idMenu, namaMenu, hargaMenu, gambarMenu, idCategory, idPenjual) VALUES (NULL, '$namaMenu', '$hargaMenu', '$fotoMenu', '$idCategory', '$idUser');";
+    mysqli_query($koneksi, $query);
+
+
+
+
+    // $password = password_hash($password, PASSWORD_DEFAULT);
+
+    // mysqli_query($koneksi, "INSERT INTO tbl_users VALUES (NULL, '$username', '$password', 'Penjualll', '2', '20000', '1')");
+
+    return mysqli_affected_rows($koneksi);
+}

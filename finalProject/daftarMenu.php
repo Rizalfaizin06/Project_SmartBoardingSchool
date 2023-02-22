@@ -6,7 +6,6 @@ if (!session_id()) {
 
 
 
-
 if (!isset($_SESSION["login"])) {
     header("location: login.php");
     exit;
@@ -42,74 +41,50 @@ if ($role == 1) {
 } else {
 
 }
+if (isset($_POST['buttonTambahCategory'])) {
+    $namaCategory = $_POST['namaCategory'];
 
-$category = query("SELECT DISTINCT namaCategory, C.idCategory FROM tbl_menu M, tbl_category C WHERE idPenjual = '$idUser' AND M.idCategory = C.idCategory");
-// var_dump($category);
-
-// if ($roleUser == 3) {
-//     header("location: buyer.php");
-//     exit;
-// }
-
-
-// var_dump($idUser);
-// var_dump($namaUser);
-// var_dump($saldoUser);
-
-
-
-
-if (isset($_POST['buttonOrder'])) {
-    // foreach ($_POST as $key => $value) {
-    //     echo "Field " . htmlspecialchars($key) . " is " . htmlspecialchars($value) . "<br>";
-    // }
-    // die;
-    // $idPembeli = $_POST['idPembeli'];
-    $waktuOrder = date("Y-m-d H:i:s");
-
-    $query = "INSERT INTO tbl_order (idOrder, idPenjual, idPembeli, waktuOrder, statusOrder) VALUES (NULL, '$idUser', 0, '$waktuOrder', 0)";
+    $query = "INSERT INTO tbl_category (idCategory, namaCategory, idUserCat) VALUES (NULL, '$namaCategory', '$idUser')";
     mysqli_query($koneksi, $query);
 
-    $querydOrder = query("SELECT idOrder FROM tbl_order WHERE statusOrder = 0 AND idPenjual = '$idUser' ORDER BY idOrder DESC LIMIT 1");
-    $idOrder = $querydOrder[0]["idOrder"];
-    var_dump($idOrder);
+}
+if (isset($_POST['buttonTambahMenu'])) {
+    if (addMenu($_POST) > 0) {
 
-
-
-    $dataPesanan = query("SELECT * FROM tbl_pesan P, tbl_menu M WHERE P.idMenu = M.idMenu AND idOrder = 0 AND M.idPenjual = '$idUser'");
-    // var_dump($dataPesanan);
-    // die;
-    foreach ($dataPesanan as $oneView) {
-        $idMenu = $oneView['idMenu'];
-        $jumlahPesan = $_POST['jumlahPesan' . $idMenu];
-        $queryUbahJumlah = "UPDATE tbl_pesan SET jumlahPesan = $jumlahPesan, idOrder = $idOrder WHERE idOrder = 0 AND idMenu = $idMenu";
-        mysqli_query($koneksi, $queryUbahJumlah);
+    } else {
+        echo mysqli_error($koneksi);
+        $error = true;
     }
-    // SELECT hargaMenu, jumlahPesan, hargaMenu * jumlahPesan AS total FROM tbl_pesan INNER JOIN tbl_menu ON tbl_pesan.idMenu = tbl_menu.idMenu;
-    header("Location: waitingPayment.php");
+}
+
+
+if (isset($_POST['buttonHapusMenu'])) {
+    $idMenu = $_POST['idMenu'];
+    $query = "DELETE FROM tbl_menu WHERE idMenu = '$idMenu'";
+    mysqli_query($koneksi, $query);
+
+    header("Location: i.php");
     exit;
 
 }
 
+$menu = query("SELECT * FROM tbl_menu M, tbl_category C WHERE M.idCategory = C.idCategory AND idPenjual = '$idUser' ORDER BY namaCategory DESC, namaMenu");
+
+$category = query("SELECT namaCategory, idCategory, idUserCat FROM tbl_category WHERE idUserCat = '$idUser'");
+// var_dump($menu);
 
 
 
 
-$dataPesanan = query("SELECT * FROM tbl_pesan P, tbl_menu M WHERE (P.idMenu = M.idMenu) AND idOrder = 0 AND idPenjual = $idUser");
 
 
-$pesanan = array();
-// $dataPesananSingle = "SELECT * FROM tbl_pesan WHERE idOrder = 0";
-// $queryDataPesananSingle = mysqli_query($koneksi, $dataPesananSingle);
-// while($readData = mysqli_fetch_array($queryDataPesananSingle)){
-//   array_push($pesanan, $readData['idMenu']);
-// }
-foreach ($dataPesanan as $oneView) {
-    array_push($pesanan, $oneView['idMenu']);
-}
+
 ?>
+
+
+
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -121,283 +96,311 @@ foreach ($dataPesanan as $oneView) {
 </head>
 
 <body>
-
-
     <?php include 'dist/template/navbar.php'; ?>
-    <?php
-    // $current_dir = __DIR__;
-    // // echo $current_dir;
-    
-    // $delimiter = DIRECTORY_SEPARATOR;
-    
-    // $array = explode($delimiter, $current_dir);
-    // // var_dump($array);
-    // // Loop melalui array untuk mencari kata "css"
-    // $index = null;
-    // foreach ($array as $key => $value) {
-    //     if ($value == "finalProject") {
-    //         $index = $key + 1;
-    //         break;
-    //     }
-    // }
-    
-    // // Memotong array dari awal hingga kata "css"
-    // $slice = array_slice($array, 0, $index);
-    
-    // // Menggabungkan kembali potongan array menjadi string
-    // $result = implode($delimiter, $slice);
-    
-    // echo $result;
-    ?>
-    <div class="p-3 grid grid-cols-1 md:grid-cols-2 md:gap-5" id="allContent">
-        <div>
-            <div class="grid gap-2 justify-items-center">
+    <div class="p-5"></div>
 
-                <?php foreach ($category as $categorySingle):
-                    $idCategory = $categorySingle['idCategory'];
-                    $menu = query("SELECT * FROM tbl_menu WHERE idPenjual = '$idUser' AND idCategory = $idCategory"); ?>
-
-                    <div class="grid grid-cols-2 gap-5 w-full">
+    <div class="w-full grid grid-cols-1 items-center justify-items-center p-5">
+        <div class="border-2 border-gray-300 rounded-xl shadow-2xl p-5 w-full max-w-xl">
+            <div>
+                <h2 class="text-2xl font-poppins font-bold underline mb-3 text-center">Daftar Menu
+                </h2>
+            </div>
+            <div class="pb-5 grid grid-cols-2 gap-1">
+                <button id="buttonDaftarMenuPane"
+                    class="px-3 py-3 rounded-lg bg-slate-50 border-2 border-gray-300 shadow-md hover:bg-opacity-80 text-xs font-poppins font-bold text-center">
 
 
-                        <div class="justify-self-start col-span-2">
-                            <h2 class="text-2xl font-poppins font-bold">
-                                <?= $categorySingle["namaCategory"]; ?>
-                            </h2>
-                        </div>
+                    Daftar Menu
+                </button>
+                <button id="buttonDaftarCatecoryPane"
+                    class="px-3 py-3 rounded-lg bg-slate-50 border-2 border-gray-300 shadow-md hover:bg-opacity-80 text-xs font-poppins font-bold text-center">
 
+
+                    Daftar Kategori
+                </button>
+                <button id="buttonTambahMenuPane"
+                    class="px-3 py-3 rounded-lg bg-slate-50 border-2 border-gray-300 shadow-md hover:bg-opacity-80 text-xs font-poppins font-bold text-center">
+
+
+                    Tambah Menu
+                </button>
+                <button id="buttonTambahCatecoryPane"
+                    class="px-3 py-3 rounded-lg bg-slate-50 border-2 border-gray-300 shadow-md hover:bg-opacity-80 text-xs font-poppins font-bold text-center">
+
+
+                    Tambah Kategori
+                </button>
+            </div>
+            <div class="relative overflow-x-auto shadow-md rounded-lg w-full  border-2 border-gray-300 "
+                id="daftarMenuPane">
+
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+
+                            <th scope="col" class="px-6 py-3">
+                                Menu
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Kategori
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Harga
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         <?php foreach ($menu as $oneView):
 
                             ?>
-
-                            <div
-                                class="block w-40 md:w-full md:max-w-xs h-full bg-white border border-gray-200 rounded-xl shadow overflow-hidden">
-                                <div class="grid grid-cols-1 md:grid-cols-2 h-full">
-                                    <img src="assets/images/<?= $oneView["gambarMenu"]; ?>" alt="esdgtsdf"
-                                        class="object-cover w-full h-36">
-                                    <div class="grid grid-cols-1 gap-0 p-2 h-full">
-
-                                        <h3 class="font-poppins font-bold">
-                                            <?= $oneView["namaMenu"]; ?>
-                                        </h3>
-                                        <h3 class="font-poppins font-extrabold text-primary">
-                                            <?="Rp " . number_format($oneView["hargaMenu"], 0, ",", ".") ?>
-                                        </h3>
-                                        <?php
-
-                                        if (in_array($oneView["idMenu"], $pesanan)): ?>
-                                            <div class="h-fit grid grid-cols-1">
-
-                                                <button
-                                                    class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg bg-opacity-50 focus:ring-4 focus:outline-none focus:ring-stone-303 align-bottom"
-                                                    disabled>Sudah dipesan</button>
-
+                            <form action="" method="post">
+                                <tr
+                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <input type="hidden" name="idMenu" value="<?= $oneView['idMenu']; ?>">
+                                    <th scope="row"
+                                        class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                        <img class="w-10 h-10 rounded-full" src="assets/images/avatar/gb.jpg"
+                                            alt="Jese image">
+                                        <div class="pl-3">
+                                            <div class="text-base font-semibold">
+                                                <?= $oneView['namaMenu']; ?>
                                             </div>
-                                        <?php else: ?>
-                                            <div class="h-fit grid grid-cols-1">
-                                                <button
-                                                    class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300 justify-self-end"
-                                                    onclick="insertDataPesan(<?= $oneView['idMenu']; ?>)">Pesan</button>
-                                            </div>
-                                        <?php endif; ?>
 
+                                        </div>
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        <?= $oneView['namaCategory']; ?>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <?= $oneView['hargaMenu']; ?>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button type="submit" name="buttonHapusMenu"
+                                            class="px-3 py-2 rounded-lg bg-primary hover:bg-opacity-80">
+
+
+                                            <span class="text-xs font-poppins font-bold text-white">Hapus</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </form>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="hidden relative overflow-x-auto shadow-md rounded-lg w-full  border-2 border-gray-300 "
+                id="tambahMenuPane">
+
+                <div class="mt-5 p-5">
+                    <div>
+                        <form action="" method="post" enctype="multipart/form-data">
+
+
+
+
+
+
+
+
+                            <div class="md:space-y-2 mb-3">
+                                <!-- <label class="font-poppins text-xs font-semibold text-gray-600 py-2">Profil<abbr
+                                        class="hidden" title="required">*</abbr></label> -->
+                                <div class="flex flex-col sm:flex-row items-center">
+                                    <h2 class="font-semibold font-poppins text-xl text-center">Menu</h2>
+                                    <div class="w-full sm:w-auto sm:ml-auto mt-3 sm:mt-0"></div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-20 h-20 mr-4 flex-none rounded-xl border overflow-hidden">
+                                        <img class="w-20 h-20 mr-4 object-cover"
+                                            src="assets/images/avatar/defaultProfile.jpg">
                                     </div>
+                                    <label class="font-poppins cursor-pointer ">
+
+                                        <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            for="file_input">Foto Menu</span>
+                                        <input
+                                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                            id="file_input" type="file" name="fotoMenu" required>
+                                    </label>
                                 </div>
                             </div>
 
+                            <div class="md:flex md:flex-row md:space-x-4 w-full text-xs">
+                                <div class="w-full flex flex-col mb-3">
+                                    <label class="font-poppins font-semibold text-gray-600 py-2">Nama Menu</label>
+                                    <input placeholder="Masukkan Nama Menu"
+                                        class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
+                                        type="text" name="namaMenu" id="namaMenu" required>
+                                </div>
+                            </div>
+
+                            <div class="md:flex md:flex-row md:space-x-4 w-full text-xs">
+                                <div class="w-full flex flex-col mb-3">
+                                    <label class="font-poppins font-semibold text-gray-600 py-2">Harga Menu</label>
+                                    <input placeholder="Masukkan Harga Menu"
+                                        class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
+                                        required type="number" min="1" name="hargaMenu" id="hargaMenu">
+                                    <p class="font-poppins text-sm text-red-500 hidden mt-3" id="error">Please fill
+                                        out
+                                        this field.
+                                    </p>
+                                </div>
+                                <div class="w-full flex flex-col mb-3">
+                                    <label class="font-poppins font-semibold text-gray-600 py-2">Kategori Menu</label>
+                                    <select id="idCategory" name="idCategory"
+                                        class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4">
+                                        <?php foreach ($category as $oneView): ?>
+                                            <option value="<?php echo $oneView['idCategory']; ?>"><?php echo $oneView['namaCategory']; ?></option>
+                                        <?php endforeach; ?>
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <!-- <p class="font-poppins text-xs text-red-500 text-right my-3">Required fields are marked with
+                                an
+                                asterisk <abbr title="Required field">*</abbr></p> -->
+                            <div class="mt-5 text-center md:text-right md:space-x-3 md:block flex flex-col-reverse">
+                                <input type="hidden" name="idUser" value="<?= $idUser; ?>">
+                                <a href="login.php"
+                                    class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
+                                    <span class="">Cancel</span> </a>
+                                <button type="submit"
+                                    class="mb-2 md:mb-0 bg-primary px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-opacity-90"
+                                    name="buttonTambahMenu">Tambah</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden relative overflow-x-auto shadow-md rounded-lg w-full  border-2 border-gray-300 "
+                id="daftarCategoryPane">
+
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+
+                            <th scope="col" class="px-6 py-3">
+                                namaCategory
+                            </th>
+
+                            <th scope="col" class="px-6 py-3">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($category as $oneView):
+
+                            ?>
+                            <form action="" method="post">
+                                <tr
+                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <input type="hidden" name="idCategory" value="<?= $oneView['idCategory']; ?>">
+                                    <th scope="row"
+                                        class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+
+                                        <div class="pl-3">
+                                            <div class="text-base font-semibold">
+                                                <?= $oneView['namaCategory']; ?>
+                                            </div>
+
+                                        </div>
+                                    </th>
+
+                                    <td class="px-6 py-4">
+                                        <button type="submit" name="buttonHapusCategory"
+                                            class="px-3 py-2 rounded-lg bg-primary hover:bg-opacity-80">
+
+
+                                            <span class="text-xs font-poppins font-bold text-white">Hapus</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </form>
                         <?php endforeach; ?>
-                    </div>
-                    <div class=" border-t-2 border-gray-400 border-dashed w-full">
-                    </div>
+                    </tbody>
+                </table>
 
-                <?php endforeach; ?>
+            </div>
+            <div class="p-2"></div>
+            <div class="hidden relative overflow-x-auto shadow-md rounded-lg w-full  border-2 border-gray-300"
+                id="tambahCategoryPane">
 
+                <div class="mt-5 p-5">
+                    <div>
+                        <form action="" method="post" enctype="multipart/form-data">
+                            <div class="md:space-y-2 mb-3">
+                                <!-- <label class="font-poppins text-xs font-semibold text-gray-600 py-2">Profil<abbr
+                                        class="hidden" title="required">*</abbr></label> -->
+                                <div class="flex flex-col sm:flex-row items-center">
+                                    <h2 class="font-semibold font-poppins text-xl text-center">Tambah Kategori</h2>
+                                    <div class="w-full sm:w-auto sm:ml-auto mt-3 sm:mt-0"></div>
+                                </div>
+
+                            </div>
+
+                            <div class="md:flex md:flex-row md:space-x-4 w-full text-xs">
+                                <div class="w-full flex flex-col mb-3">
+                                    <label class="font-poppins font-semibold text-gray-600 py-2">Nama
+                                        Kategori</label>
+                                    <input placeholder="Masukkan Nama Kategori"
+                                        class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
+                                        type="text" name="namaCategory" id="namaCategory" required>
+                                </div>
+                            </div>
+
+
+                            <div class="mt-5 text-center md:text-right md:space-x-3 md:block flex flex-col-reverse">
+
+                                <a href="login.php"
+                                    class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
+                                    <span class="">Cancel</span> </a>
+                                <button type="submit"
+                                    class="mb-2 md:mb-0 bg-primary px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-opacity-90"
+                                    name="buttonTambahCategory">Tambah</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
 
         </div>
-
-        <!-- <div>
-            <div
-                class="static md:sticky md:top-32 block m-3 p-3 bg-white border border-gray-200 rounded-xl shadow overflow-hidden">
-                <form action="" method="post">
-
-                    <div>
-                        <h2 class="text-2xl font-poppins font-bold underline mb-2 text-center">Total Tagihan
-                        </h2>
-                    </div>
-
-                    <div class="relative overflow-x-auto">
-                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 uppercase   dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" class="px-2 py-3">
-                                        Menu
-                                    </th>
-                                    <th scope="col" class="px-2 py-3">
-                                        Harga
-                                    </th>
-                                    <th scope="col" class="px-2 py-3">
-                                        Jumlah
-                                    </th>
-                                    <th scope="col" class="px-2 py-3">
-                                        Hapus
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">
-                                        <div class="border-t-2 border-gray-400 w-full"></div>
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php foreach ($dataPesanan as $oneView):
-                                    ?>
-                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                <th scope="row"
-                                                    class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    <?= $oneView["namaMenu"]; ?>
-                                                </th>
-                                                <td class="px-2 py-4">
-                                                    <?= $oneView["hargaMenu"]; ?>
-                                                </td>
-                                                <input id="<?='harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
-                                                    value="<?= $oneView["hargaMenu"]; ?>" />
-                                                <td class="px-2 py-4">
-                                                    <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number"  min="1"
-                                                        class="border border-gray-300 borderad rounded-lg w-16"
-                                                        name="<?='jumlahPesan' . $oneView['idMenu']; ?>" value="1"
-                                                        onchange="return operasi()">
-                                                </td>
-                                                <td class="px-2 py-4">
-                                                    <div class="px-1 py-1 w-8 text-sm font-medium text-center text-primary bg-primary rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
-                                                        id="buttonHapus" name="buttonHapus"
-                                                        onclick="deleteDataPesan(<?= $oneView['idMenu']; ?>)">
-                                                        <img src="assets/icons/trash.png" alt="" class="w-6">
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                <?php endforeach;
-                                if ((empty($dataPesanan))) {
-                                    echo '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th colspan="4" scope="row"
-                                            class="px-2 py-4 font-medium text-center text-red-500 whitespace-nowrap dark:text-white">
-                                            Belum ada pesanan
-                                        </th>
-                                    </tr>';
-                                }
-                                ?>
-
-
-                            </tbody>
-                        </table>
-                    </div>
-
-
-
-                    <div>
-                        <h2 class="text-xl font-poppins font-bold text-right mr-2 md:mr-8 mt-2">Total :
-                            Rp.
-                            <span id="spanTotalHarga">0</span>
-                        </h2>
-                        <input class="span8" id="tot" name="total_harga" type="hidden" value="" placeholder="" />
-
-                        <input type="hidden" name="idMenu" value="<?= $oneView["idMenu"]; ?>">
-                        <?php if (empty($dataPesanan)): ?>
-                                    <button
-                                        class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg bg-opacity-50 focus:ring-4 focus:outline-none focus:ring-stone-300"
-                                        type="submit" id="buttonOrder" name="buttonOrder" disabled>Order</button>
-                        <?php else: ?>
-                                    <button
-                                        class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300"
-                                        type="submit" id="buttonOrder" name="buttonOrder">Order</button>
-                        <?php endif; ?>
-
-                    </div>
-                </form>
-            </div>
-
-        </div> -->
-
     </div>
-    <!-- <div class="h-32">
-sfs
-  </div> -->
-
-
+    <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
     <script src="dist/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
-
-        function insertDataPesan(idMenu) {
-            $.ajax({
-                url: "dist/function/insertDataPesan.php",
-                type: "post",
-                data: { insertDataPesan: idMenu },
-                success: function (response) {
-                    console.log(response);
-
-                    $.ajax({
-                        type: "GET",
-                        url: "dist/ajax/ajaxEntry.php",
-                        data: "",
-                        success: function (data) {
-                            $("#allContent").html(data);
-                            operasi();
-                        }
-                    });
-                }
-            });
-        }
-
-        function deleteDataPesan(idMenu) {
-            $.ajax({
-                url: "dist/function/deleteDataPesan.php",
-                type: "post",
-                data: { deleteDataPesan: idMenu },
-                success: function (response) {
-                    console.log(response);
-                    $.ajax({
-                        type: "GET",
-                        url: "dist/ajax/ajaxEntry.php",
-                        data: "",
-                        success: function (data) {
-                            $("#allContent").html(data);
-                            operasi();
-                        }
-                    });
-
-                }
-            });
-        }
+        $("#buttonDaftarMenuPane").click(function () {
+            $("#daftarCategoryPane").hide();
+            $("#tambahCategoryPane").hide();
+            $("#tambahMenuPane").hide();
+            $("#daftarMenuPane").show();
+        });
+        $("#buttonDaftarCatecoryPane").click(function () {
+            $("#tambahCategoryPane").hide();
+            $("#tambahMenuPane").hide();
+            $("#daftarMenuPane").hide();
+            $("#daftarCategoryPane").show();
+        });
+        $("#buttonTambahMenuPane").click(function () {
+            $("#tambahCategoryPane").hide();
+            $("#daftarMenuPane").hide();
+            $("#daftarCategoryPane").hide();
+            $("#tambahMenuPane").show();
+        });
+        $("#buttonTambahCatecoryPane").click(function () {
+            $("#daftarMenuPane").hide();
+            $("#daftarCategoryPane").hide();
+            $("#tambahMenuPane").hide();
+            $("#tambahCategoryPane").show();
+        });
 
 
-        function operasi() {
-            var pesan = new Array();
-            var jumlah = new Array();
-
-            var total = 0;
-            for (var a = 0; a < 1000; a++) {
-                pesan[a] = $("#harga" + a).val();
-                jumlah[a] = $("#jumlahPesan" + a).val();
-
-            }
-            for (var a = 0; a < 1000; a++) {
-                if (pesan[a] == null || pesan[a] == "") {
-                    pesan[a] = 0;
-                    jumlah[a] = 0;
-                }
-                total += Number(pesan[a] * jumlah[a]);
-            }
-
-            //alert(total);
-            $("#spanTotalHarga").text(total);
-            $("#tot").val(total);
-        }
-
-        operasi();
     </script>
-    <script src="node_modules/flowbite/dist/flowbite.min.js"></script>
 </body>
 
 </html>
