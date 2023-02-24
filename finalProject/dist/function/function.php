@@ -14,11 +14,14 @@ $jamTanggal = date("Y-m-d H:i:s");
 
 
 
+
+
 if (isset($_POST['Data3']) && !empty($_POST['Data3'])) {
     // absen($_POST);
     $payingArduino = payFromArduino($_POST);
 
     if ($payingArduino > 0) {
+        // echo "status:" . $payingArduino . "|";
         // echo "status:" . $payingArduino . "|";
         echo "status:BERHASIL|";
     } else {
@@ -29,11 +32,13 @@ if (isset($_POST['Data3']) && !empty($_POST['Data3'])) {
     mysqli_autocommit($koneksi, true);
 
 }
+
+
 if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
     // absen($_POST);
-    $payingArduino = checkPayment($_POST);
-    if ($payingArduino > 0) {
-        echo "status:" . $payingArduino . "|";
+    $checkPayingArduino = checkPayment($_POST);
+    if ($checkPayingArduino > 0) {
+        echo "status:" . $checkPayingArduino . "|";
         // echo "status:BERHASIL|";
     } else {
         echo "status:GAGAL|";
@@ -51,7 +56,8 @@ function checkPayment($data)
     global $tanggal;
 
     $rfidUser = $data['Data1'];
-    $idPenjual = $data['Data2'];
+    // $idPenjual = $data['Data2'];
+    $idPenjual = "22";
 
     $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];
     $idUser = $detailUser['idUser'];
@@ -86,10 +92,14 @@ function payFromArduino($data)
     global $tanggal;
 
     $rfidUser = $data['Data3'];
-    $idPenjual = $data['Data'];
+    // $idPenjual = $data['Data'];
+    $idPenjual = "22";
+    $inputPassword = $data['Data2'];
+    // return $pw;
 
     $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];
     $idUser = $detailUser['idUser'];
+    $pinUser = $detailUser['pinUser'];
     $saldo = $detailUser['saldo'];
     $spendingLimit = $detailUser["spendingLimit"];
     $additionalLimit = $detailUser["additionalLimit"];
@@ -115,6 +125,9 @@ function payFromArduino($data)
         }
         if ($totalHarga > $sisaLimit) {
             return false;
+        }
+        if ($pinUser != $inputPassword) {
+            return "PwSalah";
         }
 
         mysqli_autocommit($koneksi, false);
