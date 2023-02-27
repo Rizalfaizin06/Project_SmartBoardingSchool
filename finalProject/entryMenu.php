@@ -6,6 +6,11 @@ if (!session_id()) {
 
 
 
+if (isset($_SESSION["waitingPayment"]) && $_SESSION["waitingPayment"] == true) {
+    header("location: waitingPayment.php");
+    exit;
+}
+
 
 if (!isset($_SESSION["login"])) {
     header("location: login.php");
@@ -86,6 +91,7 @@ if (isset($_POST['buttonOrder'])) {
         mysqli_query($koneksi, $queryUbahJumlah);
     }
     // SELECT hargaMenu, jumlahPesan, hargaMenu * jumlahPesan AS total FROM tbl_pesan INNER JOIN tbl_menu ON tbl_pesan.idMenu = tbl_menu.idMenu;
+    $_SESSION["waitingPayment"] = true;
     header("Location: waitingPayment.php");
     exit;
 

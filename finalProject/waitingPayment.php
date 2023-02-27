@@ -12,6 +12,11 @@ if (!isset($_SESSION["login"])) {
 }
 
 
+if (isset($_SESSION["waitingPayment"]) && $_SESSION["waitingPayment"] == false) {
+    header("location: entryMenu.php");
+    exit;
+}
+
 
 $idUser = $_SESSION["idUser"];
 
@@ -69,6 +74,7 @@ if (isset($_POST['buttonCancel'])) {
     $queryDeletePesan ="DELETE FROM tbl_pesan WHERE idOrder = $idOrder;";
     mysqli_query($koneksi, $queryDeletePesan);
     // SELECT hargaMenu, jumlahPesan, hargaMenu * jumlahPesan AS total FROM tbl_pesan INNER JOIN tbl_menu ON tbl_pesan.idMenu = tbl_menu.idMenu;
+    $_SESSION["waitingPayment"] = false;
     header("Location: entryMenu.php");
     exit;
 

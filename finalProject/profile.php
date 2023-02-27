@@ -48,6 +48,8 @@ if ($role == 1) {
     $namaToko = $queryUser["namaToko"];
     $logoToko = $queryUser["logoToko"];
     $PemasukanHariIni = 128000;
+    $pemasukan = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND O.idPenjual = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
+
 } elseif ($role == 3) {
     $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0];
 
@@ -69,9 +71,27 @@ if ($role == 1) {
     $listPesanan = query("SELECT *, hargaMenu * jumlahPesan total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'");
 
     $Pengeluaran = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_order O, tbl_pesan P, tbl_menu M WHERE O.idOrder = P.idOrder AND P.idMenu = M.idMenu AND idPembeli = '$idUser' AND DATE(waktuOrder) = '$tanggal'")[0]['total'];
+    $sisaLimit = $totalLimit - $Pengeluaran;
     $PengeluaranHariIni = 17000;
 } else {
+    $queryUser = query("SELECT * FROM tbl_users U, tbl_orangtua O WHERE U.idDetailUser = O.idDetailUser AND idUser = '$idUser'")[0];
 
+
+    $realName = $queryUser["realName"];
+    $tempatLahir = $queryUser["tempatLahir"];
+    $tanggalLahir = $queryUser["tanggalLahir"];
+    $alamat = $queryUser["alamat"];
+    $nomorTelfon = $queryUser["nomorTelfon"];
+    $email = $queryUser["email"];
+    $profileImage = $queryUser["profileImage"];
+    $role = $queryUser["role"];
+    $idDetailUser = $queryUser["idDetailUser"];
+
+    $idAnak = $queryUser["idAnak"];
+
+    $queryAnak = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idAnak'")[0];
+
+    $saldo = $queryAnak["saldo"];
 }
 
 
@@ -172,14 +192,46 @@ if ($role == 1) {
                             <?= $email; ?>
                         </td>
                     </tr>
-                    <tr class="bg-white align-top">
-                        <th scope="row" class="font-poppins font-medium text-gray-900 text-start whitespace-nowrap">
-                            Orang tua
-                        </th>
-                        <td class="font-poppins font-medium text-gray-900 text-start">
-                            : RAB
-                        </td>
-                    </tr>
+                    <?php if ($role == 1): ?>
+
+                    <?php elseif ($role == 2): ?>
+                        <tr class="bg-white align-top">
+                            <th scope="row" class="font-poppins font-medium text-gray-900 text-start whitespace-nowrap">
+                                Nama Toko
+                            </th>
+                            <td class="font-poppins font-medium text-gray-900 text-start">
+                                :
+                                <?= $namaToko; ?>
+                            </td>
+                        </tr>
+
+
+                    <?php elseif ($role == 3):
+                        $queryDetailOrtu = query("SELECT * FROM tbl_users U, tbl_orangtua O WHERE U.idDetailUser = O.idDetailUser AND idUser = '$idOrangTua'")[0];
+                        ?>
+                        <tr class="bg-white align-top">
+                            <th scope="row" class="font-poppins font-medium text-gray-900 text-start whitespace-nowrap">
+                                Orang tua
+                            </th>
+                            <td class="font-poppins font-medium text-gray-900 text-start">
+                                :
+                                <?= $queryDetailOrtu['realName']; ?>
+                            </td>
+                        </tr>
+                    <?php else:
+                        $queryDetailAnak = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idAnak'")[0];
+                        ?>
+                        <tr class="bg-white align-top">
+                            <th scope="row" class="font-poppins font-medium text-gray-900 text-start whitespace-nowrap">
+                                Anak
+                            </th>
+                            <td class="font-poppins font-medium text-gray-900 text-start">
+                                :
+                                <?= $queryDetailAnak['realName']; ?>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+
 
                 </tbody>
             </table>

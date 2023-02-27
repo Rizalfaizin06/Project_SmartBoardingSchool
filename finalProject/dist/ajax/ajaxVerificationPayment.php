@@ -62,6 +62,7 @@ if (!empty($pembayaran)) {
 </div>
 <a href="index.php"
     class="px-4 py-2 mt-2 w-full text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-primary hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300" id="buttonUlang" name="buttonUlang">Back</a>';
+    $_SESSION["waitingPayment"] = false;
     return false;
 }
 
