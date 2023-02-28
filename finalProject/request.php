@@ -128,6 +128,7 @@ if (isset($_POST['buttonRequest'])) {
     header("Location: index.php");
     exit;
 }
+
 if (isset($_POST['buttonSetuju'])) {
     $idNotif = $_POST['idNotif'];
     $jumlahPermintaan = $_POST['jumlahPermintaan'];
@@ -140,7 +141,7 @@ if (isset($_POST['buttonSetuju'])) {
         $sql = "UPDATE tbl_notifikasi SET statusNotif = '1' WHERE idNotif = '$idNotif'";
         mysqli_query($koneksi, $sql);
 
-        $sql = "UPDATE tbl_users U, tbl_siswa S SET additionalLimit = $jumlahPermintaan WHERE U.idDetailUser = S.idDetailUser AND idUser = $idAnak";
+        $sql = "UPDATE tbl_users U, tbl_siswa S SET additionalLimit = additionalLimit + $jumlahPermintaan WHERE U.idDetailUser = S.idDetailUser AND idUser = $idAnak";
         mysqli_query($koneksi, $sql);
 
         mysqli_commit($koneksi);
@@ -271,23 +272,23 @@ if (isset($_POST['buttonTolak'])) {
                 <?="Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
             <!-- <div class=" w-full grid grid-cols-1 justify-items-center">
-                                                        <button id="buttonTopUpSiswa"
-                                                            class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
-                                                            <div class="grid grid-cols-2 h-10 items-center justify-items-center">
-                                                                <img src="assets/icons/topUp.png" alt="" class="h-6">
+                                                                    <button id="buttonTopUpSiswa"
+                                                                        class="px-4 py-2 mt-2 text-sm font-medium text-center text-primary bg-white rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none focus:ring-stone-300">
+                                                                        <div class="grid grid-cols-2 h-10 items-center justify-items-center">
+                                                                            <img src="assets/icons/topUp.png" alt="" class="h-6">
 
-                                                                <h3 class="text-md font-poppins font-bold px-1">
-                                                                    Top Up
-                                                                </h3>
-                                                            </div>
-                                                        </button>
-                                                    </div>
+                                                                            <h3 class="text-md font-poppins font-bold px-1">
+                                                                                Top Up
+                                                                            </h3>
+                                                                        </div>
+                                                                    </button>
+                                                                </div>
 
-                                                    <script src="dist/js/jquery-3.6.0.min.js"></script>
-                                                    <script>             $("#buttonTopUpSiswa").click(function () { $(this).hide(); $("#buttonBayar").hide(); $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#siswaPane").html(data) } }); });
+                                                                <script src="dist/js/jquery-3.6.0.min.js"></script>
+                                                                <script>             $("#buttonTopUpSiswa").click(function () { $(this).hide(); $("#buttonBayar").hide(); $.ajax({ type: "GET", url: "dist/ajax/ajaxGenerateQR.php", data: "", success: function (data) { console.log(data); $("#siswaPane").html(data) } }); });
 
 
-                                                    </script> -->
+                                                                </script> -->
         <?php endif; ?>
 
     </div>
@@ -310,7 +311,7 @@ if (isset($_POST['buttonTolak'])) {
                             </label>
                             <textarea id="pesanRequest" name="pesanRequest"
                                 class=" w-full text-base py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-indigo-500"
-                                type="text" placeholder="" value="" rows="2"></textarea>
+                                type="text" placeholder="" value="" rows="2" required></textarea>
                         </div>
                         <div>
                             <label for="jumlahRequest" class="ml-2 block text-sm text-gray-900 text-center">
@@ -318,7 +319,7 @@ if (isset($_POST['buttonTolak'])) {
                             </label>
                             <input id="jumlahRequest" name="jumlahRequest"
                                 class=" w-full text-base py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-indigo-500"
-                                type="number" placeholder="" value="" min="1000">
+                                type="number" placeholder="" value="" min="1000" required>
                         </div>
                         <button type="submit" name="buttonRequest"
                             class="px-7 py-3 rounded-lg bg-primary hover:bg-opacity-80">
@@ -370,9 +371,10 @@ if (isset($_POST['buttonTolak'])) {
                                                     <td class="px-2 py-4">
                                                         <?= $oneView["jumlahPermintaan"]; ?>
                                                     </td>
-                                                    <input type="hidden" name="idNotif" value="<?= $oneView["idNotif"]; ?>">
+                                                    <input type="hidden" name="idNotif" value="<?= $oneView["idNotif"]; ?>"
+                                                        required>
                                                     <input type="hidden" name="jumlahPermintaan"
-                                                        value="<?= $oneView["jumlahPermintaan"]; ?>">
+                                                        value="<?= $oneView["jumlahPermintaan"]; ?>" required>
                                                     <td class="px-2 py-4">
                                                         <div class="grid grid-cols-1 gap-2">
 

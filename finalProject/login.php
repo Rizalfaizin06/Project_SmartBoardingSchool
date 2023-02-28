@@ -20,8 +20,8 @@ if (isset($_COOKIE['uuid'])) {
         $hashRealName = hash('sha256', $realName);
 
         if (isset($_POST['rememberMe'])) {
-            setcookie('uuid', $uuidUser, time() + 3600);
-            setcookie('key', $hashRealName, time() + 3600);
+            setcookie('uuid', $uuidUser, time() + (3600 * 24 * 2));
+            setcookie('key', $hashRealName, time() + (3600 * 24 * 2));
         }
 
         //set session

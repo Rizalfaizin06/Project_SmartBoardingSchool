@@ -447,6 +447,7 @@ if ($role == 1) {
         </li> -->
 
          <?php if ($_SESSION["currentPage"] == "transaction"): ?>
+
             <li>
                <a href="transactionHistory.php" data-drawer-toggle="default-sidebar"
                   class="flex items-center p-2 text-base font-normal rounded-lg bg-primary hover:bg-opacity-80">
