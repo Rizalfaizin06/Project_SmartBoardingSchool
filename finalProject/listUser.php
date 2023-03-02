@@ -297,6 +297,9 @@ if (isset($_POST['buttonTolak'])) {
                                             Role
                                         </th>
                                         <th scope="col" class="px-2 py-3">
+                                            Saldo
+                                        </th>
+                                        <th scope="col" class="px-2 py-3">
                                             Action
                                         </th>
                                     </tr>
@@ -331,6 +334,26 @@ if (isset($_POST['buttonTolak'])) {
                                                     }
                                                     ?>
                                                 </td>
+                                                <td class="px-2 py-4">
+                                                    <?php
+                                                    if ($oneView["role"] == 1) {
+                                                        echo "-";
+                                                    } elseif ($oneView["role"] == 2) {
+                                                        $idUser = $oneView["idUser"];
+                                                        $queryUser = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0]['saldo'];
+                                                        echo "Rp " . number_format($queryUser, 0, ",", ".");
+                                                    } elseif ($oneView["role"] == 3) {
+                                                        $idUser = $oneView["idUser"];
+                                                        $queryUser = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$idUser'")[0]['saldo'];
+                                                        echo "Rp " . number_format($queryUser, 0, ",", ".");
+                                                    } else {
+                                                        $idUser = $oneView["idUser"];
+                                                        $queryUser = query("SELECT * FROM tbl_users U, tbl_orangtua O WHERE U.idDetailUser = O.idDetailUser AND idUser = '$idUser'")[0]['idAnak'];
+                                                        $querySaldoAnak = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUser = S.idDetailUser AND idUser = '$queryUser'")[0]['saldo'];
+                                                        echo "Rp " . number_format($querySaldoAnak, 0, ",", ".");
+                                                    }
+                                                    ?>
+                                                </td>
 
                                                 <td class="px-2 py-4">
                                                     <div class="grid grid-cols-1 gap-2">
@@ -340,8 +363,8 @@ if (isset($_POST['buttonTolak'])) {
                                                             Nonaktifkan
                                                         </button>
                                                         <!-- <button type="submit" name="buttonTolak" class="text-red-500">
-                                                                                                            Tolak
-                                                                                                        </button> -->
+                                                                                                                                                                                                    Tolak
+                                                                                                                                                                                                </button> -->
                                                     </div>
                                                 </td>
                                             </tr>

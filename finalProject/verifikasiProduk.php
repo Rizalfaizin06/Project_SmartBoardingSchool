@@ -183,7 +183,7 @@ $category = query("SELECT * FROM tbl_category C, tbl_users U WHERE U.idUser = C.
                                         <?= $oneView['namaCategory']; ?>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <?= $oneView['hargaMenu']; ?>
+                                        <?="Rp " . number_format($oneView['hargaMenu'], 0, ",", "."); ?>
                                     </td>
                                     <td class="px-6 py-4">
                                         <?= $oneView['realName']; ?>
