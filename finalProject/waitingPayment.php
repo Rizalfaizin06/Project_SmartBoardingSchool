@@ -65,7 +65,7 @@ if (isset($_POST['buttonCancel'])) {
     // $idPembeli = $_POST['idPembeli'];
     $querydOrder = query("SELECT idOrder FROM tbl_order WHERE idPenjual = $idUser AND statusOrder = 0 ORDER BY idOrder DESC LIMIT 1");
     $idOrder = $querydOrder[0]["idOrder"];
-    var_dump($idOrder);
+    // var_dump($idOrder);
 
     $queryDeleteOrder ="DELETE FROM tbl_order WHERE idOrder = $idOrder;";
     mysqli_query($koneksi, $queryDeleteOrder);

@@ -89,10 +89,10 @@ if (isset($_POST['buttonBayar'])) {
     $idPenjual = $_SESSION["idPenjual"];
     $pembayaran = query("SELECT idOrder FROM tbl_order WHERE idPenjual = '$idPenjual' AND statusOrder = 0 ORDER BY idOrder DESC LIMIT 1");
     $idOrder = $pembayaran[0]["idOrder"];
-    var_dump($idOrder);
+    // var_dump($idOrder);
 
     $dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder");
-    var_dump($dataOrderan);
+    // var_dump($dataOrderan);
 
     $totalHarga = query("SELECT SUM(hargaMenu * jumlahPesan) total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder")[0]["total"];
     // var_dump($totalHarga);

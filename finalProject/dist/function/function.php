@@ -126,9 +126,9 @@ function payFromArduino($data)
         if ($totalHarga > $sisaLimit) {
             return false;
         }
-        if ($pinUser != $inputPassword) {
-            return "PwSalah";
-        }
+        // if ($pinUser != $inputPassword) {
+        //     return "PwSalah";
+        // }
 
         mysqli_autocommit($koneksi, false);
 

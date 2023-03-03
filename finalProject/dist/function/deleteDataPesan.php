@@ -5,7 +5,7 @@ if (!session_id()) {
 }
 
 if (isset($_POST['deleteDataPesan'])) {
-    var_dump($_POST);
+    // var_dump($_POST);
     $idMenu = $_POST['deleteDataPesan'];
     $query = "DELETE FROM tbl_pesan WHERE idMenu = '$idMenu' AND idOrder = 0";
 

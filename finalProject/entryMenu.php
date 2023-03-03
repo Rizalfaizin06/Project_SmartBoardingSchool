@@ -77,7 +77,7 @@ if (isset($_POST['buttonOrder'])) {
 
     $querydOrder = query("SELECT idOrder FROM tbl_order WHERE statusOrder = 0 AND idPenjual = '$idUser' ORDER BY idOrder DESC LIMIT 1");
     $idOrder = $querydOrder[0]["idOrder"];
-    var_dump($idOrder);
+    // var_dump($idOrder);
 
 
 
