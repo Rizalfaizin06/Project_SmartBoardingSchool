@@ -16,65 +16,161 @@ $jamTanggal = date("Y-m-d H:i:s");
 
 
 
-if (isset($_POST['Data3']) && !empty($_POST['Data3'])) {
-    // absen($_POST);
-    $payingArduino = payFromArduino($_POST);
-
-    if ($payingArduino > 0) {
-        // echo "status:" . $payingArduino . "|";
-        echo "status:" . $payingArduino . "|";
-        // echo "status:BERHASIL|";
-    } else {
-        echo "status:GAGAL|";
-    }
-
-    //aktifkan kembali mode autocommit
-    mysqli_autocommit($koneksi, true);
-
-}
-
-if (isset($_POST['Data3']) && !empty($_POST['Data3'])) {
-    // absen($_POST);
-    $payingArduino = payFromArduino($_POST);
-
-    if ($payingArduino > 0) {
-        // echo "status:" . $payingArduino . "|";
-        echo "status:" . $payingArduino . "|";
-        // echo "status:BERHASIL|";
-    } else {
-        echo "status:GAGAL|";
-    }
-
-    //aktifkan kembali mode autocommit
-    mysqli_autocommit($koneksi, true);
-
-}
-
-
 if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
-    // absen($_POST);
-    $checkPayingArduino = checkPayment($_POST);
-    if ($checkPayingArduino > 0) {
-        echo "status:" . $checkPayingArduino . "|";
-        // echo "status:BERHASIL|";
-    } else {
-        echo "status:GAGAL|";
+
+    if ($_POST['Data1'] == "checkRFIDUser") {
+        $checkRFIDUser = checkRFIDUser($_POST);
+
+        if ($checkRFIDUser > 0) {
+            // echo "status:" . $checkRFIDUser . "|";
+            echo "status:" . $checkRFIDUser . "|";
+            // echo "status:BERHASIL|";
+        } else {
+            echo "status:GAGAL|";
+        }
+
     }
 
-    //aktifkan kembali mode autocommit
-    mysqli_autocommit($koneksi, true);
+    if ($_POST['Data1'] == "addRFIDUser") {
+        $addRFIDUser = addRFIDUser($_POST);
+
+        if ($addRFIDUser > 0) {
+            // echo "status:" . $addRFIDUser . "|";
+            // echo "status:" . $addRFIDUser . "|";
+            echo "status:BERHASIL|";
+        } else {
+            echo "status:GAGAL|";
+        }
+
+    }
+
+    if ($_POST['Data1'] == "payFromArduino") {
+        $payingArduino = payFromArduino($_POST);
+
+        if ($payingArduino > 0) {
+            // echo "status:" . $payingArduino . "|";
+            echo "status:" . $payingArduino . "|";
+            // echo "status:BERHASIL|";
+        } else {
+            echo "status:GAGAL|";
+        }
+        mysqli_autocommit($koneksi, true);
+
+    }
+
+    if ($_POST['Data1'] == "checkPayment") {
+        $checkPayingArduino = checkPayment($_POST);
+
+        if ($checkPayingArduino > 0) {
+            echo "status:" . $checkPayingArduino . "|";
+            // echo "status:BERHASIL|";
+        } else {
+            echo "status:GAGAL|";
+        }
+
+        //aktifkan kembali mode autocommit
+        mysqli_autocommit($koneksi, true);
+
+    }
 
 }
 
+// if (isset($_POST['Data3']) && !empty($_POST['Data3'])) {
+//     // absen($_POST);
+//     $payingArduino = payFromArduino($_POST);
 
+//     if ($payingArduino > 0) {
+//         // echo "status:" . $payingArduino . "|";
+//         echo "status:" . $payingArduino . "|";
+//         // echo "status:BERHASIL|";
+//     } else {
+//         echo "status:GAGAL|";
+//     }
+
+//     //aktifkan kembali mode autocommit
+//     mysqli_autocommit($koneksi, true);
+
+// }
+
+
+// if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
+//     // absen($_POST);
+//     $checkPayingArduino = checkPayment($_POST);
+//     if ($checkPayingArduino > 0) {
+//         echo "status:" . $checkPayingArduino . "|";
+//         // echo "status:BERHASIL|";
+//     } else {
+//         echo "status:GAGAL|";
+//     }
+
+//     //aktifkan kembali mode autocommit
+//     mysqli_autocommit($koneksi, true);
+
+// }
+
+
+function addRFIDUser($data)
+{
+    global $koneksi;
+    global $tanggal;
+
+    // $rfidUser = $data['Data1'];
+    $rfidUser = $data['Data2'];
+    // $idPenjual = $data['Data2'];
+    // $idPenjual = "22";
+
+    $checkUser = query("SELECT * FROM tbl_siswa WHERE rfidUser = '0' LIMIT 1");
+
+    if (!empty($checkUser)) {
+        $idDetailUser = $checkUser[0]["idDetailUser"];
+
+        mysqli_query($koneksi, "UPDATE tbl_siswa SET rfidUser = '$rfidUser' WHERE idDetailUser = '$idDetailUser'");
+
+        return mysqli_affected_rows($koneksi);
+        // return 1;
+        // return false;
+    } else {
+        return false;
+    }
+
+
+}
+function checkRFIDUser($data)
+{
+    global $koneksi;
+    global $tanggal;
+
+    // $rfidUser = $data['Data1'];
+    // $rfidUser = $data['Data2'];
+    // $idPenjual = $data['Data2'];
+    // $idPenjual = "22";
+
+    $checkUser = query("SELECT * FROM tbl_siswa WHERE rfidUser = '0' LIMIT 1");
+
+    if (!empty($checkUser)) {
+        $idDetailUser = $checkUser[0]["idDetailUser"];
+        // var_dump($idOrder);
+
+        // $dataOrderan = query("SELECT P.idMenu, namaMenu, hargaMenu, jumlahPesan, hargaMenu * jumlahPesan total FROM tbl_pesan P, tbl_order O, tbl_menu M WHERE (P.idOrder = O.idOrder AND P.idMenu = M.idMenu) AND P.idOrder = $idOrder");
+        // var_dump($dataOrderan);
+
+        $realName = query("SELECT * FROM tbl_users WHERE idDetailUser = $idDetailUser")[0]["realName"];
+        return $realName;
+
+    } else {
+        return false;
+    }
+
+
+}
 function checkPayment($data)
 {
     global $koneksi;
     global $tanggal;
 
-    $rfidUser = $data['Data1'];
-    // $idPenjual = $data['Data2'];
-    $idPenjual = "22";
+    $rfidUser = $data['Data2'];
+    $idPenjual = $data['Data3'];
+    // $idPenjual = "22";
 
     $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];
     $idUser = $detailUser['idUser'];
@@ -108,10 +204,11 @@ function payFromArduino($data)
     global $koneksi;
     global $tanggal;
 
-    $rfidUser = $data['Data3'];
+    $rfidUser = $data['Data2'];
+    $idPenjual = $data['Data3'];
     // $idPenjual = $data['Data'];
-    $idPenjual = "22";
-    $inputPassword = $data['Data2'];
+    // $idPenjual = "22";
+    $inputPassword = $data['Data4'];
     // return $pw;
 
     $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];
