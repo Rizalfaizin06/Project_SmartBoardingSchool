@@ -481,126 +481,126 @@ if ($role == 1) {
                                     <tr>
                                         <td class="pt-2" align="center" colspan="5">
                                                                     <!-- navigasi -->
-                                    <?php $banyakNavigasi = 2;
+<?php $banyakNavigasi = 2;
 
-                                    $awalNavigasi = (($halamanAktif - $banyakNavigasi) < 1) ? 1 : $halamanAktif - $banyakNavigasi;
+$awalNavigasi = (($halamanAktif - $banyakNavigasi) < 1) ? 1 : $halamanAktif - $banyakNavigasi;
 
-                                    $akhirNavigasi = (($halamanAktif + $banyakNavigasi) > $jumlahHalaman) ? $jumlahHalaman : $halamanAktif + $banyakNavigasi;
+$akhirNavigasi = (($halamanAktif + $banyakNavigasi) > $jumlahHalaman) ? $jumlahHalaman : $halamanAktif + $banyakNavigasi;
 
-                                    ?>
-                                    <nav aria-label="Page navigation example" class="w-full h-full flex justify-center pb-3">
-                                                <ul class="inline-flex items-center -space-x-px">
-                                        <?php if ($jumlahHalaman > 1 && $jumlahData != 0): ?>
-                                                                                                <?php if ($halamanAktif > $banyakNavigasi + 1 && $jumlahData != 0): ?>
-                                                                                                                                                <li><a href="?trx-<?= $uuidPembeliSingle ?>=1"
-                                                                                                                                                        class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                                                                                                                                        Awal
+?>
+<nav aria-label="Page navigation example" class="w-full h-full flex justify-center pb-3">
+<ul class="inline-flex items-center -space-x-px">
+<?php if ($jumlahHalaman > 1 && $jumlahData != 0): ?>
+<?php if ($halamanAktif > $banyakNavigasi + 1 && $jumlahData != 0): ?>
+<li><a href="?trx-<?= $uuidPembeliSingle ?>=1"
+class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+Awal
 
-                                                                                                                                                    </a>
-                                                                                                                                                </li>
-                                                                                                                                                <li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $halamanAktif - 1 ?>"
-                                                                                                                                                        class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                                                                                                                                        <span class="sr-only">Previous</span>
-                                                                                                                                                        <svg aria-hidden="true" class="w-[1.20rem] h-[1.20rem]" fill="currentColor" viewBox="0 0 20 20"
-                                                                                                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                                                                                                            <path fill-rule="evenodd"
-                                                                                                                                                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                                                                                                                                                clip-rule="evenodd"></path>
-                                                                                                                                                        </svg>
-                                                                                                                                                    </a>
-                                                                                                                                                </li>
-                                                                                                <?php endif; ?>
+</a>
+</li>
+<li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $halamanAktif - 1 ?>"
+class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+<span class="sr-only">Previous</span>
+<svg aria-hidden="true" class="w-[1.20rem] h-[1.20rem]" fill="currentColor" viewBox="0 0 20 20"
+xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd"
+d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+clip-rule="evenodd"></path>
+</svg>
+</a>
+</li>
+<?php endif; ?>
 
-                                                                                                <?php if ($halamanAktif > 1 && $jumlahData != 0 && $halamanAktif <= $banyakNavigasi + 1): ?>
-                                                                                                                                                <li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $halamanAktif - 1 ?>"
-                                                                                                                                                        class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                                                                                                                                        <span class="sr-only">Previous</span>
-                                                                                                                                                        <svg aria-hidden="true" class="w-[1.20rem] h-[1.20rem]" fill="currentColor" viewBox="0 0 20 20"
-                                                                                                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                                                                                                            <path fill-rule="evenodd"
-                                                                                                                                                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                                                                                                                                                clip-rule="evenodd"></path>
-                                                                                                                                                        </svg>
-                                                                                                                                                    </a>
-                                                                                                                                                </li>
-                                                                                                <?php endif; ?>
+<?php if ($halamanAktif > 1 && $jumlahData != 0 && $halamanAktif <= $banyakNavigasi + 1): ?>
+<li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $halamanAktif - 1 ?>"
+class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+<span class="sr-only">Previous</span>
+<svg aria-hidden="true" class="w-[1.20rem] h-[1.20rem]" fill="currentColor" viewBox="0 0 20 20"
+xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd"
+d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+clip-rule="evenodd"></path>
+</svg>
+</a>
+</li>
+<?php endif; ?>
 
-                                                                                                <?php for ($i = $awalNavigasi; $i <= $akhirNavigasi; $i++):
-                                                                                                    if ($i == $halamanAktif): ?>
-                                                                                                                                                                                                <?php if ($halamanAktif == 1): ?>
-                                                                                                                                                                                                                                                <li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $i ?>"
-                                                                                                                                                                                                                                                        class="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 rounded-l-lg border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i ?></a></li>
-                                                                                                                                                                                                <?php elseif ($halamanAktif >= $jumlahHalaman): ?>
-                                                                                                                                                                                                                                                <li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $i ?>"
-                                                                                                                                                                                                                                                        class="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 rounded-r-lg border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i ?></a></li>
-                                                                                                                                                                                                <?php else: ?>
-                                                                                                                                                                                                                                                <li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $i ?>"
-                                                                                                                                                                                                                                                        class="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i ?></a></li>
-                                                                                                                                                                                                <?php endif; ?>
-                                                                                                                                                <?php else: ?>
-                                                                                                                                                                                                <li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $i ?>"
-                                                                                                                                                                                                        class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><?= $i ?></a></li>
-                                                                                                                                                <?php endif; ?>
-                                                                                                <?php endfor; ?>
+<?php for ($i = $awalNavigasi; $i <= $akhirNavigasi; $i++):
+if ($i == $halamanAktif): ?>
+<?php if ($halamanAktif == 1): ?>
+<li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $i ?>"
+class="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 rounded-l-lg border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i ?></a></li>
+<?php elseif ($halamanAktif >= $jumlahHalaman): ?>
+<li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $i ?>"
+class="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 rounded-r-lg border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i ?></a></li>
+<?php else: ?>
+<li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $i ?>"
+class="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $i ?></a></li>
+<?php endif; ?>
+<?php else: ?>
+<li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $i ?>"
+class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><?= $i ?></a></li>
+<?php endif; ?>
+<?php endfor; ?>
 
-                                                                                                <?php if ($halamanAktif < $jumlahHalaman && $halamanAktif >= $jumlahHalaman - $banyakNavigasi): ?>
-                                                                                                                                                <li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $halamanAktif + 1 ?>"
-                                                                                                                                                        class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                                                                                                                                        <span class="sr-only">Next</span>
-                                                                                                                                                        <svg aria-hidden="true" class="w-[1.20rem] h-[1.20rem]" fill="currentColor" viewBox="0 0 20 20"
-                                                                                                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                                                                                                            <path fill-rule="evenodd"
-                                                                                                                                                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                                                                                                                                                clip-rule="evenodd"></path>
-                                                                                                                                                        </svg>
-                                                                                                                                                    </a>
-                                                                                                                                                </li>
-                                                                                                <?php endif; ?>
+<?php if ($halamanAktif < $jumlahHalaman && $halamanAktif >= $jumlahHalaman - $banyakNavigasi): ?>
+<li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $halamanAktif + 1 ?>"
+class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+<span class="sr-only">Next</span>
+<svg aria-hidden="true" class="w-[1.20rem] h-[1.20rem]" fill="currentColor" viewBox="0 0 20 20"
+xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd"
+d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+clip-rule="evenodd"></path>
+</svg>
+</a>
+</li>
+<?php endif; ?>
 
-                                                                                                <?php if ($halamanAktif < $jumlahHalaman - $banyakNavigasi && $jumlahData != 0): ?>
-                                                                                                                                                <li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $halamanAktif + 1 ?>"
-                                                                                                                                                        class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                                                                                                                                        <span class="sr-only">Next</span>
-                                                                                                                                                        <svg aria-hidden="true" class="w-[1.20rem] h-[1.20rem]" fill="currentColor" viewBox="0 0 20 20"
-                                                                                                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                                                                                                            <path fill-rule="evenodd"
-                                                                                                                                                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                                                                                                                                                clip-rule="evenodd"></path>
-                                                                                                                                                        </svg>
-                                                                                                                                                    </a>
-                                                                                                                                                </li>
-                                                                                                                                                <li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $jumlahHalaman ?>"
-                                                                                                                                                        class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                                                                                                                                        Akhir</a>
-                                                                                                                                                </li>
+<?php if ($halamanAktif < $jumlahHalaman - $banyakNavigasi && $jumlahData != 0): ?>
+<li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $halamanAktif + 1 ?>"
+class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+<span class="sr-only">Next</span>
+<svg aria-hidden="true" class="w-[1.20rem] h-[1.20rem]" fill="currentColor" viewBox="0 0 20 20"
+xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd"
+d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+clip-rule="evenodd"></path>
+</svg>
+</a>
+</li>
+<li><a href="?trx-<?= $uuidPembeliSingle ?>=<?= $jumlahHalaman ?>"
+class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+Akhir</a>
+</li>
 
-                                                                                                <?php endif; ?>
-                                                <?php endif; ?>
+<?php endif; ?>
+<?php endif; ?>
 
-                                                </ul>
-                                            </nav>
-
-
-
-                                                                                                                                                </td>
-                                    </tr>
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-
-                                        <td colspan="5" class="px-2 py-4">
-
-                                            <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">Total Transaksi
-                                            </h2>
-                                            <h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">
-                                                Rp.
-                                                <span id="spanTotalHarga"><?= number_format($totalPesanan, 0, ",", ".") ?></span>
-                                            </h2>
+</ul>
+</nav>
 
 
-                                        </td>
-                                    </tr>
+
+</td>
+</tr>
+<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+
+<td colspan="5" class="px-2 py-4">
+
+<h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">Total Transaksi
+</h2>
+<h2 class="text-xl font-poppins font-bold text-center mr-2 md:mr-8 mt-2">
+Rp.
+<span id="spanTotalHarga"><?= number_format($totalPesanan, 0, ",", ".") ?></span>
+</h2>
 
 
-                                </tbody>                        
+</td>
+</tr>
+
+
+</tbody>                        
                     <?php endforeach;
 
             ?>

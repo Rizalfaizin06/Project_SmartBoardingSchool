@@ -194,7 +194,7 @@ void jalan() {
     }
     buzzer(1);
     confirm = request("", "", rfidUser, iData1);
-    if (confirm == "BERHASIL") {
+    if (confirm == "1") {
       lcd.clear();
       lcd.setCursor (3,0);
       lcd.print("TRANSAKSI");
@@ -204,7 +204,27 @@ void jalan() {
       delay(500);
       lcd.clear();
       
-    } else {
+    } else if (confirm == "31") {
+      lcd.clear();
+      lcd.setCursor (5,0);
+      lcd.print("SALDO");
+      lcd.setCursor (0,1);
+      lcd.print("TIDAK MENCUKUPI");
+      buzzer(5);
+      delay(1500);
+      lcd.clear();
+      
+    } else if (confirm == "12") {
+      lcd.clear();
+      lcd.setCursor (4,0);
+      lcd.print("MELEBIHI");
+      lcd.setCursor (2,1);
+      lcd.print("BATAS HARIAN");
+      buzzer(5);
+      delay(1500);
+      lcd.clear();
+      
+    }  else {
        lcd.clear();
         lcd.setCursor (3,0);
         lcd.print("TRANSAKSI");

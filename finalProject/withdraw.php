@@ -86,10 +86,12 @@ if (isset($_POST['buttonBayar'])) {
     $idPenerima = $_POST['idPenerima'];
 
     $queryAdmin = query("SELECT * FROM tbl_users U, tbl_admin A WHERE U.idDetailUser = A.idDetailUser AND idUser = '$idPenerima'")[0];
+    $uuidUserAdmin = $queryAdmin["uuidUser"];
     $realNameAdmin = $queryAdmin["realName"];
     $saldoAdmin = $queryAdmin["saldo"];
 
     $queryPenjual = query("SELECT * FROM tbl_users U, tbl_penjual P WHERE U.idDetailUser = P.idDetailUser AND idUser = '$idUser'")[0];
+    $uuidUserPenjual = $queryPenjual["uuidUser"];
     $realNamePenjual = $queryPenjual["realName"];
     $saldoPenjual = $queryPenjual["saldo"];
 
@@ -107,7 +109,7 @@ if (isset($_POST['buttonBayar'])) {
         mysqli_query($koneksi, $sql);
 
         //menulis Log transaksi
-        $sql = "INSERT INTO tbl_log (idLog, uuidPengirim, saldoPengirim, uuidPenerima, saldoPenerima, jumlahTransfer, waktuTransfer) VALUES (NULL, '$realNamePenjual', '$saldoPenjual', '$realNameAdmin', '$saldoAdmin', '$jumlahBayar', '$jamTanggal');";
+        $sql = "INSERT INTO tbl_log (idLog, uuidPengirim, saldoPengirim, uuidPenerima, saldoPenerima, jumlahTransfer, waktuTransfer) VALUES (NULL, '$uuidUserPenjual', '$saldoPenjual', '$uuidUserAdmin', '$saldoAdmin', '$jumlahBayar', '$jamTanggal');";
         mysqli_query($koneksi, $sql);
 
         //commit transaction jika operasi transfer berhasil
@@ -155,7 +157,7 @@ if (isset($_POST['buttonBayar'])) {
             <?= $realName; ?>
         </h3>
         <h3 class="font-poppins font-bold text-white">
-            <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+            <?= "Rp " . number_format($saldo, 0, ",", ".") ?>
         </h3>
     </div>
 

@@ -197,6 +197,18 @@ $tahun = date("Y");
             class="static md:sticky md:top-32 block m-3 p-3 bg-white border border-gray-200 rounded-xl shadow overflow-hidden">
             <form action="?" method="post">
 
+                <div class="pb-5 grid grid-cols-2 gap-1">
+
+                    <a id="buttonConsumer" name="buttonConsumer" type="submit"
+                        class="px-3 py-3 rounded-lg bg-gray-200 shadow-md text-xs font-poppins font-bold text-center">
+                        Consumer
+                    </a>
+                    <a href="transactionHistoryAdmin.php" id="buttonAdmin" name="buttonAdmin" type="submit"
+                        class="px-3 py-3 rounded-lg bg-slate-50 border-2 border-gray-300 shadow-md hover:bg-opacity-80 text-xs font-poppins font-bold text-center">
+                        Admin
+                    </a>
+
+                </div>
 
                 <div class="pb-5 grid grid-cols-2 gap-1">
                     <?php if (isset($_SESSION['buttonHariIni']) && $_SESSION['buttonHariIni'] == true): ?>
@@ -465,12 +477,12 @@ $tahun = date("Y");
                                         <td class="px-2 py-4">
                                             <?= $oneView["hargaMenu"]; ?>
                                         </td>
-                                        <input id="<?='harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
+                                        <input id="<?= 'harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
                                             value="<?= $oneView["hargaMenu"]; ?>" />
                                         <td class="px-2 py-4">
-                                            <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number" min="1"
+                                            <input id="<?= 'jumlahPesan' . $oneView['idMenu']; ?>" type="number" min="1"
                                                 class="border border-gray-300 borderad rounded-lg w-16"
-                                                name="<?='jumlahPesan' . $oneView['idMenu']; ?>"
+                                                name="<?= 'jumlahPesan' . $oneView['idMenu']; ?>"
                                                 value="<?= $oneView["jumlahPesan"]; ?>" disabled>
                                         </td>
                                         <td class="px-2 py-4">

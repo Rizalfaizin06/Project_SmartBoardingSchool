@@ -22,8 +22,25 @@ if (isset($_POST['Data3']) && !empty($_POST['Data3'])) {
 
     if ($payingArduino > 0) {
         // echo "status:" . $payingArduino . "|";
+        echo "status:" . $payingArduino . "|";
+        // echo "status:BERHASIL|";
+    } else {
+        echo "status:GAGAL|";
+    }
+
+    //aktifkan kembali mode autocommit
+    mysqli_autocommit($koneksi, true);
+
+}
+
+if (isset($_POST['Data3']) && !empty($_POST['Data3'])) {
+    // absen($_POST);
+    $payingArduino = payFromArduino($_POST);
+
+    if ($payingArduino > 0) {
         // echo "status:" . $payingArduino . "|";
-        echo "status:BERHASIL|";
+        echo "status:" . $payingArduino . "|";
+        // echo "status:BERHASIL|";
     } else {
         echo "status:GAGAL|";
     }
@@ -121,10 +138,10 @@ function payFromArduino($data)
         // var_dump($totalHarga);
         // die;
         if ($totalHarga > $saldo) {
-            return false;
+            return 31;
         }
         if ($totalHarga > $sisaLimit) {
-            return false;
+            return 12;
         }
         // if ($pinUser != $inputPassword) {
         //     return "PwSalah";
@@ -279,10 +296,10 @@ function upload($namaGambar, $tempatPenyimpanan)
     $tnpName = $_FILES[$namaGambar]['tmp_name'];
 
     if ($error === 4) {
-        echo "
-			<script>
-				alert('pilih gambar terlebih dahulu');
-			</script>";
+        // echo "
+        // 	<script>
+        // 		alert('pilih gambar terlebih dahulu');
+        // 	</script>";
         return false;
     }
 
