@@ -104,7 +104,7 @@ if ($role == 1) {
       </svg>
    </button>
    <div class="flex items-center">
-      <h3 class="font-poppins font-bold">Student Spending Managemet
+      <h3 class="font-poppins font-bold">Student Financial Management
       </h3>
    </div>
 </div>
@@ -120,7 +120,7 @@ if ($role == 1) {
                <?= $realName; ?>
             </h3>
             <h3 class="font-poppins font-bold text-white">
-               <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+               <?= "Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
          </div>
       </div>

@@ -157,6 +157,8 @@ $jumlahLimit = query("SELECT * FROM tbl_users U, tbl_siswa S WHERE U.idDetailUse
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/icons/app/icon_SFM_Rounded.png" type="image/icon type">
+    <title>Student Financial Management</title>
 </head>
 
 <body>

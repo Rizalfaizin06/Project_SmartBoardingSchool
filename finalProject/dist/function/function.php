@@ -169,8 +169,8 @@ function checkPayment($data)
     global $tanggal;
 
     $rfidUser = $data['Data2'];
-    $idPenjual = $data['Data3'];
-    // $idPenjual = "22";
+    // $idPenjual = $data['Data3'];
+    $idPenjual = "2";
 
     $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];
     $idUser = $detailUser['idUser'];
@@ -205,10 +205,10 @@ function payFromArduino($data)
     global $tanggal;
 
     $rfidUser = $data['Data2'];
-    $idPenjual = $data['Data3'];
-    // $idPenjual = $data['Data'];
+    // $idPenjual = $data['Data3'];
+    $idPenjual = "2";
     // $idPenjual = "22";
-    $inputPassword = $data['Data4'];
+    // $inputPassword = $data['Data4'];
     // return $pw;
 
     $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];

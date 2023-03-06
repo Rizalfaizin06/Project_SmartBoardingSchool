@@ -118,6 +118,8 @@ foreach ($dataPesanan as $oneView) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/icons/app/icon_SFM_Rounded.png" type="image/icon type">
+    <title>Student Financial Management</title>
 </head>
 
 <body>
@@ -181,7 +183,7 @@ foreach ($dataPesanan as $oneView) {
                                             <?= $oneView["namaMenu"]; ?>
                                         </h3>
                                         <h3 class="font-poppins font-extrabold text-primary">
-                                            <?="Rp " . number_format($oneView["hargaMenu"], 0, ",", ".") ?>
+                                            <?= "Rp " . number_format($oneView["hargaMenu"], 0, ",", ".") ?>
                                         </h3>
                                         <?php
 
@@ -256,17 +258,17 @@ foreach ($dataPesanan as $oneView) {
                                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                                 <th scope="row"
                                                     class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    <?= $oneView["namaMenu"]; ?>
+                                                        <?= $oneView["namaMenu"]; ?>
                                                 </th>
                                                 <td class="px-2 py-4">
-                                                    <?= $oneView["hargaMenu"]; ?>
+                                                        <?= $oneView["hargaMenu"]; ?>
                                                 </td>
-                                                <input id="<?='harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
+                                                <input id="<?= 'harga' . $oneView['idMenu']; ?>" class="span8" type="hidden"
                                                     value="<?= $oneView["hargaMenu"]; ?>" />
                                                 <td class="px-2 py-4">
-                                                    <input id="<?='jumlahPesan' . $oneView['idMenu']; ?>" type="number"  min="1"
+                                                    <input id="<?= 'jumlahPesan' . $oneView['idMenu']; ?>" type="number"  min="1"
                                                         class="border border-gray-300 borderad rounded-lg w-16"
-                                                        name="<?='jumlahPesan' . $oneView['idMenu']; ?>" value="1"
+                                                        name="<?= 'jumlahPesan' . $oneView['idMenu']; ?>" value="1"
                                                         onchange="return operasi()">
                                                 </td>
                                                 <td class="px-2 py-4">

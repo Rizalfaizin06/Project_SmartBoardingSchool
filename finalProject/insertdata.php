@@ -50,7 +50,8 @@ if (isset($_POST["login"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="dist/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/icon/bootstrap-icons.css">
-    <title>Student Spending Tracker</title>
+    <link rel="icon" href="assets/icons/app/icon_SFM_Rounded.png" type="image/icon type">
+    <title>Student Financial Management</title>
 </head>
 
 <body>

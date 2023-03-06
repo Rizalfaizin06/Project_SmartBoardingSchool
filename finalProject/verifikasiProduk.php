@@ -98,6 +98,8 @@ $category = query("SELECT * FROM tbl_category C, tbl_users U WHERE U.idUser = C.
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/icons/app/icon_SFM_Rounded.png" type="image/icon type">
+    <title>Student Financial Management</title>
 </head>
 
 <body>
@@ -183,7 +185,7 @@ $category = query("SELECT * FROM tbl_category C, tbl_users U WHERE U.idUser = C.
                                         <?= $oneView['namaCategory']; ?>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <?="Rp " . number_format($oneView['hargaMenu'], 0, ",", "."); ?>
+                                        <?= "Rp " . number_format($oneView['hargaMenu'], 0, ",", "."); ?>
                                     </td>
                                     <td class="px-6 py-4">
                                         <?= $oneView['realName']; ?>

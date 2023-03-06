@@ -25,7 +25,8 @@ $qrcode = (new QRCode($options))->render('1');
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Create QR Codes in PHP</title>
+    <link rel="icon" href="assets/icons/app/icon_SFM_Rounded.png" type="image/icon type">
+    <title>Student Financial Management</title>
     <link rel="stylesheet" href="/css/styles.min.css">
 </head>
 

@@ -130,6 +130,8 @@ if ($role == 1) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/icons/app/icon_SFM_Rounded.png" type="image/icon type">
+    <title>Student Financial Management</title>
 </head>
 
 <body>
@@ -146,7 +148,7 @@ if ($role == 1) {
                 <?= $realName; ?>
             </h3>
             <h3 class="font-poppins font-bold text-white">
-                <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+                <?= "Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
         <?php elseif ($role == 2): ?>
             <img src="assets/images/avatar/<?= $logoToko; ?>" alt="avatar" class="object-cover rounded-full h-24 w-24">
@@ -154,7 +156,7 @@ if ($role == 1) {
                 <?= $namaToko; ?>
             </h3>
             <h3 class="font-poppins font-bold text-white">
-                <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+                <?= "Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
             <div class=" w-full grid grid-cols-1 justify-items-center">
                 <a href="withdraw.php" id="buttonWithdrawPenjual"
@@ -174,7 +176,7 @@ if ($role == 1) {
                 <?= $realName; ?>
             </h3>
             <h3 class="font-poppins font-bold text-white">
-                <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+                <?= "Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
             <div class=" w-full grid grid-cols-1 justify-items-center">
                 <button id="buttonTopUpSiswa"
@@ -196,7 +198,7 @@ if ($role == 1) {
                 <?= $realName; ?>
             </h3>
             <h3 class="font-poppins font-bold text-white">
-                <?="Rp " . number_format($saldo, 0, ",", ".") ?>
+                <?= "Rp " . number_format($saldo, 0, ",", ".") ?>
             </h3>
             <!-- <div class=" w-full grid grid-cols-1 justify-items-center">
                                                             <button id="buttonTopUpSiswa"
@@ -273,7 +275,7 @@ if ($role == 1) {
                         Pendapatan Harian
                     </h3>
                     <h3 class="text-2xl font-poppins font-bold">
-                        <?="Rp " . number_format($pemasukan, 0, ",", ".") ?>
+                        <?= "Rp " . number_format($pemasukan, 0, ",", ".") ?>
                     </h3>
 
                 </div>
@@ -285,8 +287,8 @@ if ($role == 1) {
                     </h3>
                     <h3 class="text-2xl font-poppins font-bold">
 
-                        <?="Rp " . number_format($Pengeluaran, 0, ",", ".") ?>/
-                        <?="Rp " . number_format($totalLimit, 0, ",", ".") ?>
+                        <?= "Rp " . number_format($Pengeluaran, 0, ",", ".") ?>/
+                        <?= "Rp " . number_format($totalLimit, 0, ",", ".") ?>
                     </h3>
                     <h3 class="font-poppins font-bold">
                         <?php
