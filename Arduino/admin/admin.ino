@@ -84,24 +84,24 @@ String Data4;
 //String host = "testingstarproject.000webhostapp.com";
 //String host = "wirapustaka.ninapst.com";
 //String host = "rizalscompanylab.my.id";
-//String host = "function.rizalscompanylab.my.id";
-String host = "192.168.100.169";
+String host = "function.rizalscompanylab.my.id";
+//String host = "192.168.100.169";
 
-//const char* ssid = "STAR";
-//const char* password = "skansawira";
+const char* ssid = "STAR";
+const char* password = "skansawira";
 
 //const char* ssid = "LAB TITL";
 //const char* password = "titlsuksesselalu";
 
-const char* ssid = "LIMITED";
-const char* password = "12344321";
+//const char* ssid = "LIMITED";
+//const char* password = "12344321";
 
 //String url = "http://" + host + "/Krenova/GitFolder/Peminjaman-Buku-1/PHP/admin/fungsiAdmin.php";
 //String url = "https://" + host + "/index.php";
 //String url = "http://" + host + "/admin/fungsiAdmin.php";
-String url = "http://" + host + "/Project_SmartBoardingSchool/finalProject/dist/function/function.php";
+//String url = "http://" + host + "/Project_SmartBoardingSchool/finalProject/dist/function/function.php";
 //String url = "https://" + host + "/dist/function/function.php";
-//String url = "http://" + host + "/function.php";
+String url = "http://" + host + "/function.php";
 String dataUpload[10];
 String rfidUser;
 String bayarPesanan;

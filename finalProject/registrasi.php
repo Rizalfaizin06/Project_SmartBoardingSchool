@@ -12,8 +12,11 @@ if (isset($_POST["buttonDaftar"])) {
 	if (registrasi($_POST) > 0) {
 		echo "<script>
 				alert('Sign Up berhasil');
-			</script>";
+				window.location.href = 'login.php';
+			</script>
+			";
 		header("location: login.php");
+		exit;
 	} else {
 		echo mysqli_error($koneksi);
 		$error = true;
@@ -40,9 +43,7 @@ if (isset($_POST["buttonDaftar"])) {
 
 <body>
 
-	<?php if (isset($error)): ?>
-		<p style="color: red; font-style: italic;">Silahkan Ulangi Registrasi Anda</p>
-	<?php endif; ?>
+
 
 
 
@@ -61,7 +62,9 @@ if (isset($_POST["buttonDaftar"])) {
 
 		<div id="chooseRole"
 			class="p-5 bg-white grid grid-cols-1 justify-items-center gap-5 items-center w-fit h-fit rounded-xl z-10">
-
+			<?php if (isset($error)): ?>
+				<p style="color: red; font-style: italic;">Silahkan Ulangi Registrasi Anda</p>
+			<?php endif; ?>
 			<h2 class="font-poppins text-center align-self-center text-2xl">Pilih Tipe Member</h2>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-5 justify-items-center items-center w-full">
 				<div

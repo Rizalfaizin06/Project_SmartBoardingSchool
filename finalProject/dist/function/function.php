@@ -21,7 +21,7 @@ if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
     if ($_POST['Data1'] == "checkRFIDUser") {
         $checkRFIDUser = checkRFIDUser($_POST);
 
-        if ($checkRFIDUser > 0) {
+        if ($checkRFIDUser != 0 || $checkRFIDUser != false) {
             // echo "status:" . $checkRFIDUser . "|";
             echo "status:" . $checkRFIDUser . "|";
             // echo "status:BERHASIL|";
@@ -591,7 +591,7 @@ function registrasi($data)
         $query = "INSERT INTO tbl_users (idUser, uuidUser, username, password, realName, tempatLahir, tanggalLahir, alamat, nomorTelfon, email, profileImage, role, status, idDetailUser) VALUES (NULL, '$uuidPenjual', '$usernamePenjual', '$passwordPenjual', '$realNamePenjual', '$tempatLahirPenjual', '$tanggalLahirPenjual', '$alamatPenjual', '$nomorTelfonPenjual', '$emailPenjual', '$fotoProfilPenjual', '2', '0', '$idDetailPenjual');";
         mysqli_query($koneksi, $query);
 
-        $query = "INSERT INTO tbl_Penjual (idDetailUser, namaToko, logoToko, saldo) VALUES ('$idDetailPenjual', '$namaToko', '$logoToko', '0')";
+        $query = "INSERT INTO tbl_penjual (idDetailUser, namaToko, logoToko, saldo) VALUES ('$idDetailPenjual', '$namaToko', '$logoToko', '0')";
         mysqli_query($koneksi, $query);
 
     }
