@@ -3,9 +3,9 @@
 //koneksi kedatabase
 // $koneksi = mysqli_connect("localhost", "id18952921_rizal", ">R(xFzvAW#ln~1YB", "id18952921_krenova");
 // $koneksi = mysqli_connect("localhost", "ninb9915_rizal", ">R(xFzvAW#ln~1YB", "ninb9915_Krenova");
-// $koneksi = mysqli_connect("localhost", "fira3489_rizal", "tY%=Cz+#jPUi", "fira3489_rizal_database");
+$koneksi = mysqli_connect("localhost", "fira3489_rizal", "tY%=Cz+#jPUi", "fira3489_rizal_database");
 // $koneksi = mysqli_connect("127.0.0.1", "rizal", "rizal", "db_smartboardingschool");
-$koneksi = mysqli_connect("127.0.0.1", "rizal", "rizal", "db_ssm");
+// $koneksi = mysqli_connect("127.0.0.1", "rizal", "rizal", "db_ssm");
 
 date_default_timezone_set('Asia/Jakarta');
 $tanggal = date("Y-m-d");
@@ -49,8 +49,8 @@ if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
 
         if ($payingArduino > 0) {
             // echo "status:" . $payingArduino . "|";
-            echo "status:" . $payingArduino . "|";
-            // echo "status:BERHASIL|";
+            // echo "status:" . $payingArduino . "|";
+            echo "status:BERHASIL|";
         } else {
             echo "status:GAGAL|";
         }
@@ -61,7 +61,7 @@ if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
     if ($_POST['Data1'] == "checkPayment") {
         $checkPayingArduino = checkPayment($_POST);
 
-        if ($checkPayingArduino > 0) {
+        if ($checkPayingArduino != 0 || $checkPayingArduino != false) {
             echo "status:" . $checkPayingArduino . "|";
             // echo "status:BERHASIL|";
         } else {
@@ -81,8 +81,8 @@ if (isset($_POST['Data1']) && !empty($_POST['Data1'])) {
 
 //     if ($payingArduino > 0) {
 //         // echo "status:" . $payingArduino . "|";
-//         echo "status:" . $payingArduino . "|";
-//         // echo "status:BERHASIL|";
+//         // echo "status:" . $payingArduino . "|";
+//         echo "status:BERHASIL|";
 //     } else {
 //         echo "status:GAGAL|";
 //     }
@@ -169,8 +169,8 @@ function checkPayment($data)
     global $tanggal;
 
     $rfidUser = $data['Data2'];
-    // $idPenjual = $data['Data3'];
-    $idPenjual = "2";
+    $idPenjual = $data['Data3'];
+    // $idPenjual = "2";
 
     $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];
     $idUser = $detailUser['idUser'];
@@ -205,10 +205,10 @@ function payFromArduino($data)
     global $tanggal;
 
     $rfidUser = $data['Data2'];
-    // $idPenjual = $data['Data3'];
-    $idPenjual = "2";
+    $idPenjual = $data['Data3'];
+    // $idPenjual = "2";
     // $idPenjual = "22";
-    // $inputPassword = $data['Data4'];
+    $inputPassword = $data['Data4'];
     // return $pw;
 
     $detailUser = query("SELECT * FROM tbl_siswa S, tbl_users U WHERE S.idDetailUser = U.idDetailUser AND rfidUser = '$rfidUser'")[0];
@@ -234,15 +234,16 @@ function payFromArduino($data)
         // return $totalHarga;
         // var_dump($totalHarga);
         // die;
+        if ($pinUser != $inputPassword) {
+            return "PwSalah";
+        }
+
         if ($totalHarga > $saldo) {
             return 31;
         }
         if ($totalHarga > $sisaLimit) {
             return 12;
         }
-        // if ($pinUser != $inputPassword) {
-        //     return "PwSalah";
-        // }
 
         mysqli_autocommit($koneksi, false);
 
@@ -591,7 +592,7 @@ function registrasi($data)
         $query = "INSERT INTO tbl_users (idUser, uuidUser, username, password, realName, tempatLahir, tanggalLahir, alamat, nomorTelfon, email, profileImage, role, status, idDetailUser) VALUES (NULL, '$uuidPenjual', '$usernamePenjual', '$passwordPenjual', '$realNamePenjual', '$tempatLahirPenjual', '$tanggalLahirPenjual', '$alamatPenjual', '$nomorTelfonPenjual', '$emailPenjual', '$fotoProfilPenjual', '2', '0', '$idDetailPenjual');";
         mysqli_query($koneksi, $query);
 
-        $query = "INSERT INTO tbl_penjual (idDetailUser, namaToko, logoToko, saldo) VALUES ('$idDetailPenjual', '$namaToko', '$logoToko', '0')";
+        $query = "INSERT INTO tbl_Penjual (idDetailUser, namaToko, logoToko, saldo) VALUES ('$idDetailPenjual', '$namaToko', '$logoToko', '0')";
         mysqli_query($koneksi, $query);
 
     }

@@ -34,10 +34,10 @@ const byte ROWS = 4; // rows
 const byte COLS = 4; // columns
 //define the symbols on the buttons of the keypads
 char keys[ROWS][COLS] = {
-  {'1','2','3','A'},
-  {'4','5','6','B'},
-  {'7','8','9','C'},
-  {'*','0','#','D'}
+  {'1','2','3','*'},
+  {'4','5','6','0'},
+  {'7','8','9','#'},
+  {'-','-','-','-'}
 };
 byte rowPins[ROWS] = {32, 33, 12, 14};   //connect to the row pinouts of the keypad
 byte colPins[COLS] = {17, 16, 2, 15}; //connect to the column pinouts of the keypad
@@ -72,7 +72,7 @@ String iData4 = "36";
 
 float temp;
 String stats = "";
-String sendMode;
+String sendMode = "checkPayment";
 String postData;
 String Data1;
 String Data2;
@@ -211,7 +211,7 @@ void jalan() {
 //  }
   rfidUser = scann();
   Serial.println(rfidUser);
-  bayarPesanan = request(rfidUser, iData1, "", "");
+  bayarPesanan = request(sendMode, rfidUser, iData1, "");
   if (bayarPesanan != "GAGAL") {
     lcd.clear();
     lcd.setCursor (0,0);
@@ -219,23 +219,29 @@ void jalan() {
     lcd.setCursor (0,1);
     lcd.print("RP. " + bayarPesanan);
     buzzer(1);
-//    while ( button1 == 0 ) {
-//      button1 = digitalRead(btn1);
-//      button2 = digitalRead(btn2);
-//      if ( button2 == 1 ) {
-//        lcd.clear();
-//        lcd.setCursor (3,0);
-//        lcd.print("TRANSAKSI");
-//        lcd.setCursor (3,1);
-//        lcd.print("DIBATALKAN");
-//        buzzer(5);
-//        delay(500);
-//        lcd.clear();
-//        
-//        return;
-//      }
-//      delay(50);
-//    }
+    while ( button1 == 1 ) {
+      button1 = digitalRead(btn1);
+      button2 = digitalRead(btn2);
+      if ( button2 == 0 ) {
+        lcd.clear();
+        lcd.setCursor (3,0);
+        lcd.print("TRANSAKSI");
+        lcd.setCursor (3,1);
+        lcd.print("DIBATALKAN");
+        buzzer(5);
+        delay(500);
+        lcd.clear();
+        
+        return;
+      }
+      delay(50);
+    }
+    lcd.clear();
+    lcd.setCursor (3,0);
+    lcd.print("MASUKKAN");
+    lcd.setCursor (3,1);
+    lcd.print("PASSWORD");
+    buzzer(1);
     Serial.print("Masukkan Password: ");
     // Membaca input dari keypad
     while (no < 6) {
@@ -254,10 +260,28 @@ void jalan() {
         Serial.println(" input Pw");
         buzzer(1);
       }
+      button1 = digitalRead(btn1);
+      button2 = digitalRead(btn2);
+      Serial.print(button1);
+      Serial.println(button2);  
+      if ( button2 == 0 ) {
+        lcd.clear();
+        lcd.setCursor (3,0);
+        lcd.print("TRANSAKSI");
+        lcd.setCursor (3,1);
+        lcd.print("DIBATALKAN");
+        buzzer(5);
+        delay(500);
+        lcd.clear();
+        
+        return;
+      }
       delay(10); 
     }
     buzzer(1);
-    confirm = request("", pw, rfidUser, iData1);
+    sendMode = "payFromArduino";
+    confirm = request(sendMode, rfidUser, iData1, pw);
+    sendMode = "checkPayment";
     no = 0; // reset no
     if (confirm == "BERHASIL") {
       lcd.clear();
@@ -298,7 +322,7 @@ String request(String satu, String dua, String tiga, String empat) {
   Data3 = String(tiga);
   Data4 = String(empat);
  
-  postData = "Data1=" + Data1 + "&Data2=" + Data2 + "&Data3=" + Data3 + "&Data=" + Data4 ;
+  postData = "Data1=" + Data1 + "&Data2=" + Data2 + "&Data3=" + Data3 + "&Data4=" + Data4 ;
   Serial.println(postData);
  
   http.begin(url);
